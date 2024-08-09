@@ -6,6 +6,8 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <vector>
+#include <chrono>
+#include <algorithm>
 
 #define SafeRelease(com) { if(com) { com->Release(); com = NULL;}}
 
@@ -25,6 +27,28 @@ struct Vec4
 		};*/
 		
 	};
+
+	Vec4& operator+=(const Vec4& other)
+	{
+		this->v[0] += other.v[0];
+		this->v[1] += other.v[1];
+		this->v[2] += other.v[2];
+		this->v[3] += other.v[3];
+
+		return *this;
+	}
+
+
+
+	Vec4& operator/=(const float& mod)
+	{
+		this->v[0] /= mod;
+		this->v[1] /= mod;
+		this->v[2] /= mod;
+		this->v[3] /= mod;
+
+		return *this;
+	}
 };
 
 struct Vec2
@@ -38,6 +62,15 @@ struct Vec2
 			float y;
 		};*/
 	};
+
+	Vec2& operator+=(const Vec2& other)
+	{
+		this->v[0] += other.v[0];
+		this->v[1] += other.v[1];
+
+		return *this;
+	}
+
 };
 
 struct Vertex
@@ -46,12 +79,60 @@ struct Vertex
 	Vec2 uv;
 };
 
+class Image
+{
+public:
+	int width = 0, height = 0 , channels = 0;
+	std::vector<Vec4> pixels; // 이미지 처리할 때는 색을 float에 저장하는 것 이 더 정밀
+
+	void ReadFromFile(const char* filename);
+	void WritePNG(const char* filename);
+	Vec4& GetPixel(int i, int j);
+	void BoxBlur5();
+	void GaussianBlur5();
+	void Bloom(const float& th, const int& numRepeat, const float& weight = 1.0f);
+};
+
+
 class Example
 {
 public:
 	Example(HWND window, int width, int height, int canvasWidth, int canvasHeight)
 	{
-		Initialize(window, width, height, canvasWidth, canvasHeight);
+		// 이미지 읽어 들이기
+		image.ReadFromFile("../Resources/image_1.jpg");
+		
+		// 시간 측정
+		const auto start_time = std::chrono::high_resolution_clock::now();
+
+		/*
+		* 이미지 컨벌루션 참고 자료들
+		* https://en.wikipedia.org/wiki/Kernel_(image_processing) // 마지막 괄호 주의
+		* https://en.wikipedia.org/wiki/Convolution
+		* https://medium.com/@bdhuma/6-basic-things-to-know-about-convolution-daef5e1bc411
+		* https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1
+		*/
+
+		/*
+		*	separable convolution
+		*/
+
+		//for(int i = 0; i < 100; i++)
+		image.BoxBlur5();
+
+		for(int i = 0; i < 100; i++)
+			image.GaussianBlur5();
+
+		const auto elapsed_time = std::chrono::high_resolution_clock::now() - start_time;
+
+		std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time).count() / 1000.0 << " sec" << std::endl;
+		
+		image.WritePNG("result.png");
+
+		this->canvasWidth = image.width;
+		this->canvasHeight = image.height;
+
+		Initialize(window, width, height, image.width, image.height);
 	}
 
 	// https://learn.microsoft.com/en-us/windows/win32/direct3d11/how-to--compile-a-shader
@@ -268,13 +349,14 @@ public:
 		Vec4 colorPalette[3] = { {1,0,0,1},{0,1,0,1},{0,0,1,1} };
 		int length = canvasWidth * canvasHeight;
 		
-		std::vector<Vec4> pixels(canvasWidth * canvasHeight, Vec4{ canvasColor[0],canvasColor[1] ,canvasColor[2] ,1 });
+		//std::vector<Vec4> pixels(canvasWidth * canvasHeight, Vec4{ canvasColor[0],canvasColor[1] ,canvasColor[2] ,1 });
 
 
 		// Update texture buffer
 		D3D11_MAPPED_SUBRESOURCE ms;
 		deviceContext->Map(canvasTexture, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
-		memcpy(ms.pData, pixels.data(), pixels.size()* sizeof(Vec4));
+		//memcpy(ms.pData, pixels.data(), pixels.size()* sizeof(Vec4));
+		memcpy(ms.pData, image.pixels.data(), image.pixels.size() * sizeof(Vec4));
 		deviceContext->Unmap(canvasTexture, NULL);
 	}
 
@@ -346,6 +428,8 @@ public:
 	int canvasWidth, canvasHeight;
 	float backgroundColor[4] = {0.8f,0.8f,0.8f,1.0f};
 	float canvasColor[4] = {0};
+
+	Image image;
 
 };
 

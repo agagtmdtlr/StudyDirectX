@@ -11,7 +11,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam , LPARAM lParam);
 
 int main()
 {
-	const int width = 1280, height = 960;
+	const int width = 1280, height = 720;
 	const int canvasWidth = width / 80, canvasHeight = height / 80;
 
 	WNDCLASSEX wc = {
