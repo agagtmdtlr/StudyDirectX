@@ -11,6 +11,9 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{2bfa6dde-bf20-4ac2-bdf8-5b336d8989b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{5364aa9f-44b1-4bad-9e84-c15022a736a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -19,10 +22,25 @@
     <ClCompile Include="Example.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Circle.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Example.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderCommon.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Circle.h">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,131 +8,67 @@
 #include <vector>
 #include <chrono>
 #include <algorithm>
+#include <glm/glm.hpp>
+#include "RenderCommon.h"
+#include "Image.h"
+#include "Circle.h"
+
 
 #define SafeRelease(com) { if(com) { com->Release(); com = NULL;}}
 
 
-// 수학의 4차원 벡터(vector)
-struct Vec4
-{
-	union 
-	{
-		float v[4];
-		/*struct
-		{
-			float x;
-			float y;
-			float z;
-			float w;
-		};*/
-		
-	};
-
-	Vec4& operator+=(const Vec4& other)
-	{
-		this->v[0] += other.v[0];
-		this->v[1] += other.v[1];
-		this->v[2] += other.v[2];
-		this->v[3] += other.v[3];
-
-		return *this;
-	}
-
-
-
-	Vec4& operator/=(const float& mod)
-	{
-		this->v[0] /= mod;
-		this->v[1] /= mod;
-		this->v[2] /= mod;
-		this->v[3] /= mod;
-
-		return *this;
-	}
-};
-
-struct Vec2
-{
-	union
-	{
-		float v[2];
-		/*struct
-		{
-			float x;
-			float y;
-		};*/
-	};
-
-	Vec2& operator+=(const Vec2& other)
-	{
-		this->v[0] += other.v[0];
-		this->v[1] += other.v[1];
-
-		return *this;
-	}
-
-};
 
 struct Vertex
 {
-	Vec4 pos;
-	Vec2 uv;
+	glm::vec4 pos;
+	glm::vec2 uv;
 };
-
-class Image
-{
-public:
-	int width = 0, height = 0 , channels = 0;
-	std::vector<Vec4> pixels; // 이미지 처리할 때는 색을 float에 저장하는 것 이 더 정밀
-
-	void ReadFromFile(const char* filename);
-	void WritePNG(const char* filename);
-	Vec4& GetPixel(int i, int j);
-	void BoxBlur5();
-	void GaussianBlur5();
-	void Bloom(const float& th, const int& numRepeat, const float& weight = 1.0f);
-};
-
 
 class Example
 {
+
 public:
-	Example(HWND window, int width, int height, int canvasWidth, int canvasHeight)
+	// https://github.com/Microsoft/DirectXTK/wiki/Implementation#naming-conventions
+	ID3D11Device* device;
+	ID3D11DeviceContext* deviceContext;
+	IDXGISwapChain* swapChain;
+	D3D11_VIEWPORT viewport;
+	ID3D11RenderTargetView* renderTargetView;
+	ID3D11VertexShader* vertexShader;
+	ID3D11PixelShader* pixelShader;
+	ID3D11InputLayout* layout;
+
+	ID3D11Buffer* vertexBuffer = nullptr;
+	ID3D11Buffer* indexBuffer = nullptr;
+	ID3D11Texture2D* canvasTexture = nullptr;
+	ID3D11ShaderResourceView* canvasTextureView = nullptr;
+	ID3D11RenderTargetView* canvasRenderTargetView = nullptr;
+	ID3D11SamplerState* colorSampler;
+	UINT indexCount;
+
+	int width, height;
+	float backgroundColor[4] = { 0.8f,0.8f,0.8f,1.0f };
+	float canvasColor[4] = { 0 };
+
+	std::unique_ptr<slab::Circle> circle;
+
+	Image image;
+public:
+	Example(HWND window, int width, int height)
 	{
-		// 이미지 읽어 들이기
-		image.ReadFromFile("../Resources/image_1.jpg");
+		//image.ReadFromFile("../Resources/image_1.jpg");
 		
 		// 시간 측정
 		const auto start_time = std::chrono::high_resolution_clock::now();
-
-		/*
-		* 이미지 컨벌루션 참고 자료들
-		* https://en.wikipedia.org/wiki/Kernel_(image_processing) // 마지막 괄호 주의
-		* https://en.wikipedia.org/wiki/Convolution
-		* https://medium.com/@bdhuma/6-basic-things-to-know-about-convolution-daef5e1bc411
-		* https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1
-		*/
-
-		/*
-		*	separable convolution
-		*/
-
-		//for(int i = 0; i < 100; i++)
-		image.BoxBlur5();
-
-		for(int i = 0; i < 100; i++)
-			image.GaussianBlur5();
-
 		const auto elapsed_time = std::chrono::high_resolution_clock::now() - start_time;
 
 		std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time).count() / 1000.0 << " sec" << std::endl;
 		
-		image.WritePNG("result.png");
+		//image.WritePNG("../Resources/result.png");
 
-		this->canvasWidth = image.width;
-		this->canvasHeight = image.height;
+		circle = std::make_unique<slab::Circle>(slab::Circle({width/2.f,height/2.f}, 100.f, {1.f,0.f,0.f,1.f}));
 
-		Initialize(window, width, height, image.width, image.height);
+		Initialize(window, width, height);
 	}
 
 	// https://learn.microsoft.com/en-us/windows/win32/direct3d11/how-to--compile-a-shader
@@ -172,10 +108,10 @@ public:
 		deviceContext->IASetInputLayout(layout);
 	}
 
-	void Initialize(HWND window, int width, int height, int canvasWidth, int canvasHeight)
+	void Initialize(HWND window, int width, int height)
 	{
-		this->canvasWidth = canvasWidth;
-		this->canvasHeight = canvasHeight;
+		this->width = width;
+		this->height = height;
 
 		DXGI_SWAP_CHAIN_DESC swapChainDesc;
 		ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
@@ -261,8 +197,8 @@ public:
 		textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		textureDesc.MiscFlags =0;
 		textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		textureDesc.Width = canvasWidth;
-		textureDesc.Height = canvasHeight;
+		textureDesc.Width = width;
+		textureDesc.Height = height;
 
 		device->CreateTexture2D(&textureDesc, nullptr, &canvasTexture);
 
@@ -345,18 +281,23 @@ public:
 
 	void Update()
 	{
-		static int currentPos = 0;
-		Vec4 colorPalette[3] = { {1,0,0,1},{0,1,0,1},{0,0,1,1} };
-		int length = canvasWidth * canvasHeight;
-		
-		//std::vector<Vec4> pixels(canvasWidth * canvasHeight, Vec4{ canvasColor[0],canvasColor[1] ,canvasColor[2] ,1 });
+		std::vector<glm::vec4> pixels(width * height, glm::vec4{ backgroundColor[0],backgroundColor[1] ,backgroundColor[2] ,1 });
 
+		for (int i = 0; i < width; i++ )
+		{
+			for (int j = 0; j < height; j++)
+			{
+				if( circle->IsInside(glm::vec2(i,j)) == true )
+				{
+					pixels[j * width + i] = circle->color;
+				}
+			}
+		}
 
 		// Update texture buffer
 		D3D11_MAPPED_SUBRESOURCE ms;
 		deviceContext->Map(canvasTexture, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
-		//memcpy(ms.pData, pixels.data(), pixels.size()* sizeof(Vec4));
-		memcpy(ms.pData, image.pixels.data(), image.pixels.size() * sizeof(Vec4));
+		memcpy(ms.pData, pixels.data(), pixels.size()* sizeof(glm::vec4));
 		deviceContext->Unmap(canvasTexture, NULL);
 	}
 
@@ -406,30 +347,7 @@ public:
 	}
 
 	
-public:
-	// https://github.com/Microsoft/DirectXTK/wiki/Implementation#naming-conventions
-	ID3D11Device* device;
-	ID3D11DeviceContext* deviceContext;
-	IDXGISwapChain* swapChain;
-	D3D11_VIEWPORT viewport;
-	ID3D11RenderTargetView* renderTargetView;
-	ID3D11VertexShader* vertexShader;
-	ID3D11PixelShader* pixelShader;
-	ID3D11InputLayout* layout;
 
-	ID3D11Buffer* vertexBuffer = nullptr;
-	ID3D11Buffer* indexBuffer = nullptr;
-	ID3D11Texture2D* canvasTexture = nullptr;
-	ID3D11ShaderResourceView* canvasTextureView = nullptr;
-	ID3D11RenderTargetView* canvasRenderTargetView = nullptr;
-	ID3D11SamplerState* colorSampler;
-	UINT indexCount;
-
-	int canvasWidth, canvasHeight;
-	float backgroundColor[4] = {0.8f,0.8f,0.8f,1.0f};
-	float canvasColor[4] = {0};
-
-	Image image;
 
 };
 

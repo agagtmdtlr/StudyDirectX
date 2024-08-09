@@ -6,13 +6,14 @@
 #include <iostream>
 
 #include "Example.h"
+#include "Circle.h"
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam , LPARAM lParam);
 
 int main()
 {
 	const int width = 1280, height = 720;
-	const int canvasWidth = width / 80, canvasHeight = height / 80;
+	const int canvasWidth = width, canvasHeight = height;
 
 	WNDCLASSEX wc = {
 		sizeof(WNDCLASSEX),
@@ -51,7 +52,7 @@ int main()
 	ShowWindow(hwnd, SW_SHOWDEFAULT);
 	UpdateWindow(hwnd);
 
-	auto example = std::make_unique<Example>(hwnd, width, height, canvasWidth, canvasHeight);
+	auto example = std::make_unique<Example>(hwnd, width, height);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -78,8 +79,15 @@ int main()
 			ImGui_ImplDX11_NewFrame(); 
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
-			ImGui::Begin("Background Color");
-			ImGui::SliderFloat3("RGB(0.0->1.0)", example->canvasColor, 0.0f , 1.0f);
+			ImGui::Begin("Option");
+			ImGui::SeparatorText("Background");
+			ImGui::SliderFloat3("RGB(0.0->1.0)", example->backgroundColor, 0.0f , 1.0f);
+
+			ImGui::SeparatorText("Circle");
+			ImGui::SliderFloat2("Center", &example->circle->center.x,0.0f , float(width -1.0f));
+			ImGui::SliderFloat("Radius", &example->circle->radius, 0.0f, float(width - 1.0f));
+			ImGui::SliderFloat3("RGB", &example->circle->color.x, 0.0f, 1.0f);
+
 			ImGui::End();
 			ImGui::Render();
 
