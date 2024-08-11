@@ -133,7 +133,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Circle.cpp" />
     <ClCompile Include="Example.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
@@ -141,8 +140,15 @@
   <ItemGroup>
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Example.h" />
+    <ClInclude Include="Hit.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="Ray.h" />
+    <ClInclude Include="RayTracer.h" />
     <ClInclude Include="RenderCommon.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\PS.hlsl">

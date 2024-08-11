@@ -13,7 +13,6 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam , LPARAM lParam);
 int main()
 {
 	const int width = 1280, height = 720;
-	const int canvasWidth = width, canvasHeight = height;
 
 	WNDCLASSEX wc = {
 		sizeof(WNDCLASSEX),
@@ -80,13 +79,20 @@ int main()
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 			ImGui::Begin("Option");
-			ImGui::SeparatorText("Background");
-			ImGui::SliderFloat3("RGB(0.0->1.0)", example->backgroundColor, 0.0f , 1.0f);
+			ImGui::SeparatorText("Sphere");
+			/*ImGui::SliderFloat3("Center", &example->raytracer.sphere->center.x, -1, 1);
+			ImGui::SliderFloat("Radius", &example->raytracer.sphere->radius, 0.0f, 1.0f);
+			ImGui::SliderFloat3("Light", &example->raytracer.light.pos.x, -2.0f, 2.0f);
+			ImGui::SliderFloat3("Ambient color", &example->raytracer.sphere->amb.x, 0.0f, 1.0f);
+			ImGui::SliderFloat3("Diffuse color", &example->raytracer.sphere->diff.x, 0.0f, 1.0f);
+			ImGui::SliderFloat3("Specular color", &example->raytracer.sphere->spec.x, 0.0f, 1.0f);
+			ImGui::SliderFloat("Specular power", &example->raytracer.sphere->alpha, 0.0f, 100.0f);
+			ImGui::SliderFloat("Specular coeff", &example->raytracer.sphere->ks, 0.0f, 1.0f);*/
 
-			ImGui::SeparatorText("Circle");
-			ImGui::SliderFloat2("Center", &example->circle->center.x,0.0f , float(width -1.0f));
-			ImGui::SliderFloat("Radius", &example->circle->radius, 0.0f, float(width - 1.0f));
-			ImGui::SliderFloat3("RGB", &example->circle->color.x, 0.0f, 1.0f);
+
+
+
+
 
 			ImGui::End();
 			ImGui::Render();

@@ -25,9 +25,6 @@
     <ClCompile Include="Image.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Circle.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Example.h">
@@ -40,6 +37,27 @@
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="Circle.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Hit.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracer.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
       <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>

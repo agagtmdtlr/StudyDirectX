@@ -13,6 +13,8 @@
 #include "Image.h"
 #include "Circle.h"
 
+#include "RayTracer.h"
+
 
 #define SafeRelease(com) { if(com) { com->Release(); com = NULL;}}
 
@@ -47,6 +49,7 @@ public:
 	UINT indexCount;
 
 	int width, height;
+	slab::Raytracer raytracer; 
 	float backgroundColor[4] = { 0.8f,0.8f,0.8f,1.0f };
 	float canvasColor[4] = { 0 };
 
@@ -55,6 +58,7 @@ public:
 	Image image;
 public:
 	Example(HWND window, int width, int height)
+		: raytracer(width, height)
 	{
 		//image.ReadFromFile("../Resources/image_1.jpg");
 		
@@ -66,9 +70,46 @@ public:
 		
 		//image.WritePNG("../Resources/result.png");
 
-		circle = std::make_unique<slab::Circle>(slab::Circle({width/2.f,height/2.f}, 100.f, {1.f,0.f,0.f,1.f}));
+		circle = std::make_unique<slab::Circle>(slab::Circle({0.0f,0.0f}, 0.4f, {1.f,0.f,0.f,1.f}));
 
 		Initialize(window, width, height);
+	}
+
+	glm::vec2 TransformScreenToWorld(glm::vec2 positionScreen)
+	{
+		//여기서 좌표계 변환 구현
+		//스크린 좌표계는 [0,width-1] x [0, height-1]
+
+		// 여기서 우리가 정의한 월드(world)좌표계는 [-aspect, aspect] x [-1, +1]
+		// 화면비율 aspect = float(width) / height
+
+		float aspect = (float)width / height;
+
+		const float xscale = 2.0f / float(width) * aspect;
+		const float yscale = 2.0f / float(height);
+		
+		glm::vec2 positionWorld;
+		positionWorld.x = positionScreen.x * xscale;
+		positionWorld.x -= aspect;
+
+		positionWorld.y = positionScreen.y * yscale;
+		positionWorld.y -= 1.0f;
+		positionWorld.y = -positionWorld.y;
+
+		return positionWorld;
+	}
+
+	void Update()
+	{
+		std::vector<glm::vec4> pixels(width * height, glm::vec4{ backgroundColor[0],backgroundColor[1] ,backgroundColor[2] ,1 });
+
+		raytracer.Render(pixels);
+
+		// Update texture buffer
+		D3D11_MAPPED_SUBRESOURCE ms;
+		deviceContext->Map(canvasTexture, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
+		memcpy(ms.pData, pixels.data(), pixels.size() * sizeof(glm::vec4));
+		deviceContext->Unmap(canvasTexture, NULL);
 	}
 
 	// https://learn.microsoft.com/en-us/windows/win32/direct3d11/how-to--compile-a-shader
@@ -279,27 +320,7 @@ public:
 
 	}
 
-	void Update()
-	{
-		std::vector<glm::vec4> pixels(width * height, glm::vec4{ backgroundColor[0],backgroundColor[1] ,backgroundColor[2] ,1 });
-
-		for (int i = 0; i < width; i++ )
-		{
-			for (int j = 0; j < height; j++)
-			{
-				if( circle->IsInside(glm::vec2(i,j)) == true )
-				{
-					pixels[j * width + i] = circle->color;
-				}
-			}
-		}
-
-		// Update texture buffer
-		D3D11_MAPPED_SUBRESOURCE ms;
-		deviceContext->Map(canvasTexture, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
-		memcpy(ms.pData, pixels.data(), pixels.size()* sizeof(glm::vec4));
-		deviceContext->Unmap(canvasTexture, NULL);
-	}
+	
 
 	void Render()
 	{
