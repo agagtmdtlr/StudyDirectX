@@ -60,6 +60,12 @@
     <ClInclude Include="Triangle.h">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Square.h">
+      <Filter>Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VS.hlsl">

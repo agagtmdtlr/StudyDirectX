@@ -13,7 +13,7 @@ namespace slab
 
 		glm::vec3 color; // 뒤에서 "재질(material)"로 확장
 
-		Sphere(const glm::vec3& center, const float radius, const glm::vec3& color)
+		Sphere(const glm::vec3& center, const float radius, const glm::vec3& color = glm::vec3(1.0f))
 			: center(center), radius(radius), Object(color)
 		{
 		}

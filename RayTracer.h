@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Sphere.h"
+#include "Triangle.h"
 #include "Ray.h"
 #include "Light.h"
+#include "Square.h"
 
 #include <vector>
 
@@ -16,37 +18,47 @@ namespace slab
 	public:
 		int width, height;
 		Light light;
+
+		shared_ptr<Sphere> sphere;
 		std::vector<shared_ptr<Object>> objects;
+
+
 
 		Raytracer(const int& width, const int& height)
 			: width(width), height(height)
 		{
-			auto sphere1 = make_shared<Sphere>(vec3(0.5f, 0.0f, 0.5f), 0.4f, vec3(0.5f, 0.5f, 0.5f));
-			auto sphere2 = make_shared<Sphere>(vec3(0.0f, 0.0f, 1.0f), 0.4f, vec3(0.5f, 0.5f, 0.5f));
-			auto sphere3 = make_shared<Sphere>(vec3(-0.5f, 0.0f, 1.5f), 0.4f, vec3(0.5f, 0.5f, 0.5f));
-
-			sphere1->amb = glm::vec3(0.2f);
-			sphere1->diff = glm::vec3(1.0f, 0.2f, 0.2f);
-			sphere1->spec = glm::vec3(0.5f);
-			sphere1->alpha = 10.0f;
-
-			sphere2->amb = glm::vec3(0.2f);
-			sphere2->diff = glm::vec3(0.2f, 1.0f, 0.2f);
-			sphere2->spec = glm::vec3(0.5f);
-			sphere2->alpha = 10.0f;
-
-			sphere3->amb = glm::vec3(0.2f);
-			sphere3->diff = glm::vec3(0.2f, 0.2f, 1.0f);
-			sphere3->spec = glm::vec3(0.5f);
-			sphere3->alpha = 10.0f;
-
-			// 일부러 역순으로 추가
-			objects.push_back(sphere3);
-			objects.push_back(sphere2);
+			auto sphere1 = make_shared<Sphere>(vec3(0.0f, 0.0f, 0.6f), 0.4f);
+			sphere1->amb = vec3(0.2f, 0.0f, 0.0f);
+			sphere1->diff = vec3(1.0f, 0.1f, 0.1f);
+			sphere1->spec = vec3(1.5f);
+			sphere1->alpha = 50.0f;
+			
+			this->sphere = sphere1;
 			objects.push_back(sphere1);
 
+			auto triangle1 = make_shared<Triangle>(vec3(-2.0f, -1.0f, 0.0f), vec3(-2.0f, -1.0f, 4.0f), vec3(2.0f, -1.0f, 4.0f));
+			auto triangle2 = make_shared<Triangle>(vec3(-2.0f, -1.0f, 0.0f), vec3(2.0f, -1.0f, 4.0f), vec3(2.0f, -1.0f, 0.0f));
+			triangle1->amb = vec3(0.2f);
+			triangle1->diff = vec3(0.8f);
+			triangle1->spec = vec3(1.0f);
+			triangle1->alpha = 50.0f;
+			triangle2->amb = vec3(0.2f);
+			triangle2->diff = vec3(0.8f);
+			triangle2->spec = vec3(1.0f);
+			triangle2->alpha = 50.0f;
 
-			light = Light{ {0.0f,1.0f,-1.0f} }; // 화면 뒷쪽
+			objects.push_back(triangle1);
+			objects.push_back(triangle2);
+
+			//auto quad1 = make_shared<Quad>(vec3(-2.0f, -2.0f, 0.0f), vec3(-2.0f, 2.0f, 10.0f), vec3(2.0f, 2.0f, 10.0f), vec3(2.0f, -2.0f, 0.0f));
+			//quad1->amb = vec3(0.2f);
+			//quad1->diff = vec3(0.5f);
+			//quad1->spec = vec3(0.5f);
+			//quad1->alpha = 5.0f;
+			//objects.push_back(quad1);
+
+
+			light = Light{ {0.0f,1.0f,0.2f} }; // 화면 뒷쪽
 		}
 
 
@@ -60,7 +72,7 @@ namespace slab
 				auto hit = objects[l]->CheckRayCollision(ray);
 
 				if (hit.d >= 0.0f)
-				{	
+				{
 					if (hit.d < closestD)
 					{
 						closestD = hit.d;
@@ -78,36 +90,38 @@ namespace slab
 		{
 			const Hit hit = FindColsestCollision(ray);
 
-			if (hit.d < 0.0f)
+			if (hit.d >= 0.0f)
 			{
-				return glm::vec3(0.0f);
-			}
-			else
-			{
-				glm::vec3 eye = ray.start;
-				//return sphere->color * hit.d; // 깊이를 곱해서 입체감 만들기
-
+			
 				// 여기서 퐁 모델로 조면 효과 계산
 				// 참고 자료
 				// https://en.wikipedia.org/wiki/Phong_reflection_model
 				// https://www.scratchapixel.com/lessons/3d-basic-rendering/phong-shader-BRDF/phong-illumination-models-brdf.html
 				// 
+				glm::vec3 color(hit.obj->amb);
 
-				// Diffuse
-				// const vec3 dirToLight
-				glm::vec3 dirToLight = glm::normalize(light.pos - hit.point);
-				float ndotl = glm::max(glm::dot(dirToLight, hit.normal), 0.0f);
-				const float diff = ndotl;
+				vec3 dirToLight = normalize( light.pos - hit.point );
+				Ray shadowRay = Ray{hit.point + dirToLight * 1e-4f, dirToLight};
+				if (FindColsestCollision(shadowRay).d < 0.0f)
+				{
+					// Diffuse
+					// const vec3 dirToLight
+					glm::vec3 dirToLight = glm::normalize(light.pos - hit.point);
+					float ndotl = glm::max(glm::dot(dirToLight, hit.normal), 0.0f);
+					const float diff = ndotl;
 
-				// Specular
-				// const vec3 relfectDir = .. // r =2 (n dot l) n - l
-				glm::vec3 reflectDir = glm::normalize(hit.normal * glm::dot(dirToLight, hit.normal) * 2.0f - dirToLight);
+					// Specular
+					// const vec3 relfectDir = .. // r =2 (n dot l) n - l
+					glm::vec3 reflectDir = glm::normalize(hit.normal * glm::dot(dirToLight, hit.normal) * 2.0f - dirToLight);
 
-				const float specular = glm::pow(glm::max(glm::dot(-ray.dir, reflectDir), 0.0f), hit.obj->alpha);
+					const float specular = glm::pow(glm::max(glm::dot(-ray.dir, reflectDir), 0.0f), hit.obj->alpha);
 
-				//return sphere->amb + sphere->diff * diff;
-				return hit.obj->amb + hit.obj->diff * diff + hit.obj->spec * specular;
+					color += hit.obj->diff * diff + hit.obj->spec * specular;
+				}
+				return  color;
 			}
+
+			return vec3(0.0f);
 		}
 
 		void Render(std::vector<glm::vec4>& pixels)
@@ -125,8 +139,7 @@ namespace slab
 					// 광선의 방향 벡터
 					// 스크린에 수직인 z방향, 절대값 1.0인 유닛 벡터
 					// Orthographic projection (정투영) vs perspective projection (원근 투영)
-
-					const auto rayDir = glm::normalize( pixelPosWorld - eyePos );
+					const auto rayDir = glm::normalize(pixelPosWorld - eyePos);
 					//const auto rayDir = glm::vec3(0.f, 0.f, 1.f);
 
 					Ray pixelRay{ pixelPosWorld, rayDir };
