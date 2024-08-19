@@ -10,15 +10,19 @@ namespace slab
 	{
 	public:
 		vec3 v0, v1, v2;
+		vec2 uv0, uv1, uv2; // 뒤에서 텍스처 좌표계로 사용
+
+		virtual ObjectType GetObjectType() const override { return ObjectType::Triangle; }
+
 
 	public:
 		Triangle()
-			: v0(vec3(0.0f)), v1(vec3(0.0f)), v2(vec3(0.0f))
+			: v0(vec3(0.0f)), v1(vec3(0.0f)), v2(vec3(0.0f)), uv0(vec2(0.0f)), uv1(vec2(0.0f)), uv2(vec2(0.0f))
 		{
 		}
 
-		Triangle(vec3 v0, vec3 v1, vec3 v2)
-			:v0(v0), v1(v1), v2(v2)
+		Triangle(vec3 v0, vec3 v1, vec3 v2, vec2 uv0 = vec2(0.0f), vec2 uv1 = vec2(0.0f), vec2 uv2 = vec2(0.0f))
+			:v0(v0), v1(v1), v2(v2), uv0(uv0), uv1(uv1), uv2(uv2)
 		{
 
 		}
@@ -28,15 +32,18 @@ namespace slab
 			Hit hit = Hit{ -1.0f, vec3(0.0), vec3(0.0) };
 
 			vec3 point, faceNormal;
-			float t, u, v;
-			if (IntersectRayTriangle(ray.start, ray.dir, v0, v1, v2, point, faceNormal, t, u, v))
+			float t, w0, w1;
+			if (IntersectRayTriangle(ray.start, ray.dir, v0, v1, v2, point, faceNormal, t, w0, w1))
 			{
 				hit.d = t;
 				hit.point = point; // ray.start + ray.dir * t;
 				hit.normal = faceNormal;
 
+				// Barycentric coordinates 확인용
+				//hit.uv = vec2(w0,w1);
+
 				// 텍스처링에서 사용
-				// hit.uv = uv0 * u + uv1 * v + uv2 * (1.0f - u -v);
+				hit.uv = uv0 * w0 + uv1 * w1 + uv2 * (1.0f - w0 - w1 );
 			}
 
 			return hit;
@@ -51,7 +58,7 @@ namespace slab
 			const vec3& orig, const vec3& dir,
 			const vec3& v0, const vec3& v1,
 			const vec3& v2, vec3& point, vec3& faceNormal,
-			float& t, float& u, float& v)
+			float& t, float& w0, float& w1)
 		{
 			/*
 			* 기본 전략
@@ -85,18 +92,40 @@ namespace slab
 			/* 3. 그 충돌 위치가 삼각형 안에 들어 있는 확인 */
 			// 방향만 확인하면 되기 때문에 normalize() 생략 가능
 			// 아래에서 cross product의 절대값으로 작은 삼각형들의 넓이 계산
-			const vec3 normal0 = (cross(v0 - point, v1 - point));
-			const vec3 normal1 = (cross(v1 - point, v2 - point));
-			const vec3 normal2 = (cross(v2 - point, v0 - point));
+			//const vec3 normal0 = (cross(v0 - point, v1 - point));
+			//const vec3 normal1 = (cross(v1 - point, v2 - point));
+			//const vec3 normal2 = (cross(v2 - point, v0 - point));
 
-			if (dot(normal0, faceNormal) < 0.0f) return false;
-			if (dot(normal1, faceNormal) < 0.0f) return false;
-			if (dot(normal2, faceNormal) < 0.0f) return false;
+			const vec3 cross0 = glm::cross(point - v2, v1 - v2);
+			const vec3 cross1 = glm::cross(point - v0, v2 - v0);
+			const vec3 cross2 = glm::cross(v1 - v0, point - v0);
+
+			if (dot(cross0, faceNormal) < 0.0f) return false;
+			if (dot(cross1, faceNormal) < 0.0f) return false;
+			if (dot(cross2, faceNormal) < 0.0f) return false;
 
 			// Barycentric coordinates 계산
 			// 텍스처링에서 사용
+			// 아래에서 cross product의 절대값으로 작은 삼각형들의 넓이 계산
 			// u = ...
 			// v = ...
+			const float area0 = glm::length(cross0) * 0.5f;
+			const float area1 = glm::length(cross1) * 0.5f;
+			const float area2 = glm::length(cross2) * 0.5f;
+
+			const float areaSum = area0 + area1 + area2;
+
+
+			// 기호에 alpha, beta, gamma 또는 u,v,w 등을 사용하기도 함
+
+			// u + v + w = 1
+			// w = 1 - (area0 + area1)
+			w0 = area0 / areaSum;
+			w1 = area1 / areaSum;
+
+
+
+			
 
 			return true;
 		}

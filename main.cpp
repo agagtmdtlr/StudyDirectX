@@ -79,10 +79,12 @@ int main()
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 			ImGui::Begin("Option");
+			ImGui::Text("ElapsedTime %lf", 1.0f / example->elapsedTime);
+
 			ImGui::SeparatorText("Sphere");
+
 			//ImGui::SliderFloat3("Center", &example->raytracer.sphere->center.x, -1, 1);
 			//ImGui::SliderFloat("Radius", &example->raytracer.sphere->radius, 0.0f, 1.0f);
-			ImGui::SliderFloat3("Light", &example->raytracer.light.pos.x, -2.0f, 2.0f);
 			//ImGui::SliderFloat3("Ambient color", &example->raytracer.sphere->amb.x, 0.0f, 1.0f);
 			//ImGui::SliderFloat3("Diffuse color", &example->raytracer.sphere->diff.x, 0.0f, 1.0f);
 			//ImGui::SliderFloat3("Specular color", &example->raytracer.sphere->spec.x, 0.0f, 1.0f);
@@ -93,12 +95,14 @@ int main()
 
 
 
-
-			ImGui::End();
-			ImGui::Render();
+			
 
 			example->Update();
 			example->Render();
+
+
+			ImGui::End();
+			ImGui::Render();
 
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 

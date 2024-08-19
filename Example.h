@@ -30,6 +30,8 @@ class Example
 {
 
 public:
+
+
 	// https://github.com/Microsoft/DirectXTK/wiki/Implementation#naming-conventions
 	ID3D11Device* device;
 	ID3D11DeviceContext* deviceContext;
@@ -53,6 +55,9 @@ public:
 	float backgroundColor[4] = { 0.8f,0.8f,0.8f,1.0f };
 	float canvasColor[4] = { 0 };
 
+	double elapsedTime = 0.0;
+	std::vector<glm::vec4> pixels;
+
 	std::unique_ptr<slab::Circle> circle;
 
 	Image image;
@@ -62,11 +67,8 @@ public:
 	{
 		//image.ReadFromFile("../Resources/image_1.jpg");
 		
-		// 시간 측정
-		const auto start_time = std::chrono::high_resolution_clock::now();
-		const auto elapsed_time = std::chrono::high_resolution_clock::now() - start_time;
+		
 
-		std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time).count() / 1000.0 << " sec" << std::endl;
 		
 		//image.WritePNG("../Resources/result.png");
 
@@ -101,15 +103,29 @@ public:
 
 	void Update()
 	{
-		std::vector<glm::vec4> pixels(width * height, glm::vec4{ backgroundColor[0],backgroundColor[1] ,backgroundColor[2] ,1 });
+		static int count = 0;
 
-		raytracer.Render(pixels);
+		// 시간 측정
+		const auto start_time = std::chrono::high_resolution_clock::now();
 
-		// Update texture buffer
-		D3D11_MAPPED_SUBRESOURCE ms;
-		deviceContext->Map(canvasTexture, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
-		memcpy(ms.pData, pixels.data(), pixels.size() * sizeof(glm::vec4));
-		deviceContext->Unmap(canvasTexture, NULL);
+		//if (count == 0)
+		{
+			pixels.resize(width * height);
+
+			raytracer.Render(pixels);
+
+			// Update texture buffer
+			D3D11_MAPPED_SUBRESOURCE ms;
+			deviceContext->Map(canvasTexture, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
+			memcpy(ms.pData, pixels.data(), pixels.size() * sizeof(glm::vec4));
+			deviceContext->Unmap(canvasTexture, NULL);
+		}
+		const auto elapsed_time = std::chrono::high_resolution_clock::now() - start_time;
+
+		elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time).count() / 1000.0; // sec
+
+		count++;
+		
 	}
 
 	// https://learn.microsoft.com/en-us/windows/win32/direct3d11/how-to--compile-a-shader

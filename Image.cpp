@@ -4,10 +4,7 @@
 #include <iostream>
 #include <memory>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <stb_image_write.h>
+#include "FileManager.h"
 
 #include <algorithm> // std::clamp (C++17)
 
@@ -21,19 +18,7 @@ void Image::ReadFromFile(const char* filename)
     #define STB_IMAGE_WRITE_IMPLEMENTATION
     #include <stb_image_write.h>
     */
-
-    unsigned char* img = stbi_load(filename, &width, &height, &channels, 0);
-
-
-    if (width)
-    {
-        std::cout << width << " " << height << " " << channels << std::endl;
-    }
-    else
-    {
-        std::cout << "Error : reading " << filename << " failed." << std::endl;
-    }
-
+    unsigned char* img = FileManager::LoadImage(filename, &width, &height, &channels);
     // channels가 3(RGB) 또는 4(RGBA)인 경우만 가정
     // unsigned char(0에서 255)을 4채널 float(0.0f에서 1.0f)로 변화
     pixels.resize(width * height);
@@ -59,7 +44,7 @@ void Image::WritePNG(const char* filename)
         img[i * channels + 2] = uint8_t(pixels[i].v[2] * 255.0f);
     }
 
-    stbi_write_png(filename, width, height, channels, img.data(), width * channels);
+    FileManager::WriteImage(filename, width, height, channels, img.data());
 }
 
 Vec4& Image::GetPixel(int i, int j)
