@@ -24,6 +24,8 @@ namespace slab
 		vec3 diff = vec3(0.f);
 		vec3 spec = vec3(0.f);
 		float alpha = 10.0f;
+		float reflection = 0.0f;
+		float transparency = 0.0f;
 
 		std::shared_ptr<Texture> ambTexture;
 		std::shared_ptr<Texture> difTexture;

@@ -33,6 +33,9 @@ namespace slab
 				const float d1 = -b + sqrt(nebla);
 				const float d2 = -b - sqrt(nebla);
 				hit.d = glm::min(d1, d2);
+				if( hit.d < 0.0f)
+				hit.d = glm::max(d1,d2);
+
 				hit.point = ray.start + ray.dir * hit.d;
 				hit.normal = glm::normalize(hit.point - center);
 			}

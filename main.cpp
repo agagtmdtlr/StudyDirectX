@@ -79,30 +79,14 @@ int main()
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 			ImGui::Begin("Option");
-			ImGui::Text("ElapsedTime %lf", 1.0f / example->elapsedTime);
-
-			ImGui::SeparatorText("Sphere");
-
-			//ImGui::SliderFloat3("Center", &example->raytracer.sphere->center.x, -1, 1);
-			//ImGui::SliderFloat("Radius", &example->raytracer.sphere->radius, 0.0f, 1.0f);
-			//ImGui::SliderFloat3("Ambient color", &example->raytracer.sphere->amb.x, 0.0f, 1.0f);
-			//ImGui::SliderFloat3("Diffuse color", &example->raytracer.sphere->diff.x, 0.0f, 1.0f);
-			//ImGui::SliderFloat3("Specular color", &example->raytracer.sphere->spec.x, 0.0f, 1.0f);
-			//ImGui::SliderFloat("Specular power", &example->raytracer.sphere->alpha, 0.0f, 100.0f);
-			//ImGui::SliderFloat("Specular coeff", &example->raytracer.sphere->ks, 0.0f, 1.0f);*/
-
-
-
-
-
-			
+			//ImGui::Text("ElapsedTime %lf", 1.0f / example->elapsedTime);
+			ImGui::InputInt("Sumper Sampling Level",&example->raytracer.supersmaplingLevel);
+			ImGui::End();
+			ImGui::Render();
 
 			example->Update();
 			example->Render();
 
-
-			ImGui::End();
-			ImGui::Render();
 
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 

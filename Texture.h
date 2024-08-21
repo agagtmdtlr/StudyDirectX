@@ -9,6 +9,8 @@
 
 namespace slab
 {
+	
+
 	// Bilinear interpolation reference
 	// https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/interpolation/bilinear-filtering
 
@@ -17,11 +19,29 @@ namespace slab
 	class Texture
 	{
 	public:
+		enum class SampleType
+		{
+			Clamp = 0,
+			Wrap = 1
+		};
+
 		int width, height, channels;
+		SampleType sampleType = SampleType::Clamp;
 		std::vector<uint8_t> image;
 
 		Texture(const std::string& filename);
 		Texture(const int& width, const int& height, const std::vector<vec3>& pixels);
+
+		vec3 GetPixel(int i, int  j)
+		{
+			switch (sampleType)
+			{
+				case SampleType::Clamp:
+					return GetClamped(i,j);
+				case SampleType::Wrap:
+					return GetWrapped(i,j);
+			}
+		}
 
 		vec3 GetClamped(int i, int j)
 		{
@@ -52,7 +72,7 @@ namespace slab
 			return vec3(r, g, b);
 		}
 
-		vec3 InterplateBilinear(
+		vec3 InterpolateBilinear(
 			const float& dx,
 			const float& dy,
 			const vec3& c00,
@@ -61,7 +81,11 @@ namespace slab
 			const vec3& c11)
 		{
 			// ...
-			return vec3(1.0f);
+
+			vec3 a1 = c00 + (c10 - c00) * dx;
+			vec3 a2 = c01 + (c11 - c01) * dx;
+
+			return a1 + (a2 - a1) * dy;
 		}
 
 		vec3 SamplePoint(const vec2& uv) // Nearest sampling 이라고 부르기도 함
@@ -70,12 +94,29 @@ namespace slab
 			// range of image coord xy [-0.5, width -1 + 0.5] x [-0.5, height - 1 + 0.5]
 			// integer index range of array 
 
-			vec2 xy = vec2((width-1) * uv.x,(height-1)* uv.y);
+			vec2 xy = uv * vec2(float(width), float(height)) - vec2(0.5f);
 
-			int i = int(xy.x);
-			int j = int(xy.y);
+			int i = glm::round(xy.x);
+			int j = glm::round(xy.y);
 
-			return GetClamped(i,j);
+			return GetPixel(i,j);
+		}
+
+		vec3 SampleLineaer(const vec2& uv)
+		{
+			// range of texture coord uv [0.0, 1.0] x [0.0,1.0]
+			// range of image coord xy [-0.5, width -1 + 0.5] x [-0.5, height - 1 + 0.5]
+
+			vec2 xy = uv * vec2(float(width), float(height)) - vec2(0.5f);
+
+			const int i = int(glm::floor(xy.x));
+			const int j = int(glm::floor(xy.y));
+
+
+			const float dx = xy.x - float(i);
+			const float dy = xy.y - float(j);
+
+			return InterpolateBilinear(dx,dy, GetPixel(i,j), GetPixel(i+1,j), GetPixel(i,j+1), GetPixel(i+1,j+1));
 		}
 	};
 }

@@ -66,10 +66,6 @@ public:
 		: raytracer(width, height)
 	{
 		//image.ReadFromFile("../Resources/image_1.jpg");
-		
-		
-
-		
 		//image.WritePNG("../Resources/result.png");
 
 		circle = std::make_unique<slab::Circle>(slab::Circle({0.0f,0.0f}, 0.4f, {1.f,0.f,0.f,1.f}));
@@ -108,9 +104,9 @@ public:
 		// 시간 측정
 		const auto start_time = std::chrono::high_resolution_clock::now();
 
-		//if (count == 0)
+		if (count == 0)
 		{
-			pixels.resize(width * height);
+			pixels.resize(raytracer.width * raytracer.height);
 
 			raytracer.Render(pixels);
 
@@ -254,8 +250,10 @@ public:
 		textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		textureDesc.MiscFlags =0;
 		textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		textureDesc.Width = width;
-		textureDesc.Height = height;
+		//textureDesc.Width = width;
+		//textureDesc.Height = height;
+		textureDesc.Width = raytracer.width;
+		textureDesc.Height = raytracer.height;
 
 		device->CreateTexture2D(&textureDesc, nullptr, &canvasTexture);
 
