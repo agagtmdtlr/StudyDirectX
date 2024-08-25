@@ -31,6 +31,7 @@
     <ClCompile Include="FileManager.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Cubemap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Example.h">
@@ -77,6 +78,9 @@
     </ClInclude>
     <ClInclude Include="FileManager.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Cubemap.h">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

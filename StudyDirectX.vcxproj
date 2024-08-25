@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cubemap.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
@@ -140,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="Cubemap.h" />
     <ClInclude Include="Example.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="Hit.h" />

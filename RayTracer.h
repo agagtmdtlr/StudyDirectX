@@ -32,8 +32,8 @@ namespace slab
 			sphere1->diff = vec3(1.0f, 0.0f, 0.0f);
 			sphere1->spec = vec3(1.0f);
 			sphere1->alpha = 10.0f;
-			sphere1->reflection = 0.5f;
-			sphere1->transparency = 0.0f;
+			sphere1->reflection = 0.0f;
+			sphere1->transparency = 1.0f;
 			objects.push_back(sphere1);
 
 			auto sphere2 = make_shared<Sphere>(vec3(1.2f, -0.1f, 0.5f), 0.4f);
@@ -41,24 +41,37 @@ namespace slab
 			sphere2->diff = vec3(0.0f, 0.0f, 1.0f);
 			sphere2->spec = vec3(1.0f);
 			sphere2->alpha = 50.0f;
-			sphere2->reflection = 0.2f;
+			sphere2->reflection = 0.0f;
 			objects.push_back(sphere2);
 
-			auto groundTexture = std::make_shared<Texture>("../Resources/shadertoy_abstract1.jpg");
+			auto groundTexture = std::make_shared<Texture>("shadertoy_abstract1.jpg");
 			auto ground = make_shared<Square>(vec3(-10.0f, -1.2f, 0.0f), vec3(-10.0f, -1.2f, 10.0f), vec3(10.0f, -1.2f, 10.0f), vec3(10.0f, -1.2f, 0.0f),
 				vec2(0.0f, 0.0f), vec2(1.0f, 0.0f), vec2(1.0f, 1.0f), vec2(0.0f, 1.0f));
 			ground->amb = vec4(1.0f);
 			ground->diff = vec4(1.0f);
 			ground->spec = vec4(1.0f);
 			ground->alpha = 10.0f;
-			ground->reflection = 0.5f;
+			ground->reflection = 0.0f;
 			ground->ambTexture = groundTexture;
 			ground->difTexture = groundTexture;
 
 			objects.push_back(ground);
 
-			
-			light = Light{ {0.0f, 0.5f, -0.5f} }; // 화면 뒷쪽
+			auto squareTexture = std::make_shared<Texture>("back.jpg");
+			auto square = make_shared<Square>(vec3(-10.0f, 10.0f, 10.0f), vec3(10.0f, 10.0f, 10.0f), vec3(10.0f, -10.0f, 10.0f), vec3(-10.0f, -10.0f, 10.0f),
+				vec2(0.0f, 0.0f), vec2(1.0f, 0.0f), vec2(1.0f, 1.0f), vec2(0.0f, 1.0f));
+
+			square->amb = vec3(1.0f);
+			square->diff = vec3(0.0f);
+			square->spec = vec3(0.0f);
+			square->alpha = 10.0f;
+			square->reflection = 0.0f;
+			square->ambTexture = squareTexture;
+			square->difTexture = squareTexture;
+
+			objects.push_back(square);
+
+			light = Light{ {0.0f, 0.3f, -0.5f} }; // 화면 뒷쪽
 
 		}
 
@@ -88,10 +101,30 @@ namespace slab
 			return closest_hit;
 		}
 
+		vec3 refract(const vec3& I, const vec3& N, const float& ior)
+		{
+			float eta = ior;
+
+			vec3 n = N;
+			if (dot(-I, N) < 0) // in - out
+			{
+				eta = 1/eta;
+				n = -n;
+			}
+
+			const float cos1 = dot(-I, n);
+			const float sin1 = sqrt(1.f - cos1 * cos1);
+			const float sin2 = sin1 / eta;
+			const float cos2 = sqrt(1.f - sin2 * sin2);
+
+			const vec3 m = glm::normalize( I + n * cos1);
+			return m * sin2 + -n * cos2;
+		}
+
 		// 광선이 물체에 닿으면 그 물체의 색 반환
 		glm::vec3 traceRay(Ray& ray, const int recursiveLevel)
 		{
-			if(recursiveLevel < 0)
+			if (recursiveLevel < 0)
 				return vec3(0.0f);
 
 			const Hit hit = FindColsestCollision(ray);
@@ -105,7 +138,7 @@ namespace slab
 				glm::vec3 color(0.0f);
 				glm::vec3 dirToLight = glm::normalize(light.pos - hit.point);
 
-				
+
 				{
 					glm::vec3 phongColor(0.0f);
 					// Diffuse
@@ -143,26 +176,67 @@ namespace slab
 						// 반사광이 반환해준 색을 더할 때의 비율은 hit.obj->reflection
 
 						const auto reflectedDirection = glm::normalize(hit.normal * 2.0f * glm::dot(hit.normal, -ray.dir) + ray.dir);
-						Ray reflectRay = {hit.point + reflectedDirection * 1e-4f, reflectedDirection };
+						Ray reflectRay = { hit.point + reflectedDirection * 1e-4f, reflectedDirection };
 
 						color += traceRay(reflectRay, recursiveLevel - 1) * hit.obj->reflection;
 					}
 
+					// 참고
+					// https://samdriver.xyz/article/refraction-sphere (그림들이 좋아요)
+					// https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel (오류있음)
+					// https://web.cse.ohio-state.edu/~shen.94/681/Site/Slides_files/reflection_refraction.pdf (슬라이드가 보기 좋지는 않지만 정확해요)
 					if (hit.obj->transparency)
 					{
+						const float ior = 1.5f; // index of refraction ( glass : 1.5 , water : 1.3 )
+
+						vec3 normal = hit.normal;
+						float eta;
+
+						float etai = ior, etat = 1;
+						if(glm::dot(ray.dir, hit.normal) < 0.0f) // 밖에서 안으로 들어가는 경우 (ex) air->glass
+						{ 
+							eta = ior;
+							normal = hit.normal;
+						}
+						else // 안에서 밖으로 나가는 경우 (ex) glass->air
+						{
+							eta = 1.0f / ior;
+							normal = -hit.normal;
+						}
+
+						const float cosTheta1 = glm::dot(-ray.dir, normal);
+						const float sinTheta1 = sqrt(1.0f - cosTheta1 * cosTheta1); // cos^2 + sin^2 = 1
+						const float sinTheta2 = sinTheta1 / eta;
+						const float cosTheta2 = sqrt(1.0f - sinTheta2 * sinTheta2);
+
+
+						// k < 0.0f 이란 뜻 굴절 임계값을 번어사 굴절이 아닌 반사가 일어난 것이다
+						const vec3 m = glm::normalize(ray.dir + normal * cosTheta1);
+						const vec3 A = m * sinTheta2;
+						const vec3 B = -normal * cosTheta2;
+						const vec3 refractedDirection = glm::normalize(A + B); // transmission
+
+
+						//if (k >= 0.0f)
+						{
+							Ray refectRay = { hit.point + refractedDirection * 1e-4f, refractedDirection };
+							color += traceRay(refectRay, recursiveLevel - 1) * hit.obj->transparency;
+						}
+						
+						
+						// Fresnel 효과는 생략되었습니다.
 
 					}
 
 
-					Ray shadowRay = { hit.point + dirToLight * 1e-4f, dirToLight };
-					Hit shadowHit = FindColsestCollision(shadowRay);
-
-					if (shadowHit.d >= 0.0f)
-					{
-						color *= 0.5f;
-					}
+					//Ray shadowRay = { hit.point + dirToLight * 1e-4f, dirToLight };
+					//Hit shadowHit = FindColsestCollision(shadowRay);
+					//if (shadowHit.d >= 0.0f)
+					//{
+					//	color *= 0.5f;
+					//}
 				}
-				
+
 
 				return  color;
 			}
@@ -175,21 +249,21 @@ namespace slab
 			if (recursiveLevel == 0)
 			{
 				Ray ray{ pixelPos, glm::normalize(pixelPos - eyePos) };
-				return traceRay(ray,0);
+				return traceRay(ray, 0);
 			}
 			/*
 			dx
 			0  1  2  3  4
 			_____________
 			|__|a_|__|b_|
-			|__|__|p_|__|	
+			|__|__|p_|__|
 			|__|c_|__|d_|
 			|__|__|__|__|
 			------
 			dx 0-4
 			subdx 0-2
-			c = vec2( p.x - subdx * 0.5 , p.y - subdx * 0.5 )		
-			
+			c = vec2( p.x - subdx * 0.5 , p.y - subdx * 0.5 )
+
 			*/
 
 			const float subdx = 0.5f * dx;
@@ -204,7 +278,7 @@ namespace slab
 				for (int i = 0; i < 2; i++)
 				{
 					vec3 subPos(pixelPos.x + float(i) * subdx, pixelPos.y + float(j) * subdx, pixelPos.z);
-					pixelColor += traceRay2x2(eyePos, subPos, subdx, recursiveLevel -1);
+					pixelColor += traceRay2x2(eyePos, subPos, subdx, recursiveLevel - 1);
 				}
 			}
 			pixelColor += traceRay2x2(eyePos, pixelPos, subdx, recursiveLevel - 1);

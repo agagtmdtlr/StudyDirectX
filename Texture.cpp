@@ -5,7 +5,8 @@ namespace slab
 {
 	Texture::Texture(const std::string& filename)
 	{
-		unsigned char* img = FileManager::LoadImage(filename.c_str(), &width, &height, &channels);
+		std::string fullpath = "../Resources/" + filename;
+		unsigned char* img = FileManager::LoadImage(fullpath.c_str(), &width, &height, &channels);
 
 		image.resize(width * height * channels);
 		memcpy(image.data(), img, image.size() * sizeof(uint8_t));
