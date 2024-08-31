@@ -7,6 +7,7 @@
 
 #include "Example.h"
 #include "Circle.h"
+#include "RenderContext.h"
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam , LPARAM lParam);
 
@@ -52,6 +53,8 @@ int main()
 	UpdateWindow(hwnd);
 
 	auto example = std::make_unique<Example>(hwnd, width, height);
+	RenderContext* renderContext = RenderContext::GetRenderContext();
+	renderContext->Initialize(hwnd, width, height);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();

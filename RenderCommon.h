@@ -1,9 +1,14 @@
 #pragma once
 #include <algorithm>
 #include <math.h>
+#include <glm/glm.hpp>
 
 // 수학의 4차원 벡터(vector)
-
+struct Vertex
+{
+	glm::vec4 pos;
+	glm::vec2 uv;
+};
 
 template<int length, typename T> struct vec_template;
 

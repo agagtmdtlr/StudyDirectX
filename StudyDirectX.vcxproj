@@ -137,6 +137,8 @@
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="RenderContext.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,8 +149,10 @@
     <ClInclude Include="Hit.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="RenderContext.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="RayTracer.h" />

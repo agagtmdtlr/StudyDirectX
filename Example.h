@@ -20,11 +20,7 @@
 
 
 
-struct Vertex
-{
-	glm::vec4 pos;
-	glm::vec2 uv;
-};
+
 
 class Example
 {
@@ -184,22 +180,7 @@ public:
 		UINT createDeviceFlags = 0;
 		//createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 
-		const D3D_FEATURE_LEVEL featureLevelArray[1] = {D3D_FEATURE_LEVEL_11_0};
-		if (FAILED(D3D11CreateDeviceAndSwapChain(NULL,
-			D3D_DRIVER_TYPE_HARDWARE,
-			NULL,
-			createDeviceFlags,
-			featureLevelArray,
-			1,
-			D3D11_SDK_VERSION,
-			&swapChainDesc,
-			&swapChain,
-			&device,
-			NULL,
-			&deviceContext)))
-		{
-			std::cout << "D3D11CrateDeviceAndSwapChain() error" << std::endl;
-		}
+		
 
 		//CreateRenderTarget
 		ID3D11Texture2D* pBackBuffer;

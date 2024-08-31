@@ -32,6 +32,12 @@
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="Cubemap.cpp" />
+    <ClCompile Include="RenderContext.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Example.h">
@@ -80,6 +86,12 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="Cubemap.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderContext.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
       <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
