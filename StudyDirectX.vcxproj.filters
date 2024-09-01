@@ -17,6 +17,9 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{9c3dc188-9a2b-46a2-bd88-b659c6810e87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{2cd16eb6-aeab-4523-963b-24f279848da1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,6 +44,10 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+    <ClCompile Include="Gizmo.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Example.h">
@@ -100,6 +107,10 @@
     <ClInclude Include="Shader.h">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="Gizmo.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VS.hlsl">

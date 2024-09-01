@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <memory>
 #include <iostream>
+#include <ImGuizmo.h>
 
 #include "Example.h"
 #include "Circle.h"
@@ -62,6 +63,10 @@ int main()
 	io.DisplaySize = ImVec2(width, height);
 	ImGui::StyleColorsLight();
 
+	ImGuiContext* imguiContext = ImGui::GetCurrentContext();
+	ImGuizmo::SetImGuiContext(imguiContext);
+
+
 	// Setup Platform/ Renderer backedns
 	ImGui_ImplDX11_Init(example->device, example->deviceContext);
 	ImGui_ImplWin32_Init(hwnd);
@@ -80,6 +85,9 @@ int main()
 			// Start the Dear ImGui frame
 			ImGui_ImplDX11_NewFrame(); 
 			ImGui_ImplWin32_NewFrame();
+			ImGuizmo::BeginFrame();
+
+
 			ImGui::NewFrame();
 			ImGui::Begin("Option");
 			//ImGui::Text("ElapsedTime %lf", 1.0f / example->elapsedTime);
