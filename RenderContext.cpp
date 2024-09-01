@@ -134,25 +134,5 @@ void RenderContext::InitShaders()
 
 void RenderContext::Render()
 {
-	float clearColor[4] = { 0.0f , 0.0f , 0.0f , 1.0f };
-	deviceContext->RSSetViewports(1, &viewport);
-	deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
-	deviceContext->ClearRenderTargetView(renderTargetView.Get(), clearColor);
-
-	// set the shader objects
-	deviceContext->VSSetShader(vertexShader.Get(), 0, 0);
-	deviceContext->PSSetShader(pixelShader.Get(), 0, 0);
-
-	// select which vertex buffer to display
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-	deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-	deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
-
-	// https://github.com/Microsoft/DirectXTK/wiki/Getting-Started
-	// https://github.com/microsoft/Xbox-ATG-Samples/tree/main/PCSamples/IntroGraphics/SimpleTexturePC
-	deviceContext->PSSetSamplers(0, 1, &colorSampler);
-	deviceContext->PSSetShaderResources(0, 1, &canvasTextureView);
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	deviceContext->DrawIndexed(indexCount, 0, 0);
+	
 }

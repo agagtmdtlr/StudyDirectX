@@ -53,8 +53,8 @@ int main()
 	UpdateWindow(hwnd);
 
 	auto example = std::make_unique<Example>(hwnd, width, height);
-	RenderContext* renderContext = RenderContext::GetRenderContext();
-	renderContext->Initialize(hwnd, width, height);
+	//RenderContext* renderContext = RenderContext::GetRenderContext();
+	//renderContext->Initialize(hwnd, width, height);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
