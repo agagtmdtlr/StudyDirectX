@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "Image.h"
 #include <omp.h>
 #include <iostream>

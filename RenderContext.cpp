@@ -1,5 +1,5 @@
+#include "stdafx.h"
 #include "RenderContext.h"
-
 #include <iostream>
 
 
@@ -11,6 +11,16 @@ RenderContext* RenderContext::GetRenderContext()
 		renderContext = new RenderContext();
 	}
 	return renderContext;
+}
+
+ID3D11Device* RenderContext::GetDevice()
+{
+	return device.Get();
+}
+
+ID3D11DeviceContext* RenderContext::GetDC()
+{
+	return deviceContext.Get();
 }
 
 void RenderContext::Initialize(HWND window, int width, int height)

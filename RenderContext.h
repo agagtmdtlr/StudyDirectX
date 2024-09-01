@@ -10,18 +10,21 @@
 #include <wrl/client.h>
 #include "Mesh.h"
 
-using namespace Microsoft::WRL;
 
 class RenderContext
 {	
 public:
 	static RenderContext* GetRenderContext();
+	ID3D11Device* GetDevice();
+	ID3D11DeviceContext* GetDC();
+
 
 	void Initialize(HWND window, int width, int height);
 	void InitShaders();
 
 	void Render();
 
+private:
 	ComPtr<ID3D11Device> device;
 	ComPtr<ID3D11DeviceContext> deviceContext;
 	ComPtr<IDXGISwapChain> swapChain;

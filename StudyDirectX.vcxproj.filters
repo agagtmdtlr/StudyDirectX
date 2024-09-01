@@ -41,13 +41,14 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="Gizmo.cpp">
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="RenderPass.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Example.h">
@@ -104,19 +105,23 @@
     <ClInclude Include="Mesh.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="Gizmo.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="RenderPass.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PhongShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>
