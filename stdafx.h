@@ -6,7 +6,12 @@
 #include <string>
 #include <iostream>
 #include <array>
+#include <vector>
+using namespace Microsoft::WRL;
+
 #include "RenderContext.h"
 
-template<class T>
-using ComPtr = Microsoft::WRL::ComPtr<T>;
+
+
+//template<class T>
+//using ComPtr = Microsoft::WRL::ComPtr<T>;

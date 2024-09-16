@@ -10,6 +10,7 @@
 #include "Example.h"
 #include "Circle.h"
 #include "RenderContext.h"
+#include "RenderDemo.h"
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam , LPARAM lParam);
 
@@ -54,9 +55,10 @@ int main()
 	ShowWindow(hwnd, SW_SHOWDEFAULT);
 	UpdateWindow(hwnd);
 
-	auto example = std::make_unique<Example>(hwnd, width, height);
-	//RenderContext* renderContext = RenderContext::GetRenderContext();
-	//renderContext->Initialize(hwnd, width, height);
+	//auto example = std::make_unique<Example>(hwnd, width, height);
+	auto demo = std::make_unique<RenderDemo>(hwnd, width, height);
+	RenderContext* renderContext = RenderContext::GetRenderContext();
+	renderContext->Initialize(hwnd, width, height);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -65,11 +67,11 @@ int main()
 	ImGui::StyleColorsLight();
 
 	ImGuiContext* imguiContext = ImGui::GetCurrentContext();
-	ImGuizmo::SetImGuiContext(imguiContext);
+	//ImGuizmo::SetImGuiContext(imguiContext);
 
 
 	// Setup Platform/ Renderer backedns
-	ImGui_ImplDX11_Init(example->device, example->deviceContext);
+	ImGui_ImplDX11_Init(RenderContext::GetDevice(), RenderContext::GetDC());
 	ImGui_ImplWin32_Init(hwnd);
 
 	//Main message loop
@@ -86,24 +88,29 @@ int main()
 			// Start the Dear ImGui frame
 			ImGui_ImplDX11_NewFrame(); 
 			ImGui_ImplWin32_NewFrame();
-			ImGuizmo::BeginFrame();
+			//ImGuizmo::BeginFrame();
 
 
 			ImGui::NewFrame();
 			ImGui::Begin("Option");
 			//ImGui::Text("ElapsedTime %lf", 1.0f / example->elapsedTime);
-			ImGui::InputInt("Sumper Sampling Level",&example->raytracer.supersmaplingLevel);
+			//ImGui::InputInt("Sumper Sampling Level",&example->raytracer.supersmaplingLevel);
 			ImGui::End();
 			ImGui::Render();
 
-			example->Update();
-			example->Render();
+			//example->Update();
+			//example->Render();
 
+			demo->Update();
+			demo->Render();
+
+			
 
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 			// switch the back buffer and the front buffer
-			example->swapChain->Present(1,0);
+			RenderContext::Present(1,0);
+			//example->swapChain->Present(1,0);
 		}
 	} // while WM_QUIT
 
@@ -112,7 +119,7 @@ int main()
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
-	example->Clean();
+	//example->Clean();
 	DestroyWindow(hwnd);
 	UnregisterClass(wc.lpszClassName, wc.hInstance);
 

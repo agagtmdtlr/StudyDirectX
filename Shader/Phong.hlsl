@@ -1,3 +1,15 @@
+struct VSInput
+{
+    float4 poistion : POSITION;
+    float2 uv : TEXCOORD;
+};
+
+struct VSOutput
+{
+    float4 position : SV_POSITION;
+    float2 uv : TEXCOORD;
+};
+
 Texture2D baseColorTexture : register(t0);
 SamplerState baseColorSampler : register(s0);
 
@@ -18,24 +30,6 @@ struct Material
     float2 temp;
 };
 
-struct VSInput
-{
-    float4 poistion : POSITION;
-    float3 normal : NORMAL;
-    float2 uv : TEXCOORD;
-};
-
-struct VSOutput
-{
-    float4 position : SV_POSITION;
-    float3 normal : NORMAL;    
-    float2 uv : TEXCOORD;
-};
-
-StructuredBuffer<Light> lights : register(t0); 
-StructuredBuffer<Material> materials : register(t1);
-
-
 VSOutput VSmain(VSInput vsInput)
 {
     VSOutput vsOutput;
@@ -46,9 +40,7 @@ VSOutput VSmain(VSInput vsInput)
     return vsOutput;
 }
 
-
 float4 PSmain(VSOutput vsOutput) : SV_TARGET
 {
-    vsOutput.normal;
     return baseColorTexture.Sample(baseColorSampler, vsOutput.uv);
 }

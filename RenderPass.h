@@ -5,7 +5,8 @@
 #include <unordered_map>
 #include <bitset>
 #include <d3dcommon.h>
-
+#include <array>
+#include <d3dcompiler.h>
 enum class RenderStage : UINT
 {
 	VS = 0,
@@ -16,7 +17,7 @@ enum class RenderStage : UINT
 };
 
 
-#define StageCount (static_cast<size_t>(RenderStage::NUM))
+#define StageCount 3//(static_cast<size_t>(RenderStage::NUM))
 
 using BindStageMask = std::bitset<static_cast<size_t>(RenderStage::NUM)>;
 
@@ -54,10 +55,6 @@ struct RenderPass
 	ComPtr<ID3D11Buffer> vertexBuffer;
 	ComPtr<ID3D11Buffer> indexBuffer;
 
-	ComPtr<ID3D11Buffer> vertexBuffer;
-	ComPtr<ID3D11Buffer> indexBuffer;
-
-
 	ComPtr<ID3D11RenderTargetView> rtv;
 	ComPtr<ID3D11DepthStencilView> dsv;
 
@@ -75,11 +72,11 @@ struct RenderPass
 	void DrawIndexed(UINT indexCount, UINT StartIndexLocation, INT BseVertexLocation);
 
 	void BeginDraw();
-	void DrawIndexed(UINT indexCount, UINT startIndexLocation, INT baseVertexLocation);
 	void EndDraw();
 
 private:
 	ID3DBlob* GetBlob(RenderStage stage);
+	ID3DBlob** GetBlobAddressOf(RenderStage stage);
 
 	/*
 	set sample

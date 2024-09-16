@@ -3,7 +3,11 @@
 #include <winerror.h>
 #include <d3dcompiler.h>
 #include <d3dcompiler.inl>
+#include "RenderCommon.h"
+#include <d3d11shader.h>
 
+//D3DReflect unrsolved external symbol
+#pragma comment(lib, "dxguid.lib") 
 
 
 RenderPass::RenderPass(std::wstring shaderName , RenderPassState state)
@@ -17,19 +21,18 @@ void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 {
 	this->state = state;
 
+	std::wstring shaderPath = L"Shader/" + shaderName + L".hlsl";
 
 
-	ID3DBlob* vertexBlob = nullptr;
-	ID3DBlob* pixelBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 
-	std::wstring shaderPath = L"Shader/" + shaderName;
-	ID3D11Device* device = RenderContext::GetRenderContext()->GetDevice();
+	ID3D11Device* device = RenderContext::GetDevice();
 
 	/* Compile HLSL */
 	if (state.CheckMask(RenderStage::VS) == true)
 	{
-		if (FAILED(D3DCompileFromFile(shaderPath.c_str(), 0, 0, "VSmain", "vs_5_0", 0, 0, &vertexBlob, &errorBlob)))
+
+		if (FAILED(D3DCompileFromFile(shaderPath.c_str(), 0, 0, "VSmain", "vs_5_0", 0, 0, GetBlobAddressOf(RenderStage::VS), &errorBlob)))
 		{
 			if (errorBlob)
 			{
@@ -37,26 +40,34 @@ void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 			}
 		}
 
-		auto ied = GetVertexElementDesc();
-		device->CreateInputLayout(ied.data(), ied.size(),  vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), layout.GetAddressOf());
+		ID3DBlob* blob = GetBlob(RenderStage::VS);
+
+		const auto& ied = RenderDescriptor::GetVertexElementDesc();
+		device->CreateInputLayout(ied.data(), (UINT)ied.size(), blob->GetBufferPointer(), blob->GetBufferSize(), layout.GetAddressOf());
+		
+		device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &vertexShader);
+
 	}
 
 	if (state.CheckMask(RenderStage::PS) == true)
 	{
-		if (FAILED(D3DCompileFromFile(shaderPath.c_str(), 0, 0, "PSmain", "ps_5_0", 0, 0, &pixelBlob, &errorBlob)))
+
+		if (FAILED(D3DCompileFromFile(shaderPath.c_str(), 0, 0, "PSmain", "ps_5_0", 0, 0, GetBlobAddressOf(RenderStage::PS), &errorBlob)))
 		{
 			if (errorBlob)
 			{
 				std::cout << "Pixel shader compile error\n" << (char*)errorBlob->GetBufferPointer() << std::endl;
 			}
 		}
+		ID3DBlob* blob = GetBlob(RenderStage::PS);
+
+		device->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &pixelShader);
+
 	}
 
 	/* Create Shader Buffer */
 	
 
-	device->CreateVertexShader(vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), NULL, &vertexShader);
-	device->CreatePixelShader(pixelBlob->GetBufferPointer(), pixelBlob->GetBufferSize(), NULL, &pixelShader);
 
 	for (int st = 0; st < static_cast<int>(RenderStage::NUM); st++)
 	{
@@ -65,7 +76,7 @@ void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 		if (blob != nullptr)
 		{
 			ID3D11ShaderReflection* reflection = nullptr;
-			HRESULT hr = D3DReflect(vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection);
+			HRESULT hr = D3DReflect(blob->GetBufferPointer(), blob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&reflection);
 
 			// reflection shader resource
 			if (SUCCEEDED(hr))
@@ -85,7 +96,8 @@ void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 					D3D11_SHADER_INPUT_BIND_DESC desc;
 					reflection->GetResourceBindingDesc(i, &desc);
 
-					bindResources[std::string(desc.Name)][st] = desc;
+					auto& brs = bindResources[std::string(desc.Name)];
+					brs.at(st) = desc;
 				}
 
 				for (UINT i = 0; i < shaderDesc.InputParameters; ++i)
@@ -115,14 +127,14 @@ void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 
 void RenderPass::DrawIndexed(UINT indexCount, UINT startIndexLocation, INT baseVertexLocation)
 {
-	ID3D11DeviceContext* deviceContext = RenderContext::GetRenderContext()->GetDC();
+	ID3D11DeviceContext* deviceContext = RenderContext::GetDC();
 
 }
 
 void RenderPass::BeginDraw()
 {
-	ID3D11Device* device = RenderContext::GetRenderContext()->GetDevice();
-	ID3D11DeviceContext* deviceContext = RenderContext::GetRenderContext()->GetDC();
+	ID3D11Device* device = RenderContext::GetDevice();
+	ID3D11DeviceContext* deviceContext = RenderContext::GetDC();
 
 	deviceContext->RSSetViewports(1, &viewport);
 	deviceContext->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
@@ -157,4 +169,10 @@ void RenderPass::EndDraw()
 ID3DBlob* RenderPass::GetBlob(RenderStage stage)
 {
 	return blobs[static_cast<size_t>(stage)].Get();
+}
+
+ID3DBlob** RenderPass::GetBlobAddressOf(RenderStage stage)
+{
+	return blobs[static_cast<size_t>(stage)].GetAddressOf();
+
 }

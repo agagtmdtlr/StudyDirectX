@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RenderContext.h"
-#include <iostream>
+#include "RenderCommon.h"
+#include <memory>
 
 
 RenderContext* RenderContext::GetRenderContext()
@@ -15,17 +16,22 @@ RenderContext* RenderContext::GetRenderContext()
 
 ID3D11Device* RenderContext::GetDevice()
 {
-	return device.Get();
+	return GetRenderContext()->device.Get();
 }
 
 ID3D11DeviceContext* RenderContext::GetDC()
 {
-	return deviceContext.Get();
+	return GetRenderContext()->deviceContext.Get();
 }
 
 ID3D11RenderTargetView* RenderContext::GetRTV()
 {
-	return renderTargetView.Get();
+	return GetRenderContext()->renderTargetView.Get();
+}
+
+HRESULT RenderContext::Present(UINT syncInterval, UINT flag)
+{
+	return GetRenderContext()->swapChain->Present(syncInterval, flag);
 }
 
 void RenderContext::Initialize(HWND window, int width, int height)

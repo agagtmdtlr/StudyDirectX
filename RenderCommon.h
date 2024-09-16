@@ -2,6 +2,9 @@
 #include <algorithm>
 #include <math.h>
 #include <glm/glm.hpp>
+#include <vector>
+#include <d3d11.h>
+#include <d3dcompiler.h>
 
 // 수학의 4차원 벡터(vector)
 struct Vertex
@@ -10,18 +13,22 @@ struct Vertex
 	glm::vec2 uv;
 };
 
-const std::vector<const D3D11_INPUT_ELEMENT_DESC>& GetVertexElementDesc()
+class RenderDescriptor
 {
-	// Create the input layout object
-	static std::vector<const D3D11_INPUT_ELEMENT_DESC> ied(
-		{
-			{ "POSITION",0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD",0, DXGI_FORMAT_R32G32_FLOAT, 0, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-		}
-	);
+public:
+	static const std::vector< D3D11_INPUT_ELEMENT_DESC>& GetVertexElementDesc()
+	{
+		// Create the input layout object
+		static std::vector< D3D11_INPUT_ELEMENT_DESC> ied(
+			{
+				{ "POSITION",0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "TEXCOORD",0, DXGI_FORMAT_R32G32_FLOAT, 0, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+			}
+		);
 
-	return ied;
-}
+		return ied;
+	}
+};
 
 template<int length, typename T> struct vec_template;
 

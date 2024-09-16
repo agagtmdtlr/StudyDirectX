@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "RenderDemo.h"
+#include "RenderCommon.h"
 
 RenderDemo::RenderDemo(HWND window, int width, int height)
 {
+	Initialize(window, width, height);
 }
 
 void RenderDemo::Update()
@@ -11,6 +13,9 @@ void RenderDemo::Update()
 
 void RenderDemo::Render()
 {
+	renderPass->BeginDraw();
+	renderPass->DrawIndexed(indexCount, 0, 0);
+	renderPass->EndDraw();
 }
 
 void RenderDemo::Initialize(HWND window, int width, int height)
@@ -35,7 +40,7 @@ void RenderDemo::Initialize(HWND window, int width, int height)
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f; // Note: important for depth buffering
 
-	renderPass = std::make_unique<RenderPass>("PhongShader.hlsl",state);
+	renderPass = std::make_unique<RenderPass>(L"Phong",state);
 	renderPass->viewport = viewport;
 
 	// Create texture and rendertarget

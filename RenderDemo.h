@@ -3,7 +3,8 @@
 #include <windows.h>
 
 #include "RenderPass.h"
-
+#include "Mesh.h"
+#include <memory>
 
 class RenderDemo
 {

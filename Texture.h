@@ -96,8 +96,8 @@ namespace slab
 
 			vec2 xy = uv * vec2(float(width), float(height)) - vec2(0.5f);
 
-			int i = glm::round(xy.x);
-			int j = glm::round(xy.y);
+			int i = (int)glm::round(xy.x);
+			int j = (int)glm::round(xy.y);
 
 			return GetPixel(i,j);
 		}
