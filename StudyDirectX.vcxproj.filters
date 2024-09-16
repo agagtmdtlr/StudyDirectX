@@ -35,9 +35,6 @@
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="Cubemap.cpp" />
-    <ClCompile Include="RenderContext.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -49,6 +46,12 @@
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="RenderContext.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderDemo.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Example.h">
@@ -56,9 +59,6 @@
     </ClInclude>
     <ClInclude Include="Image.h">
       <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderCommon.h">
-      <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="Circle.h">
       <Filter>Render</Filter>
@@ -99,9 +99,6 @@
     <ClInclude Include="Cubemap.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="RenderContext.h">
-      <Filter>Main</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -113,6 +110,15 @@
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="RenderContext.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderCommon.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderDemo.h">
+      <Filter>Main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VS.hlsl">

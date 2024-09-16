@@ -23,6 +23,11 @@ ID3D11DeviceContext* RenderContext::GetDC()
 	return deviceContext.Get();
 }
 
+ID3D11RenderTargetView* RenderContext::GetRTV()
+{
+	return renderTargetView.Get();
+}
+
 void RenderContext::Initialize(HWND window, int width, int height)
 {
 	this->width = width;
@@ -78,71 +83,10 @@ void RenderContext::Initialize(HWND window, int width, int height)
 		exit(-1);
 	}
 
-	// Set the viewport
-	ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.Width = float(width);
-	viewport.Height = float(height);
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f; // Note: important for depth buffering
-	deviceContext->RSSetViewports(1, &viewport);
-
-	InitShaders();
-
-	// Create texture and rendertarget
-	D3D11_SAMPLER_DESC sampDesc;
-	ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
-	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; // 
-	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	sampDesc.MinLOD = 0;
-	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-	//Create the Sample State
-	device->CreateSamplerState(&sampDesc, colorSampler.GetAddressOf());
-
-	D3D11_TEXTURE2D_DESC textureDesc;
-	ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
-	textureDesc.MipLevels = textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	textureDesc.SampleDesc.Count = 1;
-	textureDesc.Usage = D3D11_USAGE_DYNAMIC;
-	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	textureDesc.MiscFlags = 0;
-	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	//textureDesc.Width = width;
-	//textureDesc.Height = height;
-	textureDesc.Width = width;
-	textureDesc.Height = height;
-
-	device->CreateTexture2D(&textureDesc, nullptr, canvasTexture.GetAddressOf());
-
-
-	if (canvasTexture)
-	{
-		device->CreateShaderResourceView(canvasTexture.Get(), nullptr, &canvasTextureView);
-		D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
-		renderTargetViewDesc.Format = textureDesc.Format;
-		renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-		renderTargetViewDesc.Texture2D.MipSlice = 0;
-
-		device->CreateRenderTargetView(canvasTexture.Get(), &renderTargetViewDesc, canvasRenderTargetView.GetAddressOf());
-
-	}
-	else
-	{
-		std::cout << "CreateRenderTargetView() error : canvasRenderTargetView" << std::endl;
-	}
+	
+	
 }
 
 void RenderContext::InitShaders()
 {
-}
-
-void RenderContext::Render()
-{
-	
 }

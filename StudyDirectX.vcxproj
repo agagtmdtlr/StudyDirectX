@@ -142,6 +142,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="RenderContext.cpp" />
+    <ClCompile Include="RenderDemo.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -162,6 +163,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="RenderContext.h" />
+    <ClInclude Include="RenderDemo.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="Ray.h" />

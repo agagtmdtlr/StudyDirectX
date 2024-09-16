@@ -5,6 +5,7 @@
 #include <wrl/client.h>
 #include <string>
 #include <iostream>
+#include <array>
 #include "RenderContext.h"
 
 template<class T>
