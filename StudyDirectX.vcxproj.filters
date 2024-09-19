@@ -50,6 +50,12 @@
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="IImageLoader.h">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Example.h">
@@ -116,6 +122,15 @@
     </ClInclude>
     <ClInclude Include="RenderDemo.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="IImageValidator.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ITextureDescriptor.h">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

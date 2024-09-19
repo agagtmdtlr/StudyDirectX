@@ -34,3 +34,42 @@ namespace slab
 	}
 
 }
+
+// 1. 생성장 + 초기화 -> 사용자 이용 오류 줄인다 + 구현의 편의성 
+// 2. 
+/*
+* 
+* 
+* 
+* 
+* 
+class texture
+{
+	texture()
+
+
+	initialize(){
+		validation(); // 확장자 검증 
+	}
+
+
+	validation(); // 확장자 검증
+
+
+	func1() {
+	validation(); // 확장자 검증
+	}
+
+	func2() {
+	validation(); // 확장자 검증
+	}
+
+}
+
+texture obj;
+obj->initialize();
+
+...
+..
+..
+*/

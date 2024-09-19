@@ -15,8 +15,6 @@ RenderPass::RenderPass(std::wstring shaderName , RenderPassState state)
 	Initialize(shaderName, state );
 }
 
-
-
 void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 {
 	this->state = state;
@@ -45,8 +43,7 @@ void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 		const auto& ied = RenderDescriptor::GetVertexElementDesc();
 		device->CreateInputLayout(ied.data(), (UINT)ied.size(), blob->GetBufferPointer(), blob->GetBufferSize(), layout.GetAddressOf());
 		
-		device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &vertexShader);
-
+		device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &vertexShader);		
 	}
 
 	if (state.CheckMask(RenderStage::PS) == true)
@@ -97,7 +94,7 @@ void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 					reflection->GetResourceBindingDesc(i, &desc);
 
 					auto& brs = bindResources[std::string(desc.Name)];
-					brs.at(st) = desc;
+					brs[st] = desc;
 				}
 
 				for (UINT i = 0; i < shaderDesc.InputParameters; ++i)

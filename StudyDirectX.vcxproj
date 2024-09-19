@@ -138,6 +138,7 @@
     <ClCompile Include="Cubemap.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="Gizmo.cpp" />
+    <ClCompile Include="IImageLoader.h" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -148,11 +149,15 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Cubemap.h" />
+    <ClInclude Include="IImageValidator.h" />
+    <ClInclude Include="ITextureDescriptor.h" />
+    <ClInclude Include="Texture2D.h" />
     <ClInclude Include="Example.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="Gizmo.h" />

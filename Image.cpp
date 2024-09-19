@@ -10,6 +10,7 @@
 
 void Image::ReadFromFile(const char* filename)
 {
+    std::string fullPath = "../Resources/" + std::string(filename);
     /*
     vcpkg install stb:x64-windows
     프로젝트 설정에서 _CRT_SECURE_NO_WARNINGS 추가 ('sprintf' in stb_image_write.h)
@@ -18,7 +19,7 @@ void Image::ReadFromFile(const char* filename)
     #define STB_IMAGE_WRITE_IMPLEMENTATION
     #include <stb_image_write.h>
     */
-    unsigned char* img = FileManager::LoadImage(filename, &width, &height, &channels);
+    unsigned char* img = FileManager::LoadImage(fullPath.c_str(), &width, &height, &channels);
     // channels가 3(RGB) 또는 4(RGBA)인 경우만 가정
     // unsigned char(0에서 255)을 4채널 float(0.0f에서 1.0f)로 변화
     pixels.resize(width * height);
