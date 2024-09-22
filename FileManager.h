@@ -1,5 +1,5 @@
 #pragma once
-#include "Texture2D.h"
+#include "Texture.h"
 #include <unordered_map>
 
 class FileManager
@@ -12,15 +12,15 @@ public:
 class TextureManager
 {
 public:
-	static ComPtr<ID3D11Texture2D> RequestTexture(std::wstring filename);
+	static shared_ptr<Texture> RequestTexture(std::wstring filename);
 	static bool ConvertImageToDDS(std::wstring src, std::wstring dest);
 
-	using TextureMap = std::unordered_map<std::wstring, ComPtr<ID3D11Texture2D>>;
+	using TextureMap = std::unordered_map<std::wstring, shared_ptr<Texture>>;
 private:
 	static TextureManager* Get();
 	bool IsExistedTexture(const std::wstring& filename) const;
 	bool CreateTextureFromFile(const std::wstring& filename);
-	ComPtr<ID3D11Texture2D> GetTexture(const std::wstring& filename);
+	shared_ptr<Texture> GetTexture(const std::wstring& filename);
 
 	TextureMap textureMap;
 };

@@ -7,8 +7,11 @@
 #include <iostream>
 #include <array>
 #include <vector>
+#include <DirectXTex.h>
+
 using namespace Microsoft::WRL;
 using namespace std;
+using namespace DirectX;
 #include "RenderContext.h"
 
 

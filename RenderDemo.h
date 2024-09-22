@@ -5,7 +5,6 @@
 #include "RenderPass.h"
 #include "Mesh.h"
 #include <memory>
-#include "Image.h"
 
 class RenderDemo
 {
@@ -28,6 +27,5 @@ public:
 
 	std::vector<Mesh> meshes;
 
-	Image image;
 	UINT indexCount;
 };

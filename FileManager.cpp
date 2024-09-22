@@ -35,10 +35,10 @@ void FileManager::WriteImage(const char* filename, int width, int height, int ch
     stbi_write_png(filename, width, height, channels, data, width * channels);
 }
 
-ComPtr<ID3D11Texture2D> TextureManager::RequestTexture(std::wstring filename)
+shared_ptr<Texture> TextureManager::RequestTexture(std::wstring filename)
 {
     TextureManager* manager = TextureManager::Get();
-    ComPtr<ID3D11Texture2D> texture;
+    shared_ptr<Texture> texture;
     if (manager->IsExistedTexture(filename) ==  true)
     {
         manager->CreateTextureFromFile(filename);
@@ -126,7 +126,7 @@ bool TextureManager::CreateTextureFromFile(const std::wstring& filename)
     return texture;
 }
 
-ComPtr<ID3D11Texture2D> TextureManager::GetTexture(const std::wstring& filename)
+shared_ptr<Texture> TextureManager::GetTexture(const std::wstring& filename)
 {
     return textureMap[filename];
 }

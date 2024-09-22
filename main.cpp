@@ -7,8 +7,6 @@
 #include <iostream>
 #include <ImGuizmo.h>
 
-#include "Example.h"
-#include "Circle.h"
 #include "RenderContext.h"
 #include "RenderDemo.h"
 
