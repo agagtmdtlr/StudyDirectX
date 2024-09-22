@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Render">
+      <UniqueIdentifier>{2e4ce28c-f03e-4fea-aa33-9b1643790f39}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Render\Hit.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Image.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Light.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Object.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Plane.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Ray.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RayTracer.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Sphere.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Square.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Texture.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Triangle.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Circle.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Render\Example.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Render\Texture.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Image.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="pch.cpp" />
+  </ItemGroup>
+</Project>

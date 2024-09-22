@@ -9,8 +9,6 @@
 
 namespace slab
 {
-	
-
 	// Bilinear interpolation reference
 	// https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/interpolation/bilinear-filtering
 
@@ -29,14 +27,11 @@ namespace slab
 		SampleType sampleType = SampleType::Clamp;
 		std::vector<uint8_t> image;
 
-		//
-		ID3D11Buffer* textureBuffer;
 		
 		Texture(const std::string& filename);
 		Texture(const int& width, const int& height, const std::vector<vec3>& pixels);
 		virtual ~Texture() {}
 
-		virtual void initialize();        
 
 		vec3 GetPixel(int i, int  j)
 		{

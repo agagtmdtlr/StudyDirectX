@@ -1,13 +1,14 @@
-#include "stdafx.h"
+#include "pch.h"
 #include "Texture.h"
-#include "FileManager.h"
+
+
 
 namespace slab
 {
 	Texture::Texture(const std::string& filename)
 	{
 		std::string fullpath = "../Resources/" + filename;
-		unsigned char* img = FileManager::LoadImage(fullpath.c_str(), &width, &height, &channels);
+		unsigned char* img = stbi_load(filename.c_str(), &width, &height, &channels, 0);
 
 		image.resize(width * height * channels);
 		memcpy(image.data(), img, image.size() * sizeof(uint8_t));

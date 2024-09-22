@@ -8,7 +8,7 @@
 #include <array>
 #include <vector>
 using namespace Microsoft::WRL;
-
+using namespace std;
 #include "RenderContext.h"
 
 

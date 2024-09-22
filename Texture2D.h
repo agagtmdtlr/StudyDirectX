@@ -1,5 +1,4 @@
 #pragma once
-#include "Texture.h"
 #include "IImageValidator.h"
 #include "IImageLoader.h"
 
@@ -8,7 +7,12 @@ class Texture2DImageLoader : public IImageLoader
 	virtual void LoadImageFromFile(std::string filename);
 };
 
-class Texture
+class Texture2D
 {
-	virtual void Initialize();
+public:
+	Texture2D(std::string filename);
+
+private:
+	std::string name;
+
 };

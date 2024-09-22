@@ -5,8 +5,6 @@
 RenderDemo::RenderDemo(HWND window, int width, int height)
 {
 	Initialize(window, width, height);
-
-	image.ReadFromFile("Re")
 }
 
 void RenderDemo::Update()
