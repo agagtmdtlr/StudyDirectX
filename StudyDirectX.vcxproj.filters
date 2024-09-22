@@ -55,9 +55,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Example.h">
-      <Filter>Main</Filter>
-    </ClInclude>
     <ClInclude Include="FileManager.h">
       <Filter>Utility</Filter>
     </ClInclude>

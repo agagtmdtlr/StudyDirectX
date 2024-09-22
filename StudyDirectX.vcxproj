@@ -157,7 +157,6 @@
     <ClInclude Include="ITextureDescriptor.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Texture2D.h" />
-    <ClInclude Include="Example.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="Gizmo.h" />
     <ClInclude Include="Mesh.h" />
