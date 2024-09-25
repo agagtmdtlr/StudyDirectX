@@ -1,10 +1,8 @@
 @startuml
-
 class system
 class input
 class application
 class d3d
-diamond dia
 
 system *-- input : contain
 system *-- application : contain
