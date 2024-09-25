@@ -7,4 +7,4 @@
 - stbi
 
 ## Structure
-![structure](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/agagtmdtlr/StudyDirectX/main/structure.puml)
+![class-diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/agagtmdtlr/StudyDirectX/main/class-diagram.puml)
