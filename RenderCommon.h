@@ -6,11 +6,17 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
-// 수학의 4차원 벡터(vector)
+struct MatrixBufferType
+{
+	Matrix world;
+	Matrix view;
+	Matrix projection;
+};
+
 struct Vertex
 {
-	glm::vec4 pos;
-	glm::vec2 uv;
+	Vector4 position;
+	Vector2 uv;
 };
 
 class RenderDescriptor

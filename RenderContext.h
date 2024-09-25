@@ -1,10 +1,10 @@
 #pragma once
 
 
-class RenderContext
+class D3D
 {	
 public:
-	static RenderContext* GetRenderContext();
+	static D3D* GetRenderContext();
 	static ID3D11Device* GetDevice();
 	static ID3D11DeviceContext* GetDC();
 	static ID3D11RenderTargetView* GetRTV();
@@ -25,3 +25,4 @@ private:
 	int height;
 
 };
+

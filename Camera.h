@@ -1,14 +1,21 @@
 #pragma once
-#include <glm/glm.hpp>
-#include <directxtk/SimpleMath.h>
 class Camera
 {
-private:
-	glm::vec3 position;
-	glm::vec3 rotation;
+public:
+	Matrix GetProjection();
+	Matrix GetView();
+	Matrix GetViewProjection();
 
-	glm::mat4x4 GetProjection();
+
+public:
+	Vector3 position;
+	Vector3 lookat;
+
+	float fov;
+	float aspectRatio;
+	float nearPlane, farPlane;
 
 
+	Matrix matrix;
 };
 

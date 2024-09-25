@@ -84,8 +84,8 @@ bool TextureManager::CreateTextureFromFile(const std::wstring& filename)
         DirectX::LoadFromDDSFile(filename.c_str(), DDS_FLAGS::DDS_FLAGS_NONE, &metaData, scratchimage);
     }
 
-    auto device = RenderContext::GetDevice();
-    auto dc = RenderContext::GetDC();
+    auto device = D3D::GetDevice();
+    auto dc = D3D::GetDC();
 
     
 

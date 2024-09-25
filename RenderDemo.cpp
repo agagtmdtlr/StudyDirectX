@@ -2,9 +2,8 @@
 #include "RenderDemo.h"
 #include "RenderCommon.h"
 
-RenderDemo::RenderDemo(HWND window, int width, int height)
+RenderDemo::RenderDemo()
 {
-	Initialize(window, width, height);
 }
 
 void RenderDemo::Update()
@@ -18,12 +17,10 @@ void RenderDemo::Render()
 	renderPass->EndDraw();
 }
 
-void RenderDemo::Initialize(HWND window, int width, int height)
+void RenderDemo::Initialize(int width, int height)
 {
-	RenderContext* renderContext = RenderContext::GetRenderContext();
-	renderContext->Initialize(window, width, height);
-	auto device = renderContext->GetDevice();
-	auto deviceContext = renderContext->GetDC();
+	auto device = D3D::GetDevice();
+	auto deviceContext = D3D::GetDC();
 	RenderPassState state;
 
 	state.SetFlag(RenderStage::VS,true);
@@ -148,7 +145,7 @@ void RenderDemo::Initialize(HWND window, int width, int height)
 		}
 	}
 
-
+	constBuffer = 
 
 }
 

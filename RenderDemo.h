@@ -6,12 +6,14 @@
 #include "Mesh.h"
 #include <memory>
 
+#include "ConstantBuffer.h"
+
 class RenderDemo
 {
 public:
 
-	RenderDemo(HWND window, int width , int height);
-	void Initialize(HWND window, int width, int height);
+	RenderDemo();
+	void Initialize(int width, int height);
 	void Update();
 	void Render();
 
@@ -26,6 +28,9 @@ public:
 	ComPtr<ID3D11SamplerState> colorSampler;
 
 	std::vector<Mesh> meshes;
+
+	ConstantBuffer<MatrixBufferType> constBuffer;
+
 
 	UINT indexCount;
 };

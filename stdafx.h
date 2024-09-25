@@ -8,11 +8,16 @@
 #include <array>
 #include <vector>
 #include <DirectXTex.h>
+#include <directxtk/SimpleMath.h>
 
 using namespace Microsoft::WRL;
 using namespace std;
 using namespace DirectX;
+using namespace DirectX::SimpleMath;
+
+
 #include "RenderContext.h"
+#include "RenderCommon.h"
 
 
 

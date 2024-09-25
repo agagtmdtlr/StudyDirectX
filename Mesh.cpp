@@ -20,7 +20,7 @@ Mesh::Mesh(void* vertices, UINT vertexStride, UINT vertexCount, void* indices, U
 		vertexBufferData.SysMemPitch = 0;
 		vertexBufferData.SysMemSlicePitch = 0;
 
-		const HRESULT hr = RenderContext::GetDevice()->CreateBuffer(&bufferDesc,&vertexBufferData,vertextBuffer.GetAddressOf());
+		const HRESULT hr = D3D::GetDevice()->CreateBuffer(&bufferDesc,&vertexBufferData,vertextBuffer.GetAddressOf());
 		if (FAILED(hr))
 		{
 			std::cout << "CreateBuffer() failed : vertexBuffer" << std::hex << hr << std::endl;
@@ -40,7 +40,7 @@ Mesh::Mesh(void* vertices, UINT vertexStride, UINT vertexCount, void* indices, U
 		indexBufferData.pSysMem = indices;
 		indexBufferData.SysMemPitch = 0;
 		indexBufferData.SysMemSlicePitch = 0;
-		const HRESULT hr = RenderContext::GetDevice()->CreateBuffer(&bufferDesc, &indexBufferData, indexBuffer.GetAddressOf());
+		const HRESULT hr = D3D::GetDevice()->CreateBuffer(&bufferDesc, &indexBufferData, indexBuffer.GetAddressOf());
 		if (FAILED(hr))
 		{
 			std::cout << "CrateBuffer() failed : indexBuffer" << std::hex << hr << std::endl;

@@ -7,6 +7,9 @@
 #include <d3dcommon.h>
 #include <array>
 #include <d3dcompiler.h>
+
+#include "PrimitiveBuffer.h"
+
 enum class RenderStage : UINT
 {
 	VS = 0,
@@ -52,8 +55,8 @@ struct RenderPass
 	ComPtr<ID3D11ComputeShader> computeShader;
 
 	ComPtr<ID3D11InputLayout> layout;
-	ComPtr<ID3D11Buffer> vertexBuffer;
-	ComPtr<ID3D11Buffer> indexBuffer;
+
+	shared_ptr<PrimitiveBuffer> primitiveBuffer;
 
 	ComPtr<ID3D11RenderTargetView> rtv;
 	ComPtr<ID3D11DepthStencilView> dsv;
@@ -64,6 +67,8 @@ struct RenderPass
 
 	D3D11_SHADER_DESC shaderDesc;
 	std::unordered_map<std::string, BindDescList> bindResources;
+
+	bool BindConstantBuffer(std::wstring resourceName, ID3D11Resource* resource);
 
 	RenderPass(std::wstring shaderName , RenderPassState state);
 

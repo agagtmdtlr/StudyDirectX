@@ -4,37 +4,37 @@
 #include <memory>
 
 
-RenderContext* RenderContext::GetRenderContext()
+D3D* D3D::GetRenderContext()
 {
-	static RenderContext* renderContext = nullptr;
+	static D3D* renderContext = nullptr;
 	if (renderContext == nullptr)
 	{
-		renderContext = new RenderContext();
+		renderContext = new D3D();
 	}
 	return renderContext;
 }
 
-ID3D11Device* RenderContext::GetDevice()
+ID3D11Device* D3D::GetDevice()
 {
 	return GetRenderContext()->device.Get();
 }
 
-ID3D11DeviceContext* RenderContext::GetDC()
+ID3D11DeviceContext* D3D::GetDC()
 {
 	return GetRenderContext()->deviceContext.Get();
 }
 
-ID3D11RenderTargetView* RenderContext::GetRTV()
+ID3D11RenderTargetView* D3D::GetRTV()
 {
 	return GetRenderContext()->renderTargetView.Get();
 }
 
-HRESULT RenderContext::Present(UINT syncInterval, UINT flag)
+HRESULT D3D::Present(UINT syncInterval, UINT flag)
 {
 	return GetRenderContext()->swapChain->Present(syncInterval, flag);
 }
 
-void RenderContext::Initialize(HWND window, int width, int height)
+void D3D::Initialize(HWND window, int width, int height)
 {
 	this->width = width;
 	this->height = height;
@@ -93,6 +93,6 @@ void RenderContext::Initialize(HWND window, int width, int height)
 	
 }
 
-void RenderContext::InitShaders()
+void D3D::InitShaders()
 {
 }

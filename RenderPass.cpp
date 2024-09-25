@@ -10,6 +10,13 @@
 #pragma comment(lib, "dxguid.lib") 
 
 
+bool RenderPass::BindConstantBuffer(std::wstring resourceName, ID3D11Resource* resource)
+{
+	
+
+	return true;
+}
+
 RenderPass::RenderPass(std::wstring shaderName , RenderPassState state)
 {
 	Initialize(shaderName, state );
@@ -24,7 +31,7 @@ void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 
 	ID3DBlob* errorBlob = nullptr;
 
-	ID3D11Device* device = RenderContext::GetDevice();
+	ID3D11Device* device = D3D::GetDevice();
 
 	/* Compile HLSL */
 	if (state.CheckMask(RenderStage::VS) == true)
@@ -124,24 +131,24 @@ void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 
 void RenderPass::DrawIndexed(UINT indexCount, UINT startIndexLocation, INT baseVertexLocation)
 {
-	ID3D11DeviceContext* deviceContext = RenderContext::GetDC();
+	ID3D11DeviceContext* deviceContext = D3D::GetDC();
 
 }
 
 void RenderPass::BeginDraw()
 {
-	ID3D11Device* device = RenderContext::GetDevice();
-	ID3D11DeviceContext* deviceContext = RenderContext::GetDC();
+	ID3D11Device* device = D3D::GetDevice();
+	ID3D11DeviceContext* dc = D3D::GetDC();
 
-	deviceContext->RSSetViewports(1, &viewport);
-	deviceContext->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
-	deviceContext->ClearRenderTargetView(rtv.Get(), &state.clearColor.r);
+	dc->RSSetViewports(1, &viewport);
+	dc->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
+	dc->ClearRenderTargetView(rtv.Get(), &state.clearColor.r);
 
-	deviceContext->IASetInputLayout(layout.Get());
+	dc->IASetInputLayout(layout.Get());
 
 	// set the shader objects
-	deviceContext->VSSetShader(vertexShader.Get(), 0, 0);
-	deviceContext->PSSetShader(pixelShader.Get(), 0, 0);
+	dc->VSSetShader(vertexShader.Get(), 0, 0);
+	dc->PSSetShader(pixelShader.Get(), 0, 0);
 
 	/*
 	bindreosurce mep
@@ -149,12 +156,8 @@ void RenderPass::BeginDraw()
 
 	if (state.CheckMask(RenderStage::PS))
 	{
-		UINT stride = sizeof(Vertex);
-		UINT offset = 0;
-		deviceContext->IASetVertexBuffers(0,1,vertexBuffer.GetAddressOf(), &stride, &offset);
-		deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
-
-		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		if( primitiveBuffer != nullptr)
+			primitiveBuffer->BeginDraw();
 	}
 }
 

@@ -134,27 +134,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ApplicationClass.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="Gizmo.cpp" />
     <ClCompile Include="IImageLoader.h" />
+    <ClCompile Include="InputClass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Path.cpp" />
+    <ClCompile Include="PrimitiveBuffer.cpp" />
     <ClCompile Include="RenderContext.cpp" />
     <ClCompile Include="RenderDemo.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SystemClass.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ApplicationClass.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="IImageValidator.h" />
+    <ClInclude Include="InputClass.h" />
     <ClInclude Include="IResource.h" />
     <ClInclude Include="ITextureDescriptor.h" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="PrimitiveBuffer.h" />
+    <ClInclude Include="SystemClass.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="Gizmo.h" />
@@ -164,6 +175,7 @@
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="RenderCommon.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\Phong.hlsl">

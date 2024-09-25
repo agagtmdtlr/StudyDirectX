@@ -1,6 +1,14 @@
+cbuffer MatrixBuffer
+{
+    matrix worldMatrix;
+    matrix viewMatrix;
+    matrix projectionMatrix;
+};
+
+
 struct VSInput
 {
-    float4 poistion : POSITION;
+    float4 position : POSITION;
     float2 uv : TEXCOORD;
 };
 
@@ -34,7 +42,11 @@ VSOutput VSmain(VSInput vsInput)
 {
     VSOutput vsOutput;
     
-    vsOutput.position = vsInput.poistion;
+    vsOutput.position = vsInput.position;
+    
+    vsOutput.position = mul(vsInput.position, worldMatrix);
+    vsOutput.position = mul(vsInput.position, viewMatrix);
+    vsOutput.position = mul(vsInput.position, projectionMatrix);
     vsOutput.uv = vsInput.uv;
     
     return vsOutput;

@@ -19,6 +19,9 @@
     <Filter Include="System">
       <UniqueIdentifier>{daab8825-a483-41c2-96ef-ae540ba3010f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{3c1dbf24-4b1f-4fb8-b88d-e864f3598e57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileManager.cpp">
@@ -33,10 +36,6 @@
     <ClCompile Include="RenderPass.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="RenderContext.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="RenderDemo.cpp">
       <Filter>Main</Filter>
     </ClCompile>
@@ -47,11 +46,35 @@
     <ClCompile Include="Path.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemClass.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplicationClass.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="InputClass.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderContext.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBuffer.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveBuffer.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,10 +88,6 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="RenderPass.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="RenderContext.h">
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="RenderCommon.h">
@@ -86,14 +105,38 @@
     <ClInclude Include="Path.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="IResource.h">
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemClass.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="ApplicationClass.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="InputClass.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderContext.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveBuffer.h">
+      <Filter>Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
