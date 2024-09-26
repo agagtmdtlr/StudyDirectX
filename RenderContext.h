@@ -9,6 +9,7 @@ public:
 	static ID3D11DeviceContext* GetDC();
 	static ID3D11RenderTargetView* GetRTV();
 	static HRESULT Present(UINT syncInterval, UINT flag);
+	static float GetWndAspectRatio();
 
 
 	void Initialize(HWND window, int width, int height);

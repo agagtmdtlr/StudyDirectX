@@ -6,8 +6,9 @@
 #include "Mesh.h"
 #include <memory>
 
-#include "ConstantBuffer.h"
 
+#include "Camera.h"
+#include "ConstantBuffer.h"
 class RenderDemo
 {
 public:
@@ -29,8 +30,7 @@ public:
 
 	std::vector<Mesh> meshes;
 
-	ConstantBuffer<MatrixBufferType> constBuffer;
-
+	Camera camera;
 
 	UINT indexCount;
 };

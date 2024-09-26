@@ -16,22 +16,28 @@ D3D* D3D::GetRenderContext()
 
 ID3D11Device* D3D::GetDevice()
 {
-	return GetRenderContext()->device.Get();
+	return D3D::GetRenderContext()->device.Get();
 }
 
 ID3D11DeviceContext* D3D::GetDC()
 {
-	return GetRenderContext()->deviceContext.Get();
+	return D3D::GetRenderContext()->deviceContext.Get();
 }
 
 ID3D11RenderTargetView* D3D::GetRTV()
 {
-	return GetRenderContext()->renderTargetView.Get();
+	return D3D::GetRenderContext()->renderTargetView.Get();
 }
 
 HRESULT D3D::Present(UINT syncInterval, UINT flag)
 {
-	return GetRenderContext()->swapChain->Present(syncInterval, flag);
+	return D3D::GetRenderContext()->swapChain->Present(syncInterval, flag);
+}
+
+float D3D::GetWndAspectRatio()
+{
+	float aspectRatio = (float) D3D::GetRenderContext()->width / D3D::GetRenderContext()->height;
+	return aspectRatio;
 }
 
 void D3D::Initialize(HWND window, int width, int height)

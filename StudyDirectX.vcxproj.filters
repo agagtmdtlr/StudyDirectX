@@ -138,6 +138,9 @@
     <ClInclude Include="PrimitiveBuffer.h">
       <Filter>Resource</Filter>
     </ClInclude>
+    <ClInclude Include="IBuffer.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VS.hlsl">

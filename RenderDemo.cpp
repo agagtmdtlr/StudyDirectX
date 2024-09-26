@@ -22,7 +22,6 @@ void RenderDemo::Initialize(int width, int height)
 	auto device = D3D::GetDevice();
 	auto deviceContext = D3D::GetDC();
 	RenderPassState state;
-
 	state.SetFlag(RenderStage::VS,true);
 	state.SetFlag(RenderStage::PS,true);
 	state.clearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -63,8 +62,6 @@ void RenderDemo::Initialize(int width, int height)
 	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	textureDesc.MiscFlags = 0;
 	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	//textureDesc.Width = width;
-	//textureDesc.Height = height;
 	textureDesc.Width = width;
 	textureDesc.Height = height;
 
@@ -145,7 +142,18 @@ void RenderDemo::Initialize(int width, int height)
 		}
 	}
 
-	constBuffer = 
+	camera.aspectRatio = D3D::GetWndAspectRatio();
+	camera.fov = XMConvertToRadians(45.f);	
+	camera.position = Vector3(0.f);
+	camera.lookat = Vector3(0.f,0.0f,-1.f);
+	camera.nearPlane = 0.01f;
+	camera.farPlane = 100.0f;
+
+	MatrixBufferType wvp;
+	// transpose for align to hlsl matrix major
+	wvp.view = camera.GetView().Transpose();
+	wvp.projection = camera.GetProjection().Transpose();
+
 
 }
 

@@ -159,6 +159,7 @@
     <ClInclude Include="ApplicationClass.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="IBuffer.h" />
     <ClInclude Include="IImageValidator.h" />
     <ClInclude Include="InputClass.h" />
     <ClInclude Include="IResource.h" />
