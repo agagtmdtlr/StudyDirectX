@@ -110,9 +110,14 @@ void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 					D3D11_SHADER_INPUT_BIND_DESC desc;
 					reflection->GetResourceBindingDesc(i, &desc);
 
-
-					auto& brs = bindResources[std::string(desc.Name)];
-					brs.push_back(BindDesc({RenderStage(st), desc}));					
+					std::string name = std::string(desc.Name);
+					if (bindDescMap.find(name) == bindDescMap.end())
+					{
+						bindDescMap[name].desc = desc;
+						bindDescMap[name].mask.reset();
+					}
+					
+					bindDescMap[name].mask[st] = true;
 				}
 
 
@@ -255,13 +260,14 @@ ID3DBlob** RenderPass::GetBlobAddressOf(RenderStage stage)
 void RenderPass::BindConstantBufferToStage(std::string name, const ConstantBuffer& cbuffer)
 {
 	auto dc = D3D::GetDC();
-	const BindDesc& desc = bindDescMap[name];
-	const auto& lists = stageListPerSemantic[name];
+	const BindDesc& bindDesc = bindDescMap[name];
 
-	for (RenderStage stage : lists)
+	for (int s = 0 ; s < bindDesc.mask.count(); s++)
 	{
+		RenderStage stage = RenderStage(s);
 		if (state.CheckMask(stage) == true)
 		{
+			auto& desc = bindDesc.desc;
 			switch (stage)
 			{
 			case RenderStage::VS:
@@ -284,12 +290,13 @@ bool RenderPass::BindSRV(std::string name, ID3D11ShaderResourceView* srv)
 {
 	auto dc = D3D::GetDC();
 
-	const BindDesc& desc = bindDescMap[name];
-	const auto& lists = stageListPerSemantic[name];
-	for (RenderStage stage : lists)
+	const BindDesc& bindDesc = bindDescMap[name];
+	for (int s = 0; s < bindDesc.mask.count(); s++)
 	{
+		RenderStage stage = RenderStage(s);
 		if (state.CheckMask(stage) == true)
 		{
+			auto& desc = bindDesc.desc;
 			switch (stage)
 			{
 			case RenderStage::VS:
@@ -329,12 +336,13 @@ bool RenderPass::BindSampler(std::string name, ID3D11SamplerState* sampler)
 {
 	auto dc = D3D::GetDC();
 
-	const BindDesc& desc = bindDescMap[name];
-	const auto& lists = stageListPerSemantic[name];
-	for (RenderStage stage : lists)
+	const BindDesc& bindDesc = bindDescMap[name];
+	for (int s = 0; s < bindDesc.mask.count(); s++)
 	{
+		RenderStage stage = RenderStage(s);
 		if (state.CheckMask(stage) == true)
 		{
+			auto& desc = bindDesc.desc;
 			switch (stage)
 			{
 			case RenderStage::VS:

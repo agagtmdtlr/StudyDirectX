@@ -45,7 +45,14 @@ struct RenderPassState
 
 struct RenderPass
 {
-	
+	struct BindDesc
+	{
+		BindDesc(D3D11_SHADER_INPUT_BIND_DESC desc, BindStageMask mask)	: desc(desc), mask(mask)
+		{}
+		D3D11_SHADER_INPUT_BIND_DESC desc;
+		BindStageMask mask;
+	};
+
 	D3D11_VIEWPORT viewport;
 
 	ComPtr<ID3D11VertexShader> vertexShader;
@@ -70,16 +77,8 @@ struct RenderPass
 
 	D3D11_SHADER_DESC shaderDesc;
 
-	using BindDesc = D3D11_SHADER_INPUT_BIND_DESC;
-	using BindDescList = std::vector<BindDesc>;
 	std::unordered_map<std::string, BindDesc> bindDescMap;
-	std::unordered_map<std::string, BindDesc> constantBindDescMap;
-
 	std::unordered_map<std::string, ConstantBuffer> constantBuffers;
-	std::unordered_map<std::string, std::vector<RenderStage>> stageListPerSemantic;
-
-	std::set<std::string, ID3D11Resource*> userSRV;
-
 
 	bool BindSRV(std::string name, ID3D11ShaderResourceView* resource);
 	void BindRenderTargets(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv);
