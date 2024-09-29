@@ -26,9 +26,11 @@ ConstantBuffer::ConstantBuffer(UINT bufferSize)
 
 }
 
-bool ConstantBuffer::UpdateData(void* data, UINT dataSize)
+bool ConstantBuffer::UpdateData(Update_ConstantBuffe_Desc desc)
 {
 	auto dc = D3D::GetDC();
+	void* data = desc.data;
+	UINT dataSize = desc.dataSize;
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 

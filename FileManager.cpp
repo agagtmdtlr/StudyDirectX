@@ -99,19 +99,7 @@ bool TextureManager::CreateTextureFromFile(const std::wstring& filename)
     desc.SampleDesc.Count = 1;
     desc.SampleDesc.Quality = 1;
 
-    desc.Usage = D3D11_USAGE_DEFAULT;
-    desc.CPUAccessFlags = FALSE;
-    desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
-
-    D3D11_SUBRESOURCE_DATA initialData;
-    initialData.pSysMem = scratchimage.GetPixels();
-    initialData.SysMemPitch = scratchimage.GetPixelsSize() * metaData.width;
-    initialData.SysMemSlicePitch = 0;
-
-
-    ComPtr<ID3D11Texture2D> texture;
     ComPtr<ID3D11ShaderResourceView> srv;
-    device->CreateTexture2D(&desc, &initialData, texture.GetAddressOf());
 
     DirectX::CreateShaderResourceViewEx(
     device, 
@@ -122,8 +110,9 @@ bool TextureManager::CreateTextureFromFile(const std::wstring& filename)
     D3D11_BIND_SHADER_RESOURCE, 
     0, 0, CREATETEX_DEFAULT, srv.GetAddressOf());
 
+    textureMap[filename] = make_shared<Texture>(metaData, srv.Get());
 
-    return texture;
+    return true;
 }
 
 shared_ptr<Texture> TextureManager::GetTexture(const std::wstring& filename)

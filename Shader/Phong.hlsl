@@ -48,11 +48,11 @@ VSOutput VSmain(VSInput vsInput)
     vsOutput.position = mul(vsInput.position, viewMatrix);
     vsOutput.position = mul(vsInput.position, projectionMatrix);
     vsOutput.uv = vsInput.uv;
-    
     return vsOutput;
 }
 
 float4 PSmain(VSOutput vsOutput) : SV_TARGET
 {
-    return baseColorTexture.Sample(baseColorSampler, vsOutput.uv);
+    return float4(1, 0, 0, 1);
+    //return baseColorTexture.Sample(baseColorSampler, vsOutput.uv);
 }

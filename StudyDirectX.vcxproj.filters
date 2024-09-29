@@ -22,6 +22,9 @@
     <Filter Include="Resource">
       <UniqueIdentifier>{3c1dbf24-4b1f-4fb8-b88d-e864f3598e57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{1997656d-f4a0-4792-912d-27d66c3dbae6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileManager.cpp">
@@ -75,6 +78,9 @@
     </ClCompile>
     <ClCompile Include="PrimitiveBuffer.cpp">
       <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +146,9 @@
     </ClInclude>
     <ClInclude Include="IBuffer.h">
       <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

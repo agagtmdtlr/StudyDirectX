@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "PrimitiveBuffer.h"
 
-PrimitiveBuffer::PrimitiveBuffer(vector<Vertex>& vertices, vector<UINT32>& indices)
+PrimitiveBuffer::PrimitiveBuffer(vector<Vertex>& vertices, vector<UINT>& indices)
 	: vertices(vertices), indices(indices)
 {
 	auto device = D3D::GetDevice();
@@ -47,13 +47,7 @@ PrimitiveBuffer::PrimitiveBuffer(vector<Vertex>& vertices, vector<UINT32>& indic
 
 }
 
-void PrimitiveBuffer::BeginDraw()
+UINT PrimitiveBuffer::GetVertexStride()
 {
-	auto dc = D3D::GetDC();
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-	dc->IASetVertexBuffers(0,1,vertexBuffer.GetAddressOf(), &stride, &offset);
-	dc->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
-
-	dc->IASetPrimitiveTopology(topology);
+	return sizeof(Vertex);
 }

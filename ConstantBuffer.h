@@ -1,11 +1,18 @@
 #pragma once
 
+struct Update_ConstantBuffe_Desc
+{
+	void* data;
+	UINT dataSize;
+};
+
 class ConstantBuffer
 {
 public:
+	ConstantBuffer() {};
 	ConstantBuffer(UINT bufferSize);
 
-	bool UpdateData(void* data, UINT dataSize);
+	bool UpdateData(Update_ConstantBuffe_Desc desc);
 
 	ID3D11Buffer*const* GetAddressOf() const { return buffer.GetAddressOf(); }
 
@@ -14,6 +21,8 @@ private:
 	ComPtr<ID3D11Buffer> buffer;
 	size_t bufferSize;
 };
+
+
 
 
 

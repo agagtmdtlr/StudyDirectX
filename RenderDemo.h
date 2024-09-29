@@ -9,6 +9,7 @@
 
 #include "Camera.h"
 #include "ConstantBuffer.h"
+#include "Sphere.h"
 class RenderDemo
 {
 public:
@@ -16,21 +17,15 @@ public:
 	RenderDemo();
 	void Initialize(int width, int height);
 	void Update();
+	
 	void Render();
 
 	std::unique_ptr<RenderPass> renderPass;
-
-	ComPtr<ID3D11Buffer> vertexBuffer;
-	ComPtr<ID3D11Buffer> indexBuffer;
-	ComPtr<ID3D11Texture2D> canvasTexture;
-
-	ComPtr<ID3D11ShaderResourceView> canvasTextureView;
-	ComPtr<ID3D11RenderTargetView> canvasRenderTargetView;
+	Sphere sphere;
+	
+	shared_ptr<PrimitiveBuffer> primitive;
+	shared_ptr<class Texture> texture;
 	ComPtr<ID3D11SamplerState> colorSampler;
 
-	std::vector<Mesh> meshes;
-
 	Camera camera;
-
-	UINT indexCount;
 };

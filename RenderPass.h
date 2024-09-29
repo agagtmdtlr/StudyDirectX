@@ -47,11 +47,14 @@ struct RenderPass
 {
 	struct BindDesc
 	{
+		BindDesc() {}
 		BindDesc(D3D11_SHADER_INPUT_BIND_DESC desc, BindStageMask mask)	: desc(desc), mask(mask)
 		{}
 		D3D11_SHADER_INPUT_BIND_DESC desc;
 		BindStageMask mask;
 	};
+
+	RenderPass(std::wstring shaderName, RenderPassState state);
 
 	D3D11_VIEWPORT viewport;
 
@@ -61,17 +64,9 @@ struct RenderPass
 	ComPtr<ID3D11PixelShader> pixelShader;
 
 	ComPtr<ID3D11ComputeShader> computeShader;
-
 	ComPtr<ID3D11InputLayout> inputlayout;
 
-	shared_ptr<PrimitiveBuffer> primitiveBuffer;
-
-	ComPtr<ID3D11RenderTargetView> rtv;
-	ComPtr<ID3D11DepthStencilView> dsv;
-
 	std::array<ComPtr<ID3DBlob>, StageCount> blobs;
-
-
 
 	RenderPassState state;
 
@@ -80,22 +75,24 @@ struct RenderPass
 	std::unordered_map<std::string, BindDesc> bindDescMap;
 	std::unordered_map<std::string, ConstantBuffer> constantBuffers;
 
+	bool UpdateConstantData(std::string name, Update_ConstantBuffe_Desc desc);
+
 	bool BindSRV(std::string name, ID3D11ShaderResourceView* resource);
 	void BindRenderTargets(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv);
 	void BindDepthStencilState(ID3D11DepthStencilState* state);
 	bool BindSampler(std::string name, ID3D11SamplerState* resource);
 
-	RenderPass(std::wstring shaderName , RenderPassState state);
 
 	void Initialize(std::wstring shaderName, RenderPassState state);
 	void InitializeInputLayout(D3D11_SHADER_DESC shaderDesc, ID3D11ShaderReflection* reflection, ID3DBlob* blob);
 
 	void DrawIndexed(UINT indexCount, UINT StartIndexLocation, INT BseVertexLocation);
 
-	void BeginDraw();
+	void BeginDraw(PrimitiveBuffer* buffer, ID3D11RenderTargetView* rtv);
 	void EndDraw();
 
 private:
+	void BindPrimitiveBuffer(PrimitiveBuffer* buffer);
 	void BindConstantBufferToStage(std::string name, const ConstantBuffer& cbuffer);
 
 	ID3DBlob* GetBlob(RenderStage stage);

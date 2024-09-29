@@ -148,6 +148,7 @@
     <ClCompile Include="RenderContext.cpp" />
     <ClCompile Include="RenderDemo.cpp" />
     <ClCompile Include="RenderPass.cpp" />
+    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -166,6 +167,7 @@
     <ClInclude Include="ITextureDescriptor.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="PrimitiveBuffer.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="SystemClass.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="FileManager.h" />
