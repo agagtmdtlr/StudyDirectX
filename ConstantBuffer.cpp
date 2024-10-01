@@ -2,6 +2,11 @@
 #include "ConstantBuffer.h"
 
 
+ConstantBuffer::ConstantBuffer()
+{
+	std::cout << "call constant buffer deafult constructor" << endl;
+}
+
 ConstantBuffer::ConstantBuffer(UINT bufferSize)
 	:bufferSize(bufferSize)
 {

@@ -5,17 +5,19 @@ cbuffer MatrixBuffer
     matrix projectionMatrix;
 };
 
+static float3 lightDir = float3(0.5, -0.5, 0.5);
+
 
 struct VSInput
 {
     float4 position : POSITION;
-    float2 uv : TEXCOORD;
+    float3 normal : NORMAL;
 };
 
 struct VSOutput
 {
     float4 position : SV_POSITION;
-    float2 uv : TEXCOORD;
+    float3 normal : NORMAL;    
 };
 
 Texture2D baseColorTexture : register(t0);
@@ -44,15 +46,21 @@ VSOutput VSmain(VSInput vsInput)
     
     vsOutput.position = vsInput.position;
     
-    vsOutput.position = mul(vsInput.position, worldMatrix);
-    vsOutput.position = mul(vsInput.position, viewMatrix);
-    vsOutput.position = mul(vsInput.position, projectionMatrix);
-    vsOutput.uv = vsInput.uv;
+    vsOutput.position = mul(vsOutput.position, worldMatrix);
+    vsOutput.position = mul(vsOutput.position, viewMatrix);
+    vsOutput.position = mul(vsOutput.position, projectionMatrix);
+    
+    vsOutput.normal = mul(vsInput.normal, (float3x3)worldMatrix);
+    vsOutput.normal = normalize(vsOutput.normal);
     return vsOutput;
 }
 
 float4 PSmain(VSOutput vsOutput) : SV_TARGET
 {
-    return float4(1, 0, 0, 1);
+    float3 l = -normalize(lightDir);
+    float3 n = normalize(vsOutput.normal);
+    float LdotN = dot(l, n);
+        
+    return float4(1 * LdotN, 0, 0, 1);
     //return baseColorTexture.Sample(baseColorSampler, vsOutput.uv);
 }

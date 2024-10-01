@@ -10,6 +10,8 @@ public:
 	static ID3D11RenderTargetView* GetRTV();
 	static HRESULT Present(UINT syncInterval, UINT flag);
 	static float GetWndAspectRatio();
+	static int GetWidth();
+	static int GetHeight();
 
 
 	void Initialize(HWND window, int width, int height);

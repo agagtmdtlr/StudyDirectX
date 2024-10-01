@@ -9,7 +9,7 @@ public:
 
 public:
 	Vector3 position;
-	Vector3 lookat;
+	Vector3 rotation;
 
 	float fov;
 	float aspectRatio;

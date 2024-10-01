@@ -9,7 +9,7 @@ struct Update_ConstantBuffe_Desc
 class ConstantBuffer
 {
 public:
-	ConstantBuffer() {};
+	ConstantBuffer();
 	ConstantBuffer(UINT bufferSize);
 
 	bool UpdateData(Update_ConstantBuffe_Desc desc);

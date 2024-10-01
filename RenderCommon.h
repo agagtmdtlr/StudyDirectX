@@ -10,7 +10,7 @@
 struct Vertex
 {
 	Vector4 position;
-	Vector2 uv;
+	Vector3 normal;
 };
 
 class RenderDescriptor

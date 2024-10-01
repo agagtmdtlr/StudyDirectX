@@ -40,6 +40,16 @@ float D3D::GetWndAspectRatio()
 	return aspectRatio;
 }
 
+int D3D::GetWidth()
+{
+	return D3D::GetRenderContext()->width;
+}
+
+int D3D::GetHeight()
+{
+	return D3D::GetRenderContext()->height;
+}
+
 void D3D::Initialize(HWND window, int width, int height)
 {
 	this->width = width;
