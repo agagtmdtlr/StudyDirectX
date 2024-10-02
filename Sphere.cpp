@@ -50,48 +50,34 @@ Sphere::Sphere()
 		std::vector<UINT> indices;
 		/*
 		k1---k2
-		| \  |
-		|  \ |
+		|  / |
+		| /  |
 		k3---k4
 		*/
 
-		for (int j = 0; j < count; j++)
+		for (int y = 0; y < count; y++)
 		{
-			UINT k1 = j * (count+1);
+			UINT k1 = y * (count+1);
 			UINT k2 = k1 + count + 1;
-			for (int i = 0; i < count; i++, ++k1, ++k2)
+			for (int x = 0; x < count; x++, ++k1, ++k2)
 			{
-				if (j != 0)
+				if (y != 0)
 				{
 					indices.push_back(k1);
 					indices.push_back(k1+1);
 					indices.push_back(k2);
 				}
 
-				if (j != count - 1)
+				if (y != count - 1)
 				{
 					indices.push_back(k1+1);
 					indices.push_back(k2+1);
 					indices.push_back(k2);
 				}
-
-
 			}
 		}
 
-		//int last = vertices.size();
-		//for (int i = 0; i < count; i++)
-		//{
-		//	int off = last - 1 - count + i;
-		//	indices.push_back(off);
-		//	indices.push_back(off + 1);
-		//	indices.push_back(last);
-		//}
-
-
 		buffer = make_unique<PrimitiveBuffer>(vertices, indices);
-
-
 	}
 }
 

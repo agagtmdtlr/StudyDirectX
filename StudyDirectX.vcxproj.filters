@@ -30,9 +30,6 @@
     <ClCompile Include="FileManager.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="Gizmo.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -82,13 +79,22 @@
     <ClCompile Include="Sphere.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="UIMaterial.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManager.h">
       <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Gizmo.h">
       <Filter>UI</Filter>
@@ -149,6 +155,18 @@
     </ClInclude>
     <ClInclude Include="Sphere.h">
       <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="UIMaterial.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

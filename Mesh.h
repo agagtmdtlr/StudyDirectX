@@ -2,18 +2,28 @@
 #include <d3d11.h>
 #include <wrl/client.h>
 
+#include "Transform.h"
+#include <set>
+
+#include "Material.h"
 
 class Mesh
 {
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vertextBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
+public:
+	Mesh();
+	virtual ~Mesh();
+	virtual void Update();
+	virtual void initialize(string name, Transform transform);
+	
+	Transform* GetTransformRef() { return &transform;}
+	Material::Description GetMaterialDesctription() {return material.desc; }
+private:
+	UINT id;
+	Transform transform;
+	string name;
+	Material material;
 
-	Mesh(void* vertices, UINT vertexStride, UINT vertexCount, void* indices, UINT indexCount );
-
-	UINT vertexCount;
-	UINT indexCount;
-	UINT stride;
-	UINT instanceCount;
-
+	static UINT idGenerator;
+	static set<UINT> instancesUID;
 };
 

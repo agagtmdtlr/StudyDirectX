@@ -21,3 +21,12 @@ private:
 	D3D11_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 };
 
+class PrimitiveBufferManager
+{
+public:
+	static void RegistBuffer(std::string, shared_ptr<PrimitiveBuffer>);
+	static shared_ptr<PrimitiveBuffer> RequestBuffer(std::string );
+	
+private:
+	static unordered_map<string, shared_ptr<PrimitiveBuffer>> bufferMap;
+};

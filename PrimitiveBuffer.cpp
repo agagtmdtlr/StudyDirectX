@@ -51,3 +51,14 @@ UINT PrimitiveBuffer::GetVertexStride()
 {
 	return sizeof(Vertex);
 }
+
+void PrimitiveBufferManager::RegistBuffer(std::string name, shared_ptr<PrimitiveBuffer> buffer)
+{
+	bufferMap[name] = buffer;
+}
+
+shared_ptr<PrimitiveBuffer> PrimitiveBufferManager::RequestBuffer(std::string name)
+{
+	return bufferMap[name];
+}
+

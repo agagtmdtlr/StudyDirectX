@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "ConstantBuffer.h"
 #include "Sphere.h"
+#include "Material.h"
 class RenderDemo
 {
 public:
@@ -22,8 +23,10 @@ public:
 
 	std::unique_ptr<RenderPass> renderPass;
 	Sphere sphere;
+
+	std::array<Material,1024> materials;
 	
-	shared_ptr<PrimitiveBuffer> primitive;
+	shared_ptr<PrimitiveBuffer> primitive; // for test
 	shared_ptr<class Texture> texture;
 	ComPtr<ID3D11SamplerState> colorSampler;
 
