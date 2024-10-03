@@ -6,23 +6,23 @@
 #include "Mesh.h"
 #include <memory>
 
-
 #include "Camera.h"
 #include "ConstantBuffer.h"
 #include "Sphere.h"
 #include "Material.h"
-class RenderDemo
+
+class Renderer
 {
 public:
 
-	RenderDemo();
+	Renderer();
 	void Initialize(int width, int height);
 	void Update();
 	
 	void Render();
 
 	std::unique_ptr<RenderPass> renderPass;
-	Sphere sphere;
+	std::unique_ptr<Sphere> sphere;
 
 	std::array<Material,1024> materials;
 	

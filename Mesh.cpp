@@ -2,31 +2,42 @@
 #include "Mesh.h"
 #include <memory>
 #include <iostream>
-#include "RenderContext.h"
 #include <algorithm>
 
 
 UINT Mesh::idGenerator = 0;
+set<UINT> Mesh::instancesUID;
 
 Mesh::Mesh()
 {
-	 id = idGenerator;
-	 idGenerator++;
+	Create();
+}
+
+Mesh::Mesh(std::string name, Transform transform)
+	:name(name), transform(transform)
+{	
+	 Create();
+	 Initialize(name, transform);
 }
 
 Mesh::~Mesh()
 {
-	instancesUID.erase(id);
+	Mesh::instancesUID.erase(id);
 }
 
 void Mesh::Update()
-{
-	
+{	
 }
 
-void Mesh::initialize(string name, Transform transform)
+void Mesh::Initialize(string name, Transform transform)
 {
-	instancesUID.insert(id);
 	this->transform = transform;
 	this->name = name;
+}
+
+void Mesh::Create()
+{
+	id = idGenerator;
+	idGenerator++;
+	Mesh::instancesUID.insert(id);
 }

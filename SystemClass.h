@@ -1,7 +1,7 @@
 #pragma once
 #include "InputClass.h"
 #include "ApplicationClass.h"
-#include "RenderDemo.h"
+#include "Renderer.h"
 
 #include <Windows.h>
 
@@ -14,6 +14,7 @@ public:
 	
 	void Initialize();
 	void InitializeWindow(int width, int height);
+	void InitializeUI();
 
 	void Run();
 	void Shutdown();
@@ -23,10 +24,12 @@ public:
 private:
 
 	HWND hwnd;
-	unique_ptr<RenderDemo> demo;
+	WNDCLASSEX wc;
+
+	unique_ptr<Renderer> renderer;
 	unique_ptr<ApplicationClass> application;
 	unique_ptr<InputClass> input;
-	WNDCLASSEX wc;
+	unique_ptr<class UIManager> ui;
 };
 
 static SystemClass* systemHandle = nullptr;

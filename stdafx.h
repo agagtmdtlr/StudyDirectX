@@ -16,8 +16,9 @@ using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
 
-#include "RenderContext.h"
+#include "D3D.h"
 #include "RenderCommon.h"
+#include "Transform.h"
 
 
 

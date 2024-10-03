@@ -4,7 +4,6 @@
 class D3D
 {	
 public:
-	static D3D* GetRenderContext();
 	static ID3D11Device* GetDevice();
 	static ID3D11DeviceContext* GetDC();
 	static ID3D11RenderTargetView* GetRTV();
@@ -14,11 +13,13 @@ public:
 	static int GetHeight();
 
 
-	void Initialize(HWND window, int width, int height);
+	static void Initialize(HWND window, int width, int height);
 	void InitShaders();
 
 
 private:
+	static D3D* GetRenderContext();
+
 	ComPtr<ID3D11Device> device;
 	ComPtr<ID3D11DeviceContext> deviceContext;
 	ComPtr<IDXGISwapChain> swapChain;

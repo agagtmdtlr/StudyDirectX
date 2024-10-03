@@ -36,7 +36,7 @@
     <ClCompile Include="RenderPass.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="RenderDemo.cpp">
+    <ClCompile Include="Renderer.cpp">
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
@@ -61,16 +61,13 @@
     <ClCompile Include="InputClass.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="RenderContext.cpp">
+    <ClCompile Include="D3D.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="PrimitiveBuffer.cpp">
@@ -91,6 +88,13 @@
     <ClCompile Include="UIMaterial.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManager.h">
@@ -105,7 +109,7 @@
     <ClInclude Include="RenderCommon.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="RenderDemo.h">
+    <ClInclude Include="Renderer.h">
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="IImageValidator.h">
@@ -135,16 +139,13 @@
     <ClInclude Include="InputClass.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="RenderContext.h">
+    <ClInclude Include="D3D.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="PrimitiveBuffer.h">
@@ -168,6 +169,13 @@
     <ClInclude Include="UIMaterial.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VS.hlsl">

@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "PrimitiveBuffer.h"
 
+
+unordered_map<string, shared_ptr<PrimitiveBuffer>> PrimitiveBufferManager::bufferMap;
+
 PrimitiveBuffer::PrimitiveBuffer(vector<Vertex>& vertices, vector<UINT>& indices)
 	: vertices(vertices), indices(indices)
 {

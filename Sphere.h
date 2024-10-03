@@ -1,13 +1,16 @@
 #pragma once
+#include "Mesh.h"
 
-class Sphere
+class Sphere : public Mesh
 {
 
 public:
 	Sphere();
-	
+	Sphere(std::string name, Transform transform);
+	virtual ~Sphere();
 
 	struct PrimitiveBuffer* GetBuffer();
+	void Create();
 	UINT GetIndexCount();
 private:
 

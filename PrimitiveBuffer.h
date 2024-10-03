@@ -24,8 +24,8 @@ private:
 class PrimitiveBufferManager
 {
 public:
-	static void RegistBuffer(std::string, shared_ptr<PrimitiveBuffer>);
-	static shared_ptr<PrimitiveBuffer> RequestBuffer(std::string );
+	static void RegistBuffer(std::string name, shared_ptr<PrimitiveBuffer> buffer);
+	static shared_ptr<PrimitiveBuffer> RequestBuffer(std::string name);
 	
 private:
 	static unordered_map<string, shared_ptr<PrimitiveBuffer>> bufferMap;

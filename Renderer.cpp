@@ -1,27 +1,27 @@
 #include "stdafx.h"
-#include "RenderDemo.h"
+#include "Renderer.h"
 #include "RenderCommon.h"
 #include "FileManager.h"
 
-RenderDemo::RenderDemo()
+Renderer::Renderer()
 {
 }
 
-void RenderDemo::Update()
+void Renderer::Update()
 {
 }
 
-void RenderDemo::Render()
+void Renderer::Render()
 {	
 	//renderPass->BeginDraw(primitive.get(), D3D::GetRTV());
 	//renderPass->DrawIndexed(primitive->GetIndexCount(), 0, 0);
 
-	renderPass->BeginDraw(sphere.GetBuffer(), D3D::GetRTV());
-	renderPass->DrawIndexed(sphere.GetIndexCount(), 0, 0);
+	renderPass->BeginDraw(sphere->GetBuffer(), D3D::GetRTV());
+	renderPass->DrawIndexed(sphere->GetIndexCount(), 0, 0);
 	renderPass->EndDraw();
 }
 
-void RenderDemo::Initialize(int width, int height)
+void Renderer::Initialize(int width, int height)
 {
 	auto device = D3D::GetDevice();
 	auto deviceContext = D3D::GetDC();
@@ -104,7 +104,7 @@ void RenderDemo::Initialize(int width, int height)
 	texture = TextureManager::RequestTexture(L"abstract.jpg");
 
 	
-
+	sphere = make_unique<Sphere>("sphere", Transform());
 	
 
 

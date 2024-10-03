@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "RenderContext.h"
+#include "D3D.h"
 #include "RenderCommon.h"
 #include <memory>
 
@@ -52,8 +52,9 @@ int D3D::GetHeight()
 
 void D3D::Initialize(HWND window, int width, int height)
 {
-	this->width = width;
-	this->height = height;
+	auto rc = D3D::GetRenderContext();
+	rc->width = width;
+	rc->height = height;
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
 	ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
@@ -83,20 +84,20 @@ void D3D::Initialize(HWND window, int width, int height)
 		1,
 		D3D11_SDK_VERSION,
 		&swapChainDesc,
-		swapChain.GetAddressOf(),
-		device.GetAddressOf(),
+		rc->swapChain.GetAddressOf(),
+		rc->device.GetAddressOf(),
 		NULL,
-		deviceContext.GetAddressOf())))
+		rc->deviceContext.GetAddressOf())))
 	{
 		std::cout << "D3D11CrateDeviceAndSwapChain() error" << std::endl;
 	}
 
 	//CreateRenderTarget
 	ID3D11Texture2D* pBackBuffer;
-	swapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+	rc->swapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
 	if (pBackBuffer)
 	{
-		device->CreateRenderTargetView(pBackBuffer, NULL, renderTargetView.GetAddressOf());
+		rc->device->CreateRenderTargetView(pBackBuffer, NULL, rc->renderTargetView.GetAddressOf());
 		pBackBuffer->Release();
 	}
 	else

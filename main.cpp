@@ -1,9 +1,5 @@
 #include "stdafx.h"
-
 #include <Windows.h>
-
-
-#include "RenderDemo.h"
 #include "SystemClass.h"
 
 

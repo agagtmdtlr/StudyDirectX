@@ -8,7 +8,8 @@
 #include <memory>
 
 
-#include "RenderContext.h"
+#include "D3D.h"
+#include "UIManager.h" 
 
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -26,30 +27,17 @@ void SystemClass::Initialize()
     const int width = 1280, height = 720;
     InitializeWindow(width, height);
 
-	D3D* renderContext = D3D::GetRenderContext();
-	renderContext->Initialize(hwnd, width, height);
+	D3D::Initialize(hwnd, width, height);
 
 	input = make_unique<InputClass>();
 	input->Initialize();
 
 	application = make_unique<ApplicationClass>();
 
-	demo = std::make_unique<RenderDemo>();
-	demo->Initialize(width, height);
+	renderer = std::make_unique<Renderer>();
+	renderer->Initialize(width, height);
 
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.DisplaySize = ImVec2(width, height);
-	ImGui::StyleColorsLight();
-
-	ImGuiContext* imguiContext = ImGui::GetCurrentContext();
-	//ImGuizmo::SetImGuiContext(imguiContext);
-
-	// Setup Platform/ Renderer backedns
-	ImGui_ImplDX11_Init(D3D::GetDevice(), D3D::GetDC());
-	ImGui_ImplWin32_Init(hwnd);
-
+	InitializeUI();
 }
 
 void SystemClass::InitializeWindow(int width, int height)
@@ -92,6 +80,24 @@ void SystemClass::InitializeWindow(int width, int height)
 	UpdateWindow(hwnd);
 }
 
+void SystemClass::InitializeUI()
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.DisplaySize = ImGui::GetMainViewport()->Size;
+	ImGui::StyleColorsLight();
+
+	ImGuiContext* imguiContext = ImGui::GetCurrentContext();
+	//ImGuizmo::SetImGuiContext(imguiContext);
+
+	// Setup Platform/ Renderer backedns
+	ImGui_ImplDX11_Init(D3D::GetDevice(), D3D::GetDC());
+	ImGui_ImplWin32_Init(hwnd);
+
+	ui = make_unique<UIManager>(this);
+}
+
 void SystemClass::Run()
 {
 	//Main message loop
@@ -121,8 +127,8 @@ void SystemClass::Run()
 			//example->Update();
 			//example->Render();
 
-			demo->Update();
-			demo->Render();
+			renderer->Update();
+			renderer->Render();
 
 
 
