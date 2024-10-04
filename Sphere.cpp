@@ -7,27 +7,6 @@ std::unique_ptr<struct PrimitiveBuffer> Sphere::buffer = nullptr;
 
 
 Sphere::Sphere()
-	:Mesh()
-{
-	Create();
-}
-
-Sphere::Sphere(std::string name, Transform transform)
-	:Mesh(name, transform)
-{
-	Create();
-}
-
-Sphere::~Sphere()
-{
-}
-
-PrimitiveBuffer* Sphere::GetBuffer()
-{
-	return buffer.get();
-}
-
-void Sphere::Create()
 {
 	if (buffer == nullptr)
 	{
@@ -100,6 +79,15 @@ void Sphere::Create()
 
 		buffer = make_unique<PrimitiveBuffer>(vertices, indices);
 	}
+}
+
+Sphere::~Sphere()
+{
+}
+
+PrimitiveBuffer* Sphere::GetBuffer()
+{
+	return buffer.get();
 }
 
 UINT Sphere::GetIndexCount()

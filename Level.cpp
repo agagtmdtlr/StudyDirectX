@@ -9,5 +9,7 @@ Level::Level(string name)
 
 Mesh* Level::CreateSphere()
 {
-	return nullptr;
+	shared_ptr<Sphere> sphere = make_shared<Sphere>();
+	meshes.push_back(sphere);
+	return sphere.get();
 }

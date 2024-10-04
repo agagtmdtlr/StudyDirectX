@@ -15,7 +15,6 @@ using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
-
 #include "D3D.h"
 #include "RenderCommon.h"
 #include "Transform.h"

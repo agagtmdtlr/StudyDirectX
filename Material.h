@@ -6,10 +6,10 @@ class Material
 public:
 	struct Description
 	{
-		float amb;
-		float diff;
-		float spec;
-		float alpha;
+		float amb = 0;
+		float diff= 0;
+		float spec = 0;
+		float alpha = 1;
 	};
 
 	Description desc;

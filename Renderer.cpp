@@ -104,7 +104,8 @@ void Renderer::Initialize(int width, int height)
 	texture = TextureManager::RequestTexture(L"abstract.jpg");
 
 	
-	sphere = make_unique<Sphere>("sphere", Transform());
+	sphere = make_unique<Sphere>();
+	sphere->Initialize("sphere",Transform());
 	
 
 

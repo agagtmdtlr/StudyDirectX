@@ -9,15 +9,13 @@ class Mesh
 {
 public:
 	Mesh();
-	Mesh(string name, Transform transform);
 	virtual ~Mesh();
 	virtual void Update();
+	virtual void Initialize(std::string name, Transform transform);
 
 	Transform* GetTransformRef() { return &transform; }
 	Material::Description GetMaterialDesctription() { return material.desc; }
 private:
-	void Initialize(std::string name, Transform transform);
-	void Create();
 	UINT id;
 	Transform transform;
 	string name;

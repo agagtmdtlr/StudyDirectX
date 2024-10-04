@@ -1,13 +1,6 @@
 #include "stdafx.h"
 #include "Transform.h"
 
-Transform::Transform()
-{
-	translation = Vector3(0, 0, 0);
-	rotation = Vector3(0, 0, 0);
-	scale = Vector3(1, 1, 1);
-}
-
 Matrix Transform::GetWorldMatrix()
 {
 	// Scale * Rotation * Translation
