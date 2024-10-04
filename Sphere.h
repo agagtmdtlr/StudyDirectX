@@ -8,10 +8,12 @@ public:
 	Sphere();
 	virtual ~Sphere();
 
-	struct PrimitiveBuffer* GetBuffer();
+	class PrimitiveBuffer* GetBuffer();
 	UINT GetIndexCount();
 private:
 
-	static std::unique_ptr<struct PrimitiveBuffer> buffer;
+	static std::unique_ptr<class PrimitiveBuffer> buffer;
 };
+
+
 

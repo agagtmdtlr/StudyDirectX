@@ -1,5 +1,7 @@
 #pragma once
 #include <functional>
+#include <imgui.h>
+
 class UI
 {
 public:
@@ -10,9 +12,5 @@ public:
 	virtual void Render() = 0;
 };
 
-class UIButton
-{
-public:
-	string label;
-	//std::function<void> func;
-};
+
+

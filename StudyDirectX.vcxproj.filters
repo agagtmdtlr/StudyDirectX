@@ -30,7 +30,7 @@
     <ClCompile Include="FileManager.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Gizmo.cpp">
+    <ClCompile Include="UIGizmo.cpp">
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="RenderPass.cpp">
@@ -95,12 +95,15 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="UIButton.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManager.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Gizmo.h">
+    <ClInclude Include="UIGizmo.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="RenderPass.h">
@@ -176,6 +179,9 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="UIButton.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VS.hlsl">

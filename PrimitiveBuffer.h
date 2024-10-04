@@ -6,7 +6,7 @@ public:
 	PrimitiveBuffer(vector<Vertex>& vertices, vector<UINT>& indices);
 
 	UINT GetVertexStride();
-	UINT GetIndexCount() { return indices.size(); }
+	UINT GetIndexCount() { return (UINT)indices.size(); }
 	ID3D11Buffer** GetVertexBufferAddressOf() { return vertexBuffer.GetAddressOf(); }
 	ID3D11Buffer* GetIndexBuffer() { return indexBuffer.Get(); }
 	D3D11_PRIMITIVE_TOPOLOGY GetTopology() { return topology; }

@@ -85,17 +85,18 @@ void SystemClass::InitializeUI()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.DisplaySize = ImGui::GetMainViewport()->Size;
+	io.DisplaySize.x = D3D::GetWidth();
+	io.DisplaySize.y = D3D::GetHeight();
 	ImGui::StyleColorsLight();
 
 	ImGuiContext* imguiContext = ImGui::GetCurrentContext();
-	//ImGuizmo::SetImGuiContext(imguiContext);
+	ImGuizmo::SetImGuiContext(imguiContext);
 
 	// Setup Platform/ Renderer backedns
 	ImGui_ImplDX11_Init(D3D::GetDevice(), D3D::GetDC());
 	ImGui_ImplWin32_Init(hwnd);
 
-	ui = make_unique<UIManager>(this);
+	ui = make_unique<UIManager>(this,renderer.get());
 }
 
 void SystemClass::Run()
@@ -114,13 +115,15 @@ void SystemClass::Run()
 			// Start the Dear ImGui frame
 			ImGui_ImplDX11_NewFrame();
 			ImGui_ImplWin32_NewFrame();
-			//ImGuizmo::BeginFrame();
 
 
 			ImGui::NewFrame();
+
 			ImGui::Begin("Option");
 			//ImGui::Text("ElapsedTime %lf", 1.0f / example->elapsedTime);
 			//ImGui::InputInt("Sumper Sampling Level",&example->raytracer.supersmaplingLevel);
+
+			ImGuizmo::BeginFrame();
 			ImGui::End();
 			ImGui::Render();
 
