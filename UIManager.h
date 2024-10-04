@@ -1,7 +1,7 @@
 #pragma once
 
 #include "UI.h"
-#include "SystemClass.h"
+
 
 struct UILinkNode
 {
@@ -20,17 +20,20 @@ class UIManager
 {
 public:
 	static UIManager* g_uiManager;
-	UIManager(SystemClass* system, Renderer* renderer);
+	UIManager(ApplicationClass* app, Renderer* renderer);
+
 	void Initialize();
+	void Update();
 	void Render();
 	void CreateSphere();
 
 	bool IsSelected();
 
+
 	UILinkNode* header;
 	vector<unique_ptr<UI>> uis;
-	SystemClass* system;
 	Renderer* renderer;
+	ApplicationClass* application;
 
 	class Mesh* selectedObject;
 	

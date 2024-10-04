@@ -55,6 +55,11 @@ UINT PrimitiveBuffer::GetVertexStride()
 	return sizeof(Vertex);
 }
 
+bool PrimitiveBufferManager::IsExisted(std::string name)
+{
+	return bufferMap.find(name) != bufferMap.end();
+}
+
 void PrimitiveBufferManager::RegistBuffer(std::string name, shared_ptr<PrimitiveBuffer> buffer)
 {
 	bufferMap[name] = buffer;

@@ -2,13 +2,13 @@
 #include "Material.h"
 #include "UI.h"
 
-class UIMaterial : UI
+class UIMaterial : public UI
 {
 public:
-	UIMaterial(Material* material);
+	UIMaterial();
 	virtual ~UIMaterial() {}
 	virtual void Render() override;
 private:
-	Material* material;
+	Material* material = nullptr;
 };
 

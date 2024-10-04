@@ -4,6 +4,7 @@
 #include <ImGuizmo.h>
 #include "UIManager.h"
 #include "Mesh.h"
+#include "Renderer.h"
 
 ImGuizmo::OPERATION ConvertToImGuizmoOperation(UIGizmo::eUIGizmoOperation operation)
 {

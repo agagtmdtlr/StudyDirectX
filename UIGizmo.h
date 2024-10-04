@@ -2,7 +2,7 @@
 
 #include "UI.h"
 
-class UIGizmo : UI
+class UIGizmo : public UI
 {
 public:
 	enum eUIGizmoOperation

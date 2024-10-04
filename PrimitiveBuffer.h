@@ -24,6 +24,7 @@ private:
 class PrimitiveBufferManager
 {
 public:
+	static bool IsExisted(std::string name);
 	static void RegistBuffer(std::string name, shared_ptr<PrimitiveBuffer> buffer);
 	static shared_ptr<PrimitiveBuffer> RequestBuffer(std::string name);
 	

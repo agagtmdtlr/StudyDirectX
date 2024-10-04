@@ -1,8 +1,4 @@
 #pragma once
-#include "InputClass.h"
-#include "ApplicationClass.h"
-#include "Renderer.h"
-
 #include <Windows.h>
 
 
@@ -26,9 +22,9 @@ private:
 	HWND hwnd;
 	WNDCLASSEX wc;
 
-	unique_ptr<Renderer> renderer;
-	unique_ptr<ApplicationClass> application;
-	unique_ptr<InputClass> input;
+	unique_ptr<class Renderer> renderer;
+	unique_ptr<class ApplicationClass> application;
+	unique_ptr<class InputClass> input;
 	unique_ptr<class UIManager> ui;
 };
 

@@ -152,6 +152,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="FileManager.cpp" />
+    <ClCompile Include="UIFactory.cpp" />
     <ClCompile Include="UIGizmo.cpp" />
     <ClCompile Include="IImageLoader.h" />
     <ClCompile Include="InputClass.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="SystemClass.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="FileManager.h" />
+    <ClInclude Include="UIFactory.h" />
     <ClInclude Include="UIGizmo.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="D3D.h" />

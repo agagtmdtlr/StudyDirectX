@@ -98,6 +98,7 @@
     <ClCompile Include="UIButton.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="UIFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManager.h">
@@ -182,6 +183,7 @@
     <ClInclude Include="UIButton.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="UIFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VS.hlsl">

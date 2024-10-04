@@ -9,6 +9,9 @@
 
 
 #include "D3D.h"
+#include "InputClass.h"
+#include "ApplicationClass.h"
+#include "Renderer.h"
 #include "UIManager.h" 
 
 // Forward declare message handler from imgui_impl_win32.cpp
@@ -97,6 +100,7 @@ void SystemClass::InitializeUI()
 	ImGui_ImplWin32_Init(hwnd);
 
 	ui = make_unique<UIManager>(this,renderer.get());
+	ui->Initialize();
 }
 
 void SystemClass::Run()
@@ -124,8 +128,7 @@ void SystemClass::Run()
 			//ImGui::InputInt("Sumper Sampling Level",&example->raytracer.supersmaplingLevel);
 
 			ImGuizmo::BeginFrame();
-			ImGui::End();
-			ImGui::Render();
+			
 
 			//example->Update();
 			//example->Render();
@@ -133,7 +136,10 @@ void SystemClass::Run()
 			renderer->Update();
 			renderer->Render();
 
+			ui->Render();
 
+			ImGui::End();
+			ImGui::Render();
 
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 

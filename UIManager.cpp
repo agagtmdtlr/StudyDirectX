@@ -5,11 +5,13 @@
 #include "Sphere.h"
 #include "UIButton.h"
 #include "Mesh.h"
+#include "Renderer.h"
+#include "ApplicationClass.h"
 
 UIManager* UIManager::g_uiManager = nullptr;
 
-UIManager::UIManager(SystemClass* system, Renderer* renderer)
-	:system(system), renderer(renderer), header(nullptr), selectedObject(nullptr)
+UIManager::UIManager(ApplicationClass * app, Renderer* renderer)
+	:application(app), renderer(renderer), header(nullptr), selectedObject(nullptr)
 {
 }
 
@@ -32,21 +34,25 @@ void UIManager::Initialize()
 		btn->type = eUIButtonType::DeleteMesh;
 		header->Insert(del);
 	}
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	ImGui::StyleColorsDark(&style);
+
+}
+
+void UIManager::Update()
+{
+	if (ImGui::IsKeyPressed(ImGuiKey_1) == true)
+	{
+		application->
+	}
 }
 
 void UIManager::Render()
 {
-	bool addSphere = ImGui::Button("Add Sphere", ImVec2(50, 10));
 
+	header->Render();
 
-	if (addSphere)
-	{
-	}
-
-	for (auto& ui : uis)
-	{
-		ui->Render();
-	}
 }
 
 void UIManager::CreateSphere()
@@ -94,6 +100,7 @@ UILinkNode* UILinkNode::Erase(UILinkNode* linkNode)
 
 void UILinkNode::Render()
 {
+
 	if (ui != nullptr)
 	{
 		ui->Render();

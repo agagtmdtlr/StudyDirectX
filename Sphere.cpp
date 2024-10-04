@@ -3,12 +3,10 @@
 #include "PrimitiveBuffer.h"
 #include <math.h>
 
-std::unique_ptr<struct PrimitiveBuffer> Sphere::buffer = nullptr;
-
 
 Sphere::Sphere()
 {
-	if (buffer == nullptr)
+	if (PrimitiveBufferManager::IsExisted(GetBufferName()) == false)
 	{
 		std::vector<Vertex> vertices;
 
@@ -77,20 +75,18 @@ Sphere::Sphere()
 			}
 		}
 
-		buffer = make_unique<PrimitiveBuffer>(vertices, indices);
+		shared_ptr<PrimitiveBuffer> buffer = make_unique<PrimitiveBuffer>(vertices, indices);
+		PrimitiveBufferManager::RegistBuffer(GetBufferName(), buffer);
+
 	}
+	
+	buffer = PrimitiveBufferManager::RequestBuffer(GetBufferName());
 }
 
 Sphere::~Sphere()
 {
 }
 
-PrimitiveBuffer* Sphere::GetBuffer()
-{
-	return buffer.get();
-}
 
-UINT Sphere::GetIndexCount()
-{
-	return buffer->GetIndexCount();
-}
+
+
