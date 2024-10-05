@@ -88,7 +88,7 @@ struct RenderPass
 
 	void DrawIndexed(UINT indexCount, UINT StartIndexLocation, INT BseVertexLocation);
 
-	void BeginDraw(PrimitiveBuffer* buffer, ID3D11RenderTargetView* rtv);
+	void BeginDraw(ID3D11RenderTargetView* rtv);
 	void EndDraw();
 
 private:

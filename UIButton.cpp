@@ -7,7 +7,7 @@ void UIButton::Render()
 {
 	ImGui::Columns(3);
 
-	if (ImGui::Button(GetLabel().c_str()) == true)
+	if (ImGui::Button(label.c_str()) == true)
 	{
 		Action();
 	}
@@ -15,22 +15,6 @@ void UIButton::Render()
 
 void UIButton::Action()
 {
-
+	(*callback)();
 }
 
-std::string UIButton::GetLabel()
-{
-
-
-	switch (type)
-	{
-	case eUIButtonType::CreateMesh:
-		return "CreateMesh";
-	case eUIButtonType::DeleteMesh:
-		return "DeleteMesh";
-	case eUIButtonType::ImportMehs:
-		return "ImportMesh";
-	}
-
-	return "";
-}

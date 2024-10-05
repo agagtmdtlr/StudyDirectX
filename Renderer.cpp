@@ -15,8 +15,7 @@ void Renderer::Render()
 {	
 	//renderPass->BeginDraw(primitive.get(), D3D::GetRTV());
 	//renderPass->DrawIndexed(primitive->GetIndexCount(), 0, 0);
-
-	renderPass->BeginDraw(sphere->GetBuffer(), D3D::GetRTV());
+	renderPass->BeginDraw(D3D::GetRTV());
 	renderPass->DrawIndexed(sphere->GetIndexCount(), 0, 0);
 	renderPass->EndDraw();
 }

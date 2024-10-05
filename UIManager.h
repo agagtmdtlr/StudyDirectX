@@ -1,8 +1,7 @@
 #pragma once
 
 #include "UI.h"
-
-
+#include "Callback.h"
 struct UILinkNode
 {
 	unique_ptr<UI> ui;
@@ -20,7 +19,7 @@ class UIManager
 {
 public:
 	static UIManager* g_uiManager;
-	UIManager(ApplicationClass* app, Renderer* renderer);
+	UIManager(class Renderer* renderer);
 
 	void Initialize();
 	void Update();
@@ -29,12 +28,15 @@ public:
 
 	bool IsSelected();
 
+	void SetCallbackToUI(std::string label, unique_ptr<Callback> callback);
 
 	UILinkNode* header;
 	vector<unique_ptr<UI>> uis;
-	Renderer* renderer;
-	ApplicationClass* application;
 
+	unordered_map<std::string, UI*> uimap;
+	class Renderer* renderer;
+	class Application* application;
+	
 	class Mesh* selectedObject;
 	
 };

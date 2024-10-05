@@ -36,9 +36,6 @@
     <ClCompile Include="RenderPass.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="IImageLoader.h">
       <Filter>Render</Filter>
@@ -53,9 +50,6 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="SystemClass.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="ApplicationClass.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="InputClass.cpp">
@@ -98,7 +92,18 @@
     <ClCompile Include="UIButton.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="UIFactory.cpp" />
+    <ClCompile Include="Callback.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFactory.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManager.h">
@@ -112,9 +117,6 @@
     </ClInclude>
     <ClInclude Include="RenderCommon.h">
       <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="IImageValidator.h">
       <Filter>Render</Filter>
@@ -135,9 +137,6 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="SystemClass.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="ApplicationClass.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="InputClass.h">
@@ -183,7 +182,18 @@
     <ClInclude Include="UIButton.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="UIFactory.h" />
+    <ClInclude Include="Callback.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="UIFactory.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VS.hlsl">

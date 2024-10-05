@@ -190,7 +190,7 @@ void RenderPass::DrawIndexed(UINT indexCount, UINT startIndexLocation, INT baseV
 
 }
 
-void RenderPass::BeginDraw(PrimitiveBuffer* buffer, ID3D11RenderTargetView* rtv)
+void RenderPass::BeginDraw(ID3D11RenderTargetView* rtv)
 {
 	ID3D11Device* device = D3D::GetDevice();
 	ID3D11DeviceContext* dc = D3D::GetDC();
@@ -216,7 +216,6 @@ void RenderPass::BeginDraw(PrimitiveBuffer* buffer, ID3D11RenderTargetView* rtv)
 	/*
 	bindreosurce mep
 	*/
-	BindPrimitiveBuffer(buffer);
 	for (auto& it : constantBuffers)
 	{
 		BindConstantBufferToStage(it.first, it.second);

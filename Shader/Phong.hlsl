@@ -41,12 +41,14 @@ struct VSInput
 {
     float4 position : POSITION;
     float3 normal : NORMAL;
+    float2 uv : TEXCOORD;
 };
 
 struct VSOutput
 {
     float4 position : SV_POSITION;
-    float3 normal : NORMAL;    
+    float3 normal : NORMAL;
+    float2 uv : TEXCOORD;
 };
 
 Texture2D baseColorTexture : register(t0);

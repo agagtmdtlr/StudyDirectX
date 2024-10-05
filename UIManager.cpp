@@ -6,12 +6,11 @@
 #include "UIButton.h"
 #include "Mesh.h"
 #include "Renderer.h"
-#include "ApplicationClass.h"
 
 UIManager* UIManager::g_uiManager = nullptr;
 
-UIManager::UIManager(ApplicationClass * app, Renderer* renderer)
-	:application(app), renderer(renderer), header(nullptr), selectedObject(nullptr)
+UIManager::UIManager(Renderer* renderer)
+	: renderer(renderer), header(nullptr), selectedObject(nullptr)
 {
 }
 
@@ -24,14 +23,14 @@ void UIManager::Initialize()
 		UILinkNode* add = new UILinkNode();
 		add->ui = make_unique<UIButton>();
 		UIButton* btn = dynamic_cast<UIButton*>(add->ui.get());
-		btn->type = eUIButtonType::CreateMesh;
+		btn->label = "Create Mesh";
 		header->Insert(add);
 	}
 	{
 		UILinkNode* del = new UILinkNode();
 		del->ui = make_unique<UIButton>();
 		UIButton* btn = dynamic_cast<UIButton*>(del->ui.get());
-		btn->type = eUIButtonType::DeleteMesh;
+		btn->label = "Delete Mesh";
 		header->Insert(del);
 	}
 
@@ -44,7 +43,6 @@ void UIManager::Update()
 {
 	if (ImGui::IsKeyPressed(ImGuiKey_1) == true)
 	{
-		application->
 	}
 }
 
@@ -62,6 +60,14 @@ void UIManager::CreateSphere()
 bool UIManager::IsSelected()
 {
 	return selectedObject != nullptr;
+}
+
+void UIManager::SetCallbackToUI(std::string label, unique_ptr<Callback> callback)
+{
+	if (uimap.find(label) != uimap.end())
+	{
+		uimap[label]->callback = std::move(callback);
+	}
 }
 
 void UILinkNode::Insert(UILinkNode* linkNode)

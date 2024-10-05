@@ -13,7 +13,8 @@ public:
 
 	float fov;
 	float aspectRatio;
-	float nearPlane, farPlane;
+	float nearPlane = 0.01f;
+	float farPlane = 1000.f;
 
 
 	Matrix matrix;

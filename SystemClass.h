@@ -23,7 +23,7 @@ private:
 	WNDCLASSEX wc;
 
 	unique_ptr<class Renderer> renderer;
-	unique_ptr<class ApplicationClass> application;
+	unique_ptr<class Application> application;
 	unique_ptr<class InputClass> input;
 	unique_ptr<class UIManager> ui;
 };

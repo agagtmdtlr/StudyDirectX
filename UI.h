@@ -1,7 +1,5 @@
 #pragma once
-#include <functional>
-#include <imgui.h>
-
+#include "Callback.h"
 class UI
 {
 public:
@@ -10,9 +8,8 @@ public:
 	virtual ~UI() {}
 
 	virtual void Render() = 0;
+
+	std::string label;
+	unique_ptr<Callback> callback;
 };
-
-
-
-
 

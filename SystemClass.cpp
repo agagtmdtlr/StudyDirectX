@@ -10,7 +10,7 @@
 
 #include "D3D.h"
 #include "InputClass.h"
-#include "ApplicationClass.h"
+#include "Application.h"
 #include "Renderer.h"
 #include "UIManager.h" 
 
@@ -35,7 +35,7 @@ void SystemClass::Initialize()
 	input = make_unique<InputClass>();
 	input->Initialize();
 
-	application = make_unique<ApplicationClass>();
+	application = make_unique<Application>();
 
 	renderer = std::make_unique<Renderer>();
 	renderer->Initialize(width, height);
@@ -99,7 +99,7 @@ void SystemClass::InitializeUI()
 	ImGui_ImplDX11_Init(D3D::GetDevice(), D3D::GetDC());
 	ImGui_ImplWin32_Init(hwnd);
 
-	ui = make_unique<UIManager>(this,renderer.get());
+	ui = make_unique<UIManager>(application.get(), renderer.get());
 	ui->Initialize();
 }
 

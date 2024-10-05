@@ -148,7 +148,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ApplicationClass.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Callback.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="FileManager.cpp" />
@@ -178,7 +179,8 @@
     <ClCompile Include="UIMaterial.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ApplicationClass.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Callback.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="IBuffer.h" />

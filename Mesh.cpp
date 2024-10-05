@@ -28,8 +28,13 @@ void Mesh::Update()
 void Mesh::Render()
 {
 	auto dc = D3D::GetDC();
+	UINT stride = buffer->GetVertexStride();
+	UINT offset = 0;
 
-	dc
+	dc->IASetVertexBuffers(0, 1, buffer->GetVertexBufferAddressOf(), &stride, &offset);
+	dc->IASetIndexBuffer(buffer->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+
+	dc->IASetPrimitiveTopology(buffer->GetTopology());
 }
 
 void Mesh::Initialize(string name, Transform transform)

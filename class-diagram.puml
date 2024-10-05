@@ -6,7 +6,13 @@ class input
 class application
 class d3d
 
+class ui
+class callback
+
 system *-- input : contain
 system *-- application : contain
 system *-- d3d : contanin
+
+ui *-- callback
+
 @enduml
