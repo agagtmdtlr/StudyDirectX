@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "SystemClass.h"
+#include "System.h"
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
@@ -9,41 +9,42 @@
 
 
 #include "D3D.h"
-#include "InputClass.h"
+#include "Input.h"
 #include "Application.h"
 #include "Renderer.h"
-#include "UIManager.h" 
+#include "ControllerManager.h" 
 
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-SystemClass::SystemClass()
+System::System()
 {
 }
 
-SystemClass::~SystemClass()
+System::~System()
 {
 }
 
-void SystemClass::Initialize()
+void System::Initialize()
 {
     const int width = 1280, height = 720;
     InitializeWindow(width, height);
 
 	D3D::Initialize(hwnd, width, height);
 
-	input = make_unique<InputClass>();
+	input = make_unique<Input>();
 	input->Initialize();
-
-	application = make_unique<Application>();
 
 	renderer = std::make_unique<Renderer>();
 	renderer->Initialize(width, height);
 
 	InitializeUI();
+
+	application = make_unique<Application>(ui.get());
+	application->Initialize();
 }
 
-void SystemClass::InitializeWindow(int width, int height)
+void System::InitializeWindow(int width, int height)
 {
 	wc = {
 			sizeof(WNDCLASSEX),
@@ -83,7 +84,7 @@ void SystemClass::InitializeWindow(int width, int height)
 	UpdateWindow(hwnd);
 }
 
-void SystemClass::InitializeUI()
+void System::InitializeUI()
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -99,11 +100,11 @@ void SystemClass::InitializeUI()
 	ImGui_ImplDX11_Init(D3D::GetDevice(), D3D::GetDC());
 	ImGui_ImplWin32_Init(hwnd);
 
-	ui = make_unique<UIManager>(application.get(), renderer.get());
+	ui = make_unique<ControllerManager>(renderer.get());
 	ui->Initialize();
 }
 
-void SystemClass::Run()
+void System::Run()
 {
 	//Main message loop
 	MSG msg = {};
@@ -150,7 +151,7 @@ void SystemClass::Run()
 	} // while WM_QUIT
 }
 
-void SystemClass::Shutdown()
+void System::Shutdown()
 {
 	//Cleanup
 	ImGui_ImplDX11_Shutdown();
@@ -162,7 +163,7 @@ void SystemClass::Shutdown()
 	UnregisterClass(wc.lpszClassName, wc.hInstance);
 }
 
-LRESULT SystemClass::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT System::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{

@@ -3,7 +3,7 @@
 #include "Mesh.h"
 #include "UIManager.h"
 
-Application::Application(UIManager* uiManager)
+Application::Application(ControllerManager* uiManager)
     :uiManager(uiManager)
 {
     sphere.Initialize("sphere", Transform());

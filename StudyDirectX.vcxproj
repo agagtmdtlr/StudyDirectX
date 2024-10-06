@@ -153,10 +153,10 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="FileManager.cpp" />
-    <ClCompile Include="UIFactory.cpp" />
-    <ClCompile Include="UIGizmo.cpp" />
+    <ClCompile Include="ControllerFactory.cpp" />
+    <ClCompile Include="GizmoController.cpp" />
     <ClCompile Include="IImageLoader.h" />
-    <ClCompile Include="InputClass.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -170,13 +170,13 @@
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="SystemClass.cpp" />
+    <ClCompile Include="System.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="UI.cpp" />
-    <ClCompile Include="UIButton.cpp" />
-    <ClCompile Include="UIManager.cpp" />
-    <ClCompile Include="UIMaterial.cpp" />
+    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="ButtonController.cpp" />
+    <ClCompile Include="ControllerManager.cpp" />
+    <ClCompile Include="MaterialController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -185,7 +185,7 @@
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="IBuffer.h" />
     <ClInclude Include="IImageValidator.h" />
-    <ClInclude Include="InputClass.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="IResource.h" />
     <ClInclude Include="ITextureDescriptor.h" />
     <ClInclude Include="Level.h" />
@@ -193,11 +193,11 @@
     <ClInclude Include="Path.h" />
     <ClInclude Include="PrimitiveBuffer.h" />
     <ClInclude Include="Sphere.h" />
-    <ClInclude Include="SystemClass.h" />
+    <ClInclude Include="System.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="FileManager.h" />
-    <ClInclude Include="UIFactory.h" />
-    <ClInclude Include="UIGizmo.h" />
+    <ClInclude Include="ControllerFactory.h" />
+    <ClInclude Include="GizmoController.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="Renderer.h" />
@@ -205,10 +205,10 @@
     <ClInclude Include="RenderCommon.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="UI.h" />
-    <ClInclude Include="UIButton.h" />
-    <ClInclude Include="UIManager.h" />
-    <ClInclude Include="UIMaterial.h" />
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="ButtonController.h" />
+    <ClInclude Include="ControllerManager.h" />
+    <ClInclude Include="MaterialController.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\Phong.hlsl">

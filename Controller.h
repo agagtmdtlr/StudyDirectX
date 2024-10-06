@@ -1,11 +1,11 @@
 #pragma once
 #include "Callback.h"
-class UI
+class Controller
 {
 public:
-	UI() {}
+	Controller() {}
 
-	virtual ~UI() {}
+	virtual ~Controller() {}
 
 	virtual void Render() = 0;
 

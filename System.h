@@ -2,11 +2,11 @@
 #include <Windows.h>
 
 
-class SystemClass
+class System
 {
 public:
-	SystemClass();
-	~SystemClass();
+	System();
+	~System();
 	
 	void Initialize();
 	void InitializeWindow(int width, int height);
@@ -24,10 +24,10 @@ private:
 
 	unique_ptr<class Renderer> renderer;
 	unique_ptr<class Application> application;
-	unique_ptr<class InputClass> input;
-	unique_ptr<class UIManager> ui;
+	unique_ptr<class Input> input;
+	unique_ptr<class ControllerManager> ui;
 };
 
-static SystemClass* systemHandle = nullptr;
+static System* systemHandle = nullptr;
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 

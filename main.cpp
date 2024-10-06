@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include <Windows.h>
-#include "SystemClass.h"
+#include "System.h"
 
 
 int main()
 {
-	unique_ptr<SystemClass> system = make_unique<SystemClass>();
+	unique_ptr<System> system = make_unique<System>();
 
 	system->Initialize();
 

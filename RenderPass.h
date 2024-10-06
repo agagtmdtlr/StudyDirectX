@@ -91,8 +91,9 @@ struct RenderPass
 	void BeginDraw(ID3D11RenderTargetView* rtv);
 	void EndDraw();
 
-private:
 	void BindPrimitiveBuffer(PrimitiveBuffer* buffer);
+
+private:
 	void BindConstantBufferToStage(std::string name, const ConstantBuffer& cbuffer);
 
 	ID3DBlob* GetBlob(RenderStage stage);

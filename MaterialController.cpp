@@ -1,12 +1,13 @@
 #include "stdafx.h"
-#include "UIMaterial.h"
+#include "MaterialController.h"
+#include "Material.h"
 #include "imgui.h"
 
-UIMaterial::UIMaterial()
+MaterialController::MaterialController()
 {
 }
 
-void UIMaterial::Render()
+void MaterialController::Render()
 {
 	if (material != nullptr)
 	{

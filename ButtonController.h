@@ -1,8 +1,8 @@
 #pragma once
-#include "UI.h"
+#include "Controller.h"
 #include "Callback.h"
 
-class UIButton : public UI
+class ButtonController : public Controller
 {
 public:
 	virtual void Render() override final;

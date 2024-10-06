@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "UIButton.h"
+#include "ButtonController.h"
 #include "imgui.h"
 #include <imgui.h>
 
-void UIButton::Render()
+void ButtonController::Render()
 {
 	ImGui::Columns(3);
 
@@ -13,7 +13,7 @@ void UIButton::Render()
 	}
 }
 
-void UIButton::Action()
+void ButtonController::Action()
 {
 	(*callback)();
 }

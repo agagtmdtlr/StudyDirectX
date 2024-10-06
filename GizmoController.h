@@ -1,8 +1,8 @@
 #pragma once
 
-#include "UI.h"
+#include "Controller.h"
 
-class UIGizmo : public UI
+class GizmoController : public Controller
 {
 public:
 	enum eUIGizmoOperation
@@ -18,7 +18,7 @@ public:
 		World = 1,
 	};
 public:
-	UIGizmo() {}
+	GizmoController() {}
 
 	virtual void Render() override;
 

@@ -13,9 +13,6 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{9c3dc188-9a2b-46a2-bd88-b659c6810e87}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI">
-      <UniqueIdentifier>{2cd16eb6-aeab-4523-963b-24f279848da1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{daab8825-a483-41c2-96ef-ae540ba3010f}</UniqueIdentifier>
     </Filter>
@@ -25,13 +22,16 @@
     <Filter Include="Mesh">
       <UniqueIdentifier>{1997656d-f4a0-4792-912d-27d66c3dbae6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Controller">
+      <UniqueIdentifier>{2cd16eb6-aeab-4523-963b-24f279848da1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileManager.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="UIGizmo.cpp">
-      <Filter>UI</Filter>
+    <ClCompile Include="GizmoController.cpp">
+      <Filter>Controller</Filter>
     </ClCompile>
     <ClCompile Include="RenderPass.cpp">
       <Filter>Render</Filter>
@@ -49,10 +49,7 @@
     <ClCompile Include="Transform.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="SystemClass.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="InputClass.cpp">
+    <ClCompile Include="System.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="D3D.cpp">
@@ -79,24 +76,24 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="UIMaterial.cpp">
-      <Filter>UI</Filter>
+    <ClCompile Include="MaterialController.cpp">
+      <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="UIManager.cpp">
-      <Filter>UI</Filter>
+    <ClCompile Include="ControllerManager.cpp">
+      <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>UI</Filter>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Controller</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="UIButton.cpp">
-      <Filter>UI</Filter>
+    <ClCompile Include="ButtonController.cpp">
+      <Filter>Controller</Filter>
     </ClCompile>
     <ClCompile Include="Callback.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="UIFactory.cpp">
-      <Filter>UI</Filter>
+    <ClCompile Include="ControllerFactory.cpp">
+      <Filter>Controller</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Render</Filter>
@@ -104,13 +101,16 @@
     <ClCompile Include="Application.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManager.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="UIGizmo.h">
-      <Filter>UI</Filter>
+    <ClInclude Include="GizmoController.h">
+      <Filter>Controller</Filter>
     </ClInclude>
     <ClInclude Include="RenderPass.h">
       <Filter>Render</Filter>
@@ -136,10 +136,7 @@
     <ClInclude Include="Transform.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="SystemClass.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="InputClass.h">
+    <ClInclude Include="System.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="D3D.h">
@@ -169,30 +166,33 @@
     <ClInclude Include="Mesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="UIMaterial.h">
-      <Filter>UI</Filter>
+    <ClInclude Include="MaterialController.h">
+      <Filter>Controller</Filter>
     </ClInclude>
-    <ClInclude Include="UIManager.h">
-      <Filter>UI</Filter>
+    <ClInclude Include="ControllerManager.h">
+      <Filter>Controller</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>UI</Filter>
+    <ClInclude Include="Controller.h">
+      <Filter>Controller</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="UIButton.h">
-      <Filter>UI</Filter>
+    <ClInclude Include="ButtonController.h">
+      <Filter>Controller</Filter>
     </ClInclude>
     <ClInclude Include="Callback.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="UIFactory.h">
-      <Filter>UI</Filter>
+    <ClInclude Include="ControllerFactory.h">
+      <Filter>Controller</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Controller</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

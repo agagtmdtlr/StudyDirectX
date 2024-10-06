@@ -1,14 +1,16 @@
 #pragma once
 #include "Sphere.h"
 
+class Mesh;
+class ControllerManager;
 class Application
 {
 public:
-	Application(UIManager* uiManager);
+	Application(ControllerManager* uiManager);
 	void Initialize();
-	class Mesh* GetMesh();
+	Mesh* GetMesh();
 	Sphere sphere;
 
-	class UIManager* uiManager;
+	ControllerManager* uiManager;
 };
 

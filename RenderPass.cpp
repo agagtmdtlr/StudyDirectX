@@ -45,8 +45,6 @@ void RenderPass::Initialize(std::wstring shaderName, RenderPassState state)
 
 		ID3DBlob* blob = GetBlob(RenderStage::VS);
 
-		const auto& ied = RenderDescriptor::GetVertexElementDesc();
-		device->CreateInputLayout(ied.data(), (UINT)ied.size(), blob->GetBufferPointer(), blob->GetBufferSize(), inputlayout.GetAddressOf());
 		
 		device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &vertexShader);		
 	}

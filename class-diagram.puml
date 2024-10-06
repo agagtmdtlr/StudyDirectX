@@ -5,6 +5,7 @@ class system
 class input
 class application
 class d3d
+class uiManager
 
 class ui
 class callback
@@ -12,6 +13,7 @@ class callback
 system *-- input : contain
 system *-- application : contain
 system *-- d3d : contanin
+system *-- uiManager : contain
 
 ui *-- callback
 
