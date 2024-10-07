@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Application.h"
 #include "Mesh.h"
-#include "UIManager.h"
+#include "ControllerManager.h"
 
 Application::Application(ControllerManager* uiManager)
     :uiManager(uiManager)

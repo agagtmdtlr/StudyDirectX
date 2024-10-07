@@ -1,5 +1,6 @@
 #pragma once
 #include "Sphere.h"
+#include "Camera.h"
 
 class Mesh;
 class ControllerManager;
@@ -11,6 +12,7 @@ public:
 	Mesh* GetMesh();
 	Sphere sphere;
 
+	Camera camera;
 	ControllerManager* uiManager;
 };
 

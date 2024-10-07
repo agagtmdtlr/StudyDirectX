@@ -27,17 +27,9 @@ void ControllerManager::CreateUI(std::string type, std::string label)
 void ControllerManager::Initialize()
 {
 	g_uiManager = this;
-	// TODO:: UI 레이아웃을 css 구조를 통해 사전에 정의하다록 변경, 여기에 있는 하드코딩 제거
 
-	{
-		CreateUI("button","Create Mesh");
-	}
-	{
-		CreateUI("button", "Delete Mesh");
-	}
-	{
-		CreateUI("material", "Material");
-	}
+	// TODO:: UI 레이아웃을 css 구조를 통해 사전에 정의하다록 변경, 여기에 있는 하드코딩 제거
+	CreateUI("material", "Material");
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	ImGui::StyleColorsDark(&style);
@@ -46,14 +38,26 @@ void ControllerManager::Initialize()
 
 void ControllerManager::Update()
 {
-	if (ImGui::IsKeyPressed(ImGuiKey_1) == true)
+	if ( ImGui::IsMouseClicked(ImGuiMouseButton_Left) == true )
 	{
+		
 	}
+	ImVec2 pos = ImGui::GetMousePos();
+	ImGui::InputFloat2("Mouse Pos", &pos.x);
+
+	Ray ray = renderer->camera.ScreenPointToRay(Vector2(pos.x, pos.y));
+
+	ImGui::InputFloat3("ray pos", & ray.position.x);
+	ImGui::InputFloat3("ray dir", &ray.direction.x);
+
 }
 
 void ControllerManager::Render()
 {
-
+	for (auto c : uis)
+	{
+		c->Render();
+	}
 }
 
 void ControllerManager::CreateSphere()

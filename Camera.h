@@ -5,11 +5,11 @@ public:
 	Matrix GetProjection();
 	Matrix GetView();
 	Matrix GetViewProjection();
-
+	Ray ScreenPointToRay(Vector2 mousePosition);
 
 public:
-	Vector3 position;
-	Vector3 rotation;
+	Vector3 position = Vector3(0.f);
+	Vector3 rotation = Vector3(0.f);
 
 	float fov;
 	float aspectRatio;

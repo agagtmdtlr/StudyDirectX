@@ -11,10 +11,29 @@ void Renderer::Update()
 {
 }
 
+void Renderer::UpdateCamera(const Camera& camera)
+{
+	this->camera = camera;
+}
+
 void Renderer::Render()
 {	
 	//renderPass->BeginDraw(primitive.get(), D3D::GetRTV());
 	//renderPass->DrawIndexed(primitive->GetIndexCount(), 0, 0);
+
+	MatrixBufferType cbuffer;
+	// transpose for align to hlsl matrix major
+	cbuffer.world = Matrix::Identity;
+	cbuffer.world = cbuffer.world.Transpose();
+	cbuffer.view = camera.GetView().Transpose();
+	cbuffer.projection = camera.GetProjection().Transpose();
+
+	{
+		Update_ConstantBuffe_Desc desc;
+		desc.data = &cbuffer;
+		desc.dataSize = sizeof(cbuffer);
+		renderPass->UpdateConstantData("MatrixBuffer", desc);
+	}
 
 	renderPass->BindPrimitiveBuffer(sphere->GetBuffer());
 
@@ -65,8 +84,8 @@ void Renderer::Initialize(int width, int height)
 	}
 	
 	camera.aspectRatio = D3D::GetWndAspectRatio();
-	camera.fov = XMConvertToRadians(45.f);
-	camera.position = Vector3(0,0,0);
+	camera.fov = 45.f;
+	camera.position = Vector3(0,0,-5);
 	camera.nearPlane = 0.01f;
 	camera.farPlane = 1000.0f;
 

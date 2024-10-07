@@ -137,6 +137,7 @@ void System::Run()
 			renderer->Update();
 			renderer->Render();
 
+			ui->Update();
 			ui->Render();
 
 			ImGui::End();

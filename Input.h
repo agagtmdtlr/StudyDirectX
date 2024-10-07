@@ -6,6 +6,8 @@ public:
 	~Input();
 	
 	void Initialize();
+
+	void Event();
 	
 	void KeyDown(unsigned int);
 	void KeyUp(unsigned int);

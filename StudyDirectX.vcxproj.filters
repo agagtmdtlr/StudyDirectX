@@ -19,11 +19,11 @@
     <Filter Include="Resource">
       <UniqueIdentifier>{3c1dbf24-4b1f-4fb8-b88d-e864f3598e57}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mesh">
-      <UniqueIdentifier>{1997656d-f4a0-4792-912d-27d66c3dbae6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Controller">
       <UniqueIdentifier>{2cd16eb6-aeab-4523-963b-24f279848da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{1997656d-f4a0-4792-912d-27d66c3dbae6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -65,7 +65,7 @@
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="Sphere.cpp">
-      <Filter>Mesh</Filter>
+      <Filter>Geometry</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Render</Filter>
@@ -74,7 +74,7 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>Mesh</Filter>
+      <Filter>Geometry</Filter>
     </ClCompile>
     <ClCompile Include="MaterialController.cpp">
       <Filter>Controller</Filter>
@@ -155,7 +155,7 @@
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="Sphere.h">
-      <Filter>Mesh</Filter>
+      <Filter>Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Render</Filter>
@@ -164,7 +164,7 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Mesh</Filter>
+      <Filter>Geometry</Filter>
     </ClInclude>
     <ClInclude Include="MaterialController.h">
       <Filter>Controller</Filter>

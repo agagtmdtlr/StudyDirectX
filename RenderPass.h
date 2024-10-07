@@ -47,7 +47,7 @@ struct RenderPass
 {
 	struct BindDesc
 	{
-		BindDesc() {}
+		BindDesc() { ZeroMemory(&desc,sizeof(desc)); }
 		BindDesc(D3D11_SHADER_INPUT_BIND_DESC desc, BindStageMask mask)	: desc(desc), mask(mask)
 		{}
 		D3D11_SHADER_INPUT_BIND_DESC desc;
