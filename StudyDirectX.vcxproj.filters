@@ -33,7 +33,7 @@
     <ClCompile Include="GizmoController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="RenderPass.cpp">
+    <ClCompile Include="Shader.cpp">
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
@@ -86,7 +86,7 @@
       <Filter>Controller</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="ButtonController.cpp">
+    <ClCompile Include="Button.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
     <ClCompile Include="Callback.cpp">
@@ -104,6 +104,9 @@
     <ClCompile Include="Input.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
+    <ClCompile Include="CameraController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManager.h">
@@ -112,7 +115,7 @@
     <ClInclude Include="GizmoController.h">
       <Filter>Controller</Filter>
     </ClInclude>
-    <ClInclude Include="RenderPass.h">
+    <ClInclude Include="Shader.h">
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="RenderCommon.h">
@@ -176,7 +179,7 @@
       <Filter>Controller</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="ButtonController.h">
+    <ClInclude Include="Button.h">
       <Filter>Controller</Filter>
     </ClInclude>
     <ClInclude Include="Callback.h">
@@ -194,6 +197,9 @@
     <ClInclude Include="Input.h">
       <Filter>Controller</Filter>
     </ClInclude>
+    <ClInclude Include="CameraController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VS.hlsl">
@@ -202,19 +208,8 @@
     <FxCompile Include="Shader\PS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\PhongPS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PhongVS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
     <FxCompile Include="Shader\Phong.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\Phong.hlsli">
-      <Filter>Shader</Filter>
-    </None>
   </ItemGroup>
 </Project>

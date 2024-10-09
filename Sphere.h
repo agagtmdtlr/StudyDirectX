@@ -8,6 +8,8 @@ public:
 	Sphere();
 	virtual ~Sphere();
 
+	virtual bool RayCast(const Ray& ray);
+
 };
 
 

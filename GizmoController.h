@@ -2,28 +2,22 @@
 
 #include "Controller.h"
 
+#include <imgui.h>
+#include <ImGuizmo.h>
+
+class Mesh;
 class GizmoController : public Controller
 {
-public:
-	enum eUIGizmoOperation
-	{
-		Translation = 0,
-		Rotation = 1,
-		Scale = 2
-	};
 
-	enum eUIGizmoMode
-	{
-		Local = 0,
-		World = 1,
-	};
 public:
 	GizmoController() {}
+	virtual ~GizmoController() override {}
 
 	virtual void Render() override;
+	void SetMesh(Mesh* mesh);
 
-	eUIGizmoOperation operation = eUIGizmoOperation::Translation;
-	eUIGizmoMode mode = eUIGizmoMode::World;
+	ImGuizmo::OPERATION  operation = ImGuizmo::OPERATION::TRANSLATE;
+	ImGuizmo::MODE mode = ImGuizmo::WORLD;
 
 };
 

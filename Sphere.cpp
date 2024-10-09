@@ -87,6 +87,21 @@ Sphere::~Sphere()
 {
 }
 
+bool Sphere::RayCast(const Ray& ray)
+{
+	Vector3 p = transform.position;
+	p -= ray.position;
+	float b = p.Dot(ray.direction);
+	if( b <= 0)
+		return false;
+
+	Vector3 o = (ray.direction * b) + ray.position;
+
+	float l = (o - transform.position).Length();
+	float r = 0.5f;
+	return l <= r;
+}
+
 
 
 

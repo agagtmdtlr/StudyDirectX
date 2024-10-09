@@ -39,11 +39,11 @@ struct RenderPassState
 		return mask[static_cast<size_t>(flag)];
 	}
 
-	glm::vec4 clearColor;
+	Vector4 clearColor;
 	BindStageMask mask;
 };
 
-struct RenderPass
+struct Shader
 {
 	struct BindDesc
 	{
@@ -54,7 +54,7 @@ struct RenderPass
 		BindStageMask mask;
 	};
 
-	RenderPass(std::wstring shaderName, RenderPassState state);
+	Shader(std::wstring shaderName, RenderPassState state);
 
 	D3D11_VIEWPORT viewport;
 

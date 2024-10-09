@@ -2,7 +2,7 @@
 #include "Controller.h"
 #include "Callback.h"
 
-class ButtonController : public Controller
+class Button : public Controller
 {
 public:
 	virtual void Render() override final;

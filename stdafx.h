@@ -1,12 +1,13 @@
 #pragma once
 
 #include <d3d11.h>
-#include <glm/glm.hpp>
 #include <wrl/client.h>
 #include <string>
 #include <iostream>
 #include <array>
 #include <vector>
+#include <any>
+
 #include <DirectXTex.h>
 #include <directxtk/SimpleMath.h>
 

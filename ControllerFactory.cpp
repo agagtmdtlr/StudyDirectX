@@ -2,16 +2,17 @@
 #include "ControllerFactory.h"
 
 #include "Controller.h"
-#include "ButtonController.h"
+#include "Button.h"
 #include "GizmoController.h"
 #include "MaterialController.h"
+#include "CameraController.h"
 
 unique_ptr<Controller> ControllerFactory::CreateUI(const std::string type)
 {
     unique_ptr<Controller> ui = nullptr;
     if (type == "button")
     {
-        ui = make_unique<ButtonController>();
+        ui = make_unique<Button>();
     }
     else if(type == "gizmo")
     {
@@ -20,6 +21,10 @@ unique_ptr<Controller> ControllerFactory::CreateUI(const std::string type)
     else if (type == "material")
     {
         ui = make_unique<MaterialController>();
+    }
+    else if (type == "camera")
+    {
+        ui = make_unique<CameraController>();
     }
     return std::move(ui);
 }

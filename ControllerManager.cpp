@@ -1,16 +1,17 @@
 #include "stdafx.h"
 #include "ControllerManager.h"
-#include "imgui.h"
+#include <imgui.h>
+
 #include "Level.h"
 #include "Sphere.h"
-#include "ButtonController.h"
+#include "Button.h"
 #include "Mesh.h"
 #include "Renderer.h"
 
 ControllerManager* ControllerManager::g_uiManager = nullptr;
 
 ControllerManager::ControllerManager(Renderer* renderer)
-	: renderer(renderer), selectedObject(nullptr)
+	: renderer(renderer)
 {
 }
 
@@ -24,31 +25,46 @@ void ControllerManager::CreateUI(std::string type, std::string label)
 
 
 
+
 void ControllerManager::Initialize()
 {
 	g_uiManager = this;
 
 	// TODO:: UI 레이아웃을 css 구조를 통해 사전에 정의하다록 변경, 여기에 있는 하드코딩 제거
-	CreateUI("material", "Material");
-
+	CreateUI("material", "material");
+	CreateUI("gizmo", "gizmo");
+	CreateUI("camera", "camera");
 	ImGuiStyle& style = ImGui::GetStyle();
-	ImGui::StyleColorsDark(&style);
 
+
+	ImGui::StyleColorsDark(&style);
 }
 
 void ControllerManager::Update()
 {
-	if ( ImGui::IsMouseClicked(ImGuiMouseButton_Left) == true )
-	{
-		
-	}
 	ImVec2 pos = ImGui::GetMousePos();
 	ImGui::InputFloat2("Mouse Pos", &pos.x);
 
 	Ray ray = renderer->camera.ScreenPointToRay(Vector2(pos.x, pos.y));
-
-	ImGui::InputFloat3("ray pos", & ray.position.x);
+	ImGui::InputFloat3("ray pos", &ray.position.x);
 	ImGui::InputFloat3("ray dir", &ray.direction.x);
+
+
+	if ( ImGui::IsMouseClicked(ImGuiMouseButton_Left) == true )
+	{
+		Mesh* mesh = renderer->GetSphere();
+		bool intersect = mesh->RayCast(ray);
+		if (intersect == true)
+		{
+			GetController("gizmo")->model = mesh ;
+		}
+	}
+	
+	if (ImGui::IsKeyPressed(ImGuiKey_Escape) == true)
+	{
+		GetController("gizmo")->model.reset();
+	}
+	
 
 }
 
@@ -64,10 +80,6 @@ void ControllerManager::CreateSphere()
 {
 }
 
-bool ControllerManager::IsSelected()
-{
-	return selectedObject != nullptr;
-}
 
 void ControllerManager::SetCallbackToUI(std::string label, unique_ptr<Callback> callback)
 {
@@ -75,6 +87,11 @@ void ControllerManager::SetCallbackToUI(std::string label, unique_ptr<Callback> 
 	{
 		uimap[label]->callback = std::move(callback);
 	}
+}
+
+Controller* ControllerManager::GetController(std::string label)
+{
+	return uimap[label].get();
 }
 
 void ControllerLinkNode::Insert(ControllerLinkNode* linkNode)

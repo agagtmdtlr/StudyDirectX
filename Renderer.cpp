@@ -3,6 +3,8 @@
 #include "RenderCommon.h"
 #include "FileManager.h"
 
+Renderer* Renderer::g_renderer = nullptr;
+
 Renderer::Renderer()
 {
 }
@@ -23,7 +25,7 @@ void Renderer::Render()
 
 	MatrixBufferType cbuffer;
 	// transpose for align to hlsl matrix major
-	cbuffer.world = Matrix::Identity;
+	cbuffer.world = sphere->GetTransformRef()->GetWorldMatrix();
 	cbuffer.world = cbuffer.world.Transpose();
 	cbuffer.view = camera.GetView().Transpose();
 	cbuffer.projection = camera.GetProjection().Transpose();
@@ -44,12 +46,14 @@ void Renderer::Render()
 
 void Renderer::Initialize(int width, int height)
 {
+	g_renderer = this;
+
 	auto device = D3D::GetDevice();
 	auto deviceContext = D3D::GetDC();
 	RenderPassState state;
 	state.SetFlag(RenderStage::VS,true);
 	state.SetFlag(RenderStage::PS,true);
-	state.clearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	state.clearColor = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 
 	D3D11_VIEWPORT viewport;
 	{
@@ -64,7 +68,7 @@ void Renderer::Initialize(int width, int height)
 	}
 	
 	// render pass
-	renderPass = std::make_unique<RenderPass>(L"Phong",state);
+	renderPass = std::make_unique<Shader>(L"Phong",state);
 	renderPass->viewport = viewport;
 
 	// Create texture and rendertarget

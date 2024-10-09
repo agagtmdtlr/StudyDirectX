@@ -43,6 +43,11 @@ void Mesh::Initialize(string name, Transform transform)
 	this->name = name;
 }
 
+void Mesh::SetWorldMatrix(Matrix& matrix)
+{
+	transform = Transform(matrix);
+}
+
 PrimitiveBuffer* Mesh::GetBuffer()
 {
 	return buffer.get();

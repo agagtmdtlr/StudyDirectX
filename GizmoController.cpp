@@ -1,55 +1,72 @@
 #include "stdafx.h"
 #include "GizmoController.h"
 #include <imgui.h>
-#include <ImGuizmo.h>
-#include "ControllerManager.h"
+#include <ImSequencer.h>
 #include "Mesh.h"
 #include "Renderer.h"
 
-ImGuizmo::OPERATION ConvertToImGuizmoOperation(GizmoController::eUIGizmoOperation operation)
-{
-	switch (operation)
-	{
-	case GizmoController::Translation:
-		return ImGuizmo::TRANSLATE;
-	case GizmoController::Rotation:
-		return ImGuizmo::ROTATE;
-	case GizmoController::Scale:
-		return ImGuizmo::SCALE;
-	}
 
-}
 
 void GizmoController::Render()
 {
-	if (ControllerManager::g_uiManager->IsSelected() == true)
+	static Matrix deltaMatrix;
+	static float snap = 0.0f;
+
+	if (model.has_value() == false )
 	{
-		auto& camera = ControllerManager::g_uiManager->renderer->camera;
+		return;
+	}
+	Mesh* mesh = std::any_cast<Mesh*>(model);
+
+	if (mesh != nullptr)
+	{
+		auto& camera = Renderer::g_renderer->camera;
 		Matrix view = camera.GetView();
 		Matrix proj = camera.GetProjection();
-		Matrix world = ControllerManager::g_uiManager->selectedObject->GetTransformRef()->GetWorldMatrix();
-		ImGuizmo::DrawCubes(&view._11, &proj._11, &world._11, 1);
 
-		Mesh* obj = ControllerManager::g_uiManager->selectedObject;
+		Matrix world = mesh->GetTransformRef()->GetWorldMatrix();
 
-		Transform* trans = obj->GetTransformRef();
-		ImGui::InputFloat3("Tr", &trans->translation.x);
-		ImGui::InputFloat3("Rt", &trans->rotation.x);
-		ImGui::InputFloat3("St", &trans->rotation.x);
 
+		//if (mCurrentGizmoOperation != ImGuizmo::SCALE)
+		{
+			if (ImGui::RadioButton("Local", mode == ImGuizmo::LOCAL))
+				mode = ImGuizmo::LOCAL;
+			ImGui::SameLine();
+			if (ImGui::RadioButton("World", mode == ImGuizmo::WORLD))
+				mode = ImGuizmo::WORLD;
+		}
+
+		ImGui::InputFloat3("Before", &world._41);
+		Matrix after = world;
+
+		auto io = ImGui::GetIO();
+		ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+		//ImGuizmo::DrawCubes(&view._11, &proj._11, &world._11, 1);
+		ImGuizmo::Manipulate(&view._11, &proj._11, operation, mode, &after._11,
+			&deltaMatrix._11
+			, &snap);
+
+		ImGui::InputFloat3("After", &after._41);
+
+
+		mesh->SetWorldMatrix(after);
+
+		Transform* trans = mesh->GetTransformRef();
+		ImGui::SliderFloat3("Tr", &trans->position.x, -180, 180);
+		ImGui::SliderFloat3("Rt", &trans->rotation.x, -180, 180);
+		ImGui::SliderFloat3("St", &trans->scale.x, -180, 180);
+		ImGui::Text("snap %f", snap);
 		if (ImGui::IsKeyPressed(ImGuiKey_T) == true)
 		{
-			operation = GizmoController::eUIGizmoOperation::Translation;
 		}
 		else if (ImGui::IsKeyPressed(ImGuiKey_R) == true)
 		{
-			operation = GizmoController::eUIGizmoOperation::Rotation;
 		}
 		else if (ImGui::IsKeyPressed(ImGuiKey_S) == true)
 		{
-			operation = GizmoController::eUIGizmoOperation::Scale;
 		}
 
 	}
-	
+
 }
+

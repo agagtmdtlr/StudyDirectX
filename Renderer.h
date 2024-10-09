@@ -2,7 +2,7 @@
 
 #include <windows.h>
 
-#include "RenderPass.h"
+#include "Shader.h"
 #include "Mesh.h"
 #include <memory>
 
@@ -14,7 +14,7 @@
 class Renderer
 {
 public:
-
+	static Renderer* g_renderer;
 	Renderer();
 	void Initialize(int width, int height);
 	void Update();
@@ -22,12 +22,12 @@ public:
 	
 	void Render();
 
-	std::unique_ptr<RenderPass> renderPass;
+	Mesh* GetSphere() { return sphere.get(); }
+
+	std::unique_ptr<Shader> renderPass;
 
 	std::array<Material,1024> materials;
 	
-	
-
 	shared_ptr<class Texture> texture;
 	ComPtr<ID3D11SamplerState> colorSampler;
 

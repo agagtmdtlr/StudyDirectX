@@ -31,15 +31,13 @@ public:
 	void Render();
 	void CreateSphere();
 
-	bool IsSelected();
-
 	void SetCallbackToUI(std::string label, unique_ptr<Callback> callback);
+	Controller* GetController(std::string label);
 
 	vector<Controller*> uis;
 	ControllerFactory factory;
 	unordered_map<std::string, unique_ptr<Controller>> uimap;
-	class Renderer* renderer;
-	class Mesh* selectedObject;
+	class Renderer* renderer = nullptr;
 	
 };
 
