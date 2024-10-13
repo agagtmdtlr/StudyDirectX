@@ -12,9 +12,9 @@
 
 
 
-Shader::Shader(std::wstring shaderName , RenderPassState state)
+Shader::Shader(std::wstring shaderName, RenderPassState state)
 {
-	Initialize(shaderName, state );
+	Initialize(shaderName, state);
 }
 
 void Shader::Initialize(std::wstring shaderName, RenderPassState state)
@@ -27,13 +27,15 @@ void Shader::Initialize(std::wstring shaderName, RenderPassState state)
 	ID3DBlob* errorBlob = nullptr;
 
 	ID3D11Device* device = D3D::GetDevice();
+	auto dc = D3D::GetDC();
 
-	D3D_SHADER_MACRO macro[] = { "DEBUG" , "0"};
+	D3D_SHADER_MACRO macro[] = { "DEBUG" , "0" };
+
 
 
 	/* Compile HLSL */
 	if (state.CheckMask(RenderStage::VS) == true)
-	{		
+	{
 
 		if (FAILED(D3DCompileFromFile(shaderPath.c_str(), 0, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VSmain", "vs_5_0", 0, 0, GetBlobAddressOf(RenderStage::VS), &errorBlob)))
 		{
@@ -43,8 +45,8 @@ void Shader::Initialize(std::wstring shaderName, RenderPassState state)
 			}
 		}
 		ID3DBlob* blob = GetBlob(RenderStage::VS);
-		
-		device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &vertexShader);		
+
+		device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &vertexShader);
 	}
 
 	if (state.CheckMask(RenderStage::PS) == true)
@@ -66,7 +68,7 @@ void Shader::Initialize(std::wstring shaderName, RenderPassState state)
 	/* Reflect Shader */
 	for (int st = 0; st < static_cast<int>(RenderStage::NUM); st++)
 	{
-		RenderStage stage =  static_cast<RenderStage>(st);
+		RenderStage stage = static_cast<RenderStage>(st);
 		ID3DBlob* blob = GetBlob(stage);
 		if (blob != nullptr)
 		{
@@ -92,10 +94,10 @@ void Shader::Initialize(std::wstring shaderName, RenderPassState state)
 					D3D11_SHADER_INPUT_BIND_DESC inputDesc;
 					if (SUCCEEDED(constantBuffer->GetDesc(&desc)))
 					{
-						std::string name =std::string(desc.Name);
+						std::string name = std::string(desc.Name);
 						if (constantBuffers.find(name) == constantBuffers.end())
-						{	
-							constantBuffers.insert( make_pair( name , ConstantBuffer(desc.Size) ) );
+						{
+							constantBuffers[name].Initialize(desc.Size);
 						}
 					}
 				} // for ConstantBuffers
@@ -104,14 +106,20 @@ void Shader::Initialize(std::wstring shaderName, RenderPassState state)
 				{
 					D3D11_SHADER_INPUT_BIND_DESC desc;
 					reflection->GetResourceBindingDesc(i, &desc);
-
 					std::string name = std::string(desc.Name);
+
+					if (desc.Type == D3D_SHADER_INPUT_TYPE::D3D10_SIT_SAMPLER)
+					{
+						samplerMap[name].desc = desc;
+						samplerMap[name].mask[st] = true;
+					}
+
 					if (bindDescMap.find(name) == bindDescMap.end())
 					{
 						bindDescMap[name].desc = desc;
 						bindDescMap[name].mask.reset();
 					}
-					
+
 					bindDescMap[name].mask[st] = true;
 				} // for BoundResources
 
@@ -124,9 +132,13 @@ void Shader::Initialize(std::wstring shaderName, RenderPassState state)
 			} // HRESULT
 		} // blob
 	} // for renderStage
+
+	InitRasterizerState();
+
+
 }
 
-void Shader::InitializeInputLayout(D3D11_SHADER_DESC shaderDesc, ID3D11ShaderReflection* reflection , ID3DBlob* blob)
+void Shader::InitializeInputLayout(D3D11_SHADER_DESC shaderDesc, ID3D11ShaderReflection* reflection, ID3DBlob* blob)
 {
 	std::vector<D3D11_INPUT_ELEMENT_DESC> inputLayoutDesc;
 	for (UINT i = 0; i < shaderDesc.InputParameters; ++i)
@@ -144,8 +156,8 @@ void Shader::InitializeInputLayout(D3D11_SHADER_DESC shaderDesc, ID3D11ShaderRef
 
 		if (desc.Mask == 1)
 		{
-			if(desc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32_UINT;
-			else if(desc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32_SINT;
+			if (desc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32_UINT;
+			else if (desc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32_SINT;
 			else if (desc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32_FLOAT;
 		}
 		else if (desc.Mask <= 3)
@@ -176,12 +188,41 @@ void Shader::InitializeInputLayout(D3D11_SHADER_DESC shaderDesc, ID3D11ShaderRef
 	{
 		std::cout << "failed create input layout" << std::endl;
 	}
+
+
+}
+
+void Shader::InitRasterizerState()
+{
+	auto device = D3D::GetDevice();
+	D3D11_RASTERIZER_DESC wfd;
+	ZeroMemory(&wfd, sizeof(wfd));
+	wfd.FillMode = D3D11_FILL_SOLID;
+	wfd.CullMode = D3D11_CULL_BACK;
+	device->CreateRasterizerState(&wfd, rss.GetAddressOf());
+}
+
+void Shader::InitializeSampler()
+{
+	auto device = D3D::GetDevice();
+	D3D11_SAMPLER_DESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	desc.MinLOD = 0;
+	desc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	device->CreateSamplerState(&desc, sampler.GetAddressOf());
+
 }
 
 void Shader::DrawIndexed(UINT indexCount, UINT startIndexLocation, INT baseVertexLocation)
 {
 	ID3D11DeviceContext* dc = D3D::GetDC();
-	dc->DrawIndexed(indexCount,startIndexLocation,baseVertexLocation);
+	dc->DrawIndexed(indexCount, startIndexLocation, baseVertexLocation);
 
 }
 
@@ -195,6 +236,8 @@ void Shader::BeginDraw(ID3D11RenderTargetView* rtv)
 	dc->ClearRenderTargetView(rtv, &state.clearColor.x);
 
 
+	dc->RSSetState(rss.Get());
+
 	// set the shader objects
 	if (state.CheckMask(RenderStage::VS))
 	{
@@ -205,7 +248,7 @@ void Shader::BeginDraw(ID3D11RenderTargetView* rtv)
 	if (state.CheckMask(RenderStage::PS))
 	{
 		dc->PSSetShader(pixelShader.Get(), 0, 0);
-	
+
 	}
 
 	/*
@@ -214,6 +257,11 @@ void Shader::BeginDraw(ID3D11RenderTargetView* rtv)
 	for (auto& it : constantBuffers)
 	{
 		BindConstantBufferToStage(it.first, it.second);
+	}
+
+	for (auto& it : samplerMap)
+	{
+		BindSampler(it.first, sampler.Get());
 	}
 }
 
@@ -241,7 +289,7 @@ void Shader::BindConstantBufferToStage(std::string name, const ConstantBuffer& c
 	auto dc = D3D::GetDC();
 	const BindDesc& bindDesc = bindDescMap[name];
 
-	for (int s = 0 ; s < bindDesc.mask.count(); s++)
+	for (int s = 0; s < bindDesc.mask.count(); s++)
 	{
 		RenderStage stage = RenderStage(s);
 		if (state.CheckMask(stage) == true)
@@ -250,7 +298,7 @@ void Shader::BindConstantBufferToStage(std::string name, const ConstantBuffer& c
 			switch (stage)
 			{
 			case RenderStage::VS:
-				dc->VSSetConstantBuffers(desc.BindPoint, desc.BindCount, cbuffer.GetAddressOf() );
+				dc->VSSetConstantBuffers(desc.BindPoint, desc.BindCount, cbuffer.GetAddressOf());
 				break;
 			case RenderStage::PS:
 				dc->PSSetConstantBuffers(desc.BindPoint, desc.BindCount, cbuffer.GetAddressOf());
@@ -271,10 +319,14 @@ void Shader::BindPrimitiveBuffer(PrimitiveBuffer* buffer)
 	UINT stride = buffer->GetVertexStride();
 	UINT offset = 0;
 
+
+
 	dc->IASetVertexBuffers(0, 1, buffer->GetVertexBufferAddressOf(), &stride, &offset);
 	dc->IASetIndexBuffer(buffer->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
 
 	dc->IASetPrimitiveTopology(buffer->GetTopology());
+
+	dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 bool Shader::UpdateConstantData(std::string name, Update_ConstantBuffe_Desc desc)
@@ -326,7 +378,7 @@ bool Shader::BindSRV(std::string name, ID3D11ShaderResourceView* srv)
 void Shader::BindRenderTargets(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv)
 {
 	auto dc = D3D::GetDC();
-	dc->OMSetRenderTargets(1,&rtv, dsv);
+	dc->OMSetRenderTargets(1, &rtv, dsv);
 }
 
 void Shader::BindDepthStencilState(ID3D11DepthStencilState* state)
@@ -363,7 +415,7 @@ bool Shader::BindSampler(std::string name, ID3D11SamplerState* sampler)
 			default:
 				break;
 			}
-		}		
+		}
 	}
 	return true;
 }

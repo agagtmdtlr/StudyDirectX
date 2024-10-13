@@ -36,12 +36,16 @@ void ControllerManager::Initialize()
 	CreateUI("camera", "camera");
 	ImGuiStyle& style = ImGui::GetStyle();
 
-
+	{
+		
+	}
 	ImGui::StyleColorsDark(&style);
 }
 
 void ControllerManager::Update()
 {
+	ImGui::Begin("Option");
+
 	ImVec2 pos = ImGui::GetMousePos();
 	ImGui::InputFloat2("Mouse Pos", &pos.x);
 
@@ -64,16 +68,23 @@ void ControllerManager::Update()
 	{
 		GetController("gizmo")->model.reset();
 	}
-	
+
+	for (auto c : uis)
+	{
+		c->Render();
+	}
+	ImGui::End();
+
+
+	fileBrowser.Render();
+
+
 
 }
 
 void ControllerManager::Render()
 {
-	for (auto c : uis)
-	{
-		c->Render();
-	}
+	
 }
 
 void ControllerManager::CreateSphere()
@@ -141,3 +152,4 @@ void ControllerLinkNode::Render()
 		next->Render();
 	}
 }
+

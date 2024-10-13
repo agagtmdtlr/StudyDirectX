@@ -7,7 +7,6 @@
 #include <array>
 #include <vector>
 #include <any>
-
 #include <DirectXTex.h>
 #include <directxtk/SimpleMath.h>
 

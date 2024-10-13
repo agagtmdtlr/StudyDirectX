@@ -66,14 +66,21 @@ struct Shader
 	ComPtr<ID3D11ComputeShader> computeShader;
 	ComPtr<ID3D11InputLayout> inputlayout;
 
+	ComPtr<ID3D11RasterizerState> rss;
+
 	std::array<ComPtr<ID3DBlob>, StageCount> blobs;
 
 	RenderPassState state;
 
+	ComPtr<ID3D11SamplerState> sampler;
+
 	D3D11_SHADER_DESC shaderDesc;
 
 	std::unordered_map<std::string, BindDesc> bindDescMap;
+	// 여러 쉐이더 중복으로 사용되는 거라면 메모리 낭비가.. 심한다.
 	std::unordered_map<std::string, ConstantBuffer> constantBuffers;
+	std::unordered_map<std::string,BindDesc> samplerMap;
+	std::hash<std::string> strHash;
 
 	bool UpdateConstantData(std::string name, Update_ConstantBuffe_Desc desc);
 
@@ -85,7 +92,8 @@ struct Shader
 
 	void Initialize(std::wstring shaderName, RenderPassState state);
 	void InitializeInputLayout(D3D11_SHADER_DESC shaderDesc, ID3D11ShaderReflection* reflection, ID3DBlob* blob);
-
+	void InitRasterizerState();
+	void InitializeSampler();
 	void DrawIndexed(UINT indexCount, UINT StartIndexLocation, INT BseVertexLocation);
 
 	void BeginDraw(ID3D11RenderTargetView* rtv);

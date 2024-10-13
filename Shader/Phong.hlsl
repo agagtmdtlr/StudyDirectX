@@ -12,11 +12,7 @@ struct Material
     float amb;
     float diff;
     float spec;
-    float alpha;
-    
-    float reflection;
-    float transparency;
-    float2 temp;
+    float alpha;    
 };
 
 struct InstanceConst
@@ -35,7 +31,6 @@ cbuffer MaterialBuffer
 {
     Material materials[INSTANCE_MAX_COUNT];
 };
-
 
 struct VSInput
 {
@@ -72,6 +67,8 @@ VSOutput VSmain(VSInput vsInput)
     
     vsOutput.normal = mul(vsInput.normal, (float3x3)worldMatrix);
     vsOutput.normal = normalize(vsOutput.normal);
+    
+    vsOutput.uv = vsInput.uv;
     return vsOutput;
 }
 
@@ -80,9 +77,11 @@ float4 PSmain(VSOutput vsOutput) : SV_TARGET
     float3 l = -normalize(lightDir);
     float3 n = normalize(vsOutput.normal);
     float LdotN = dot(l, n);
+    float2 uv = vsOutput.uv;
         
-    //return float4(1 * LdotN, 0, 0, 1);
-    return float4(1 , 0, 0, 1) * LdotN;
+    float4 color = float4(0.2, 0.1, 0.1, 1);
+    color += float4(1,0, 0, 1) * LdotN;
+    return color;
     
     //return baseColorTexture.Sample(baseColorSampler, vsOutput.uv);
 }

@@ -10,7 +10,7 @@ Sphere::Sphere()
 	{
 		std::vector<Vertex> vertices;
 
-		int count = 10;
+		int count = 36;
 		float r = 0.5f;
 		float sectorStep = XM_2PI / (count);
 		float stackStep = XM_PI / (count);
@@ -22,26 +22,21 @@ Sphere::Sphere()
 		Vector2 uv;
 		float sinStack, cosStack, sinSector, cosSector;
 
-		for (int j = 0; j <= count; j++)
+		for (int y = 0; y <= count; y++)
 		{
-			stackAngle = XM_PIDIV2 - j * stackStep;
-
-			sinStack = sinf(stackAngle);
-			cosStack = cosf(stackAngle);
-
-			pos.y = r * sinStack;
-			uv.y = uvStep * j;
-			for (int i = 0; i <= count; i++)
+			stackAngle = XM_PIDIV2 - y * stackStep;
+			float xy = r * cosf(stackAngle);
+			pos.y = r * sinf(stackAngle);
+			uv.y = uvStep * y;
+			for (int x = 0; x <= count; x++)
 			{
-				sectorAngle = sectorStep * i;
-				sinSector = sinf(sectorAngle);
-				cosSector = cosf(sectorAngle);
-				pos.z = r * cosStack * sinSector;
-				pos.x = r * cosStack * cosSector;
-				uv.x = uvStep * i;
+				sectorAngle = sectorStep * x;
+				pos.z = xy * sinf(sectorAngle);
+				pos.x = xy * cosf(sectorAngle);
+				uv.x = uvStep * x;
 				Vector3 normal(pos);
 				normal.Normalize();
-				vertices.push_back({ pos,normal });
+				vertices.push_back({ pos,normal ,uv});
 			}
 		}
 
@@ -55,7 +50,7 @@ Sphere::Sphere()
 
 		for (int y = 0; y < count; y++)
 		{
-			UINT k1 = y * (count + 1);
+			UINT k1 = y * (count + 1 );
 			UINT k2 = k1 + count + 1;
 			for (int x = 0; x < count; x++, ++k1, ++k2)
 			{
@@ -66,12 +61,20 @@ Sphere::Sphere()
 					indices.push_back(k2);
 				}
 
-				if (y != count - 1)
+				if (y != (count - 1))
 				{
 					indices.push_back(k1 + 1);
 					indices.push_back(k2 + 1);
 					indices.push_back(k2);
 				}
+			}
+		}
+
+		for (auto i : indices)
+		{
+			if (i >= vertices.size())
+			{
+				assert(false);
 			}
 		}
 

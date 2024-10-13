@@ -4,12 +4,14 @@
 
 ConstantBuffer::ConstantBuffer()
 {
-	std::cout << "call constant buffer deafult constructor" << endl;
 }
 
-ConstantBuffer::ConstantBuffer(UINT bufferSize)
-	:bufferSize(bufferSize)
+
+
+void ConstantBuffer::Initialize(UINT bufferSize)
 {
+	this->bufferSize = bufferSize;
+
 	auto device = D3D::GetDevice();
 
 	D3D11_BUFFER_DESC desc;
@@ -31,7 +33,7 @@ ConstantBuffer::ConstantBuffer(UINT bufferSize)
 
 }
 
-bool ConstantBuffer::UpdateData(Update_ConstantBuffe_Desc desc)
+bool ConstantBuffer::UpdateData(const Update_ConstantBuffe_Desc& desc)
 {
 	auto dc = D3D::GetDC();
 	void* data = desc.data;

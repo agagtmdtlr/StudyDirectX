@@ -27,6 +27,7 @@ System::~System()
 
 void System::Initialize()
 {
+
     const int width = 1280, height = 720;
     InitializeWindow(width, height);
 
@@ -121,15 +122,24 @@ void System::Run()
 			ImGui_ImplDX11_NewFrame();
 			ImGui_ImplWin32_NewFrame();
 
-
 			ImGui::NewFrame();
+			ImGuizmo::BeginFrame();
 
-			ImGui::Begin("Option");
+			//ImGui::ShowDemoWindow();
+
+			ImGui::BeginMainMenuBar();
+			if (ImGui::MenuItem("File"))
+			{
+				if (ImGui::MenuItem("Open", "Ctrl+O"))
+				{
+					
+				}
+
+			}
+			ImGui::EndMainMenuBar();
+
 			//ImGui::Text("ElapsedTime %lf", 1.0f / example->elapsedTime);
 			//ImGui::InputInt("Sumper Sampling Level",&example->raytracer.supersmaplingLevel);
-
-			ImGuizmo::BeginFrame();
-			
 
 			//example->Update();
 			//example->Render();
@@ -140,7 +150,9 @@ void System::Run()
 			ui->Update();
 			ui->Render();
 
-			ImGui::End();
+
+			
+
 			ImGui::Render();
 
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

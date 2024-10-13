@@ -107,6 +107,13 @@
     <ClCompile Include="CameraController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
+    <ClCompile Include="Debugger.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Filebrowser.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManager.h">
@@ -198,6 +205,13 @@
       <Filter>Controller</Filter>
     </ClInclude>
     <ClInclude Include="CameraController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Debugger.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Filebrowser.h">
       <Filter>Controller</Filter>
     </ClInclude>
   </ItemGroup>

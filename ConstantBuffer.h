@@ -10,9 +10,8 @@ class ConstantBuffer
 {
 public:
 	ConstantBuffer();
-	ConstantBuffer(UINT bufferSize);
-
-	bool UpdateData(Update_ConstantBuffe_Desc desc);
+	void Initialize(UINT bufferSize);
+	bool UpdateData(const Update_ConstantBuffe_Desc& desc);
 
 	ID3D11Buffer*const* GetAddressOf() const { return buffer.GetAddressOf(); }
 

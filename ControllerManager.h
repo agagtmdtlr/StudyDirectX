@@ -4,6 +4,7 @@
 #include "Callback.h"
 #include "ControllerFactory.h"
 
+#include "Filebrowser.h"
 
 struct ControllerLinkNode
 {
@@ -37,7 +38,10 @@ public:
 	vector<Controller*> uis;
 	ControllerFactory factory;
 	unordered_map<std::string, unique_ptr<Controller>> uimap;
+
 	class Renderer* renderer = nullptr;
-	
+
+	FileBrowser fileBrowser;
+
 };
 

@@ -73,6 +73,7 @@ bool TextureManager::CreateTextureFromFile(const std::wstring& filename)
     wstring ext = Path::GetExtension(filename);
 
     TexMetadata metaData;
+    ZeroMemory(&metaData, sizeof(metaData));
     ScratchImage scratchimage;
     if (ext == L"png" || ext == L"jpg")
     {
