@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Filebrowser.h"
 #include <imgui.h>
+#include "FileManager.h"
 
 namespace fs = std::filesystem;
 
@@ -13,6 +14,9 @@ FileBrowser::FileBrowser()
 	curpath = fs::absolute(curpath);
 	Move(curpath);
 
+	folderIco = TextureManager::RequestTexture(L"icon/folder.png");
+	fileIco = TextureManager::RequestTexture(L"icon/file.png");
+	imgIco = TextureManager::RequestTexture(L"icon/image.png");
 
 }
 
@@ -27,7 +31,7 @@ void FileBrowser::Render()
 
 
 		static float padding = 16.0f;
-		static float thumbnailSize = 128;
+		static float thumbnailSize = 64;
 		float cellSize = thumbnailSize + padding;
 		float panelWidth = ImGui::GetContentRegionAvail().x;
 
@@ -37,11 +41,13 @@ void FileBrowser::Render()
 
 		for (UINT i = 0; i < tokens.size(); i++)
 		{
-			bool clicked = ImGui::Button(tokens[i].c_str(), { thumbnailSize,thumbnailSize });
-			clicked &= ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
-			ImGui::Text(tokens[i].c_str());
+			bool clicked = false;
+
 			if (entrys[i].is_directory())
 			{
+				ImGui::ImageButton((ImTextureID)(folderIco->GetSRV()), { thumbnailSize,thumbnailSize });
+
+				clicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
 				if(clicked)
 				{
 					movePth = entrys[i].path();
@@ -50,10 +56,19 @@ void FileBrowser::Render()
 			}
 			else
 			{
+				std::filesystem::path pth = entrys[i].path();
+
+				bool isImg = TextureManager::IsImage(pth);
+				ImTextureID txId = isImg ? imgIco->GetSRV() : fileIco->GetSRV();
+				ImGui::ImageButton(txId, { thumbnailSize,thumbnailSize });
+				clicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
+
 				if (clicked)
 				{
 				}
 			}
+			ImGui::Text(tokens[i].c_str());
+
 			
 			ImGui::NextColumn();
 		}

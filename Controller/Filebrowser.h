@@ -10,8 +10,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
-
-
+#include "Texture.h"
 using ImGuiFileBrowserFlags = int;
 
 enum ImGuiFileBrowserFlags_ : std::uint32_t
@@ -45,5 +44,8 @@ public:
     std::vector<std::filesystem::directory_entry> entrys;
     std::vector<std::string> tokens;
 
-    
+    shared_ptr<Texture> folderIco;
+    shared_ptr<Texture> fileIco;
+    shared_ptr<Texture> imgIco;
+
 };

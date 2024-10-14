@@ -39,7 +39,7 @@ shared_ptr<Texture> TextureManager::RequestTexture(std::wstring filename)
 {
     TextureManager* manager = TextureManager::Get();
     shared_ptr<Texture> texture;
-    if (manager->IsExistedTexture(filename) ==  true)
+    if (manager->IsExistedTexture(filename) ==  false)
     {
         manager->CreateTextureFromFile(filename);
     }
@@ -50,6 +50,12 @@ shared_ptr<Texture> TextureManager::RequestTexture(std::wstring filename)
 bool TextureManager::ConvertImageToDDS(std::wstring src, std::wstring dest)
 {
     return false;
+}
+
+bool TextureManager::IsImage(std::wstring file)
+{
+    wstring ext =  Path::GetExtension(file);
+    return ext == L"png" || ext == L"jpg" || ext == L"dds";
 }
 
 TextureManager* TextureManager::Get()
@@ -75,14 +81,23 @@ bool TextureManager::CreateTextureFromFile(const std::wstring& filename)
     TexMetadata metaData;
     ZeroMemory(&metaData, sizeof(metaData));
     ScratchImage scratchimage;
+
+    std::wstring fullPth = L"../Resources/";
+    fullPth += filename;
+    HRESULT hr;
     if (ext == L"png" || ext == L"jpg")
     {
         //DirectX::GetMetadataFromWICFile(filename.c_str(), WIC_FLAGS::WIC_FLAGS_NONE , metaData );
-        DirectX::LoadFromWICFile(filename.c_str(),WIC_FLAGS_NONE , &metaData, scratchimage);
+        hr = DirectX::LoadFromWICFile(fullPth.c_str(),WIC_FLAGS_NONE , &metaData, scratchimage);
     }
     else if (ext == L"dds")
     {
-        DirectX::LoadFromDDSFile(filename.c_str(), DDS_FLAGS::DDS_FLAGS_NONE, &metaData, scratchimage);
+        hr = DirectX::LoadFromDDSFile(fullPth.c_str(), DDS_FLAGS::DDS_FLAGS_NONE, &metaData, scratchimage);
+    }
+
+    if (FAILED(hr))
+    {
+        std::wcout << "faile texture load " << filename << std::endl;
     }
 
     auto device = D3D::GetDevice();

@@ -1,7 +1,7 @@
 #pragma once
 #include "Texture.h"
 #include <unordered_map>
-
+#include <filesystem>
 class FileManager
 {
 public:
@@ -14,6 +14,7 @@ class TextureManager
 public:
 	static shared_ptr<Texture> RequestTexture(std::wstring filename);
 	static bool ConvertImageToDDS(std::wstring src, std::wstring dest);
+	static bool IsImage(std::wstring file);
 
 	using TextureMap = std::unordered_map<std::wstring, shared_ptr<Texture>>;
 private:
