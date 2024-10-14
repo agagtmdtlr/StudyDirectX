@@ -90,7 +90,7 @@ Sphere::~Sphere()
 {
 }
 
-bool Sphere::RayCast(const Ray& ray)
+bool Sphere::RayCast(const DirectX::SimpleMath::Ray& ray)
 {
 	Vector3 p = transform.position;
 	p -= ray.position;

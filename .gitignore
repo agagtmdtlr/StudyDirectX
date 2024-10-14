@@ -19,6 +19,9 @@
 # Mono auto generated files
 mono_crash.*
 
+# Cpu RayTracer unused project
+RayTracer/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
