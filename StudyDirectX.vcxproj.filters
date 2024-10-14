@@ -25,194 +25,192 @@
     <Filter Include="Geometry">
       <UniqueIdentifier>{1997656d-f4a0-4792-912d-27d66c3dbae6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{ccf111de-cc11-4ba5-bbb6-e3f4c2e52b19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FileManager.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="GizmoController.cpp">
-      <Filter>Controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="IImageLoader.h">
-      <Filter>Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Path.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="ConstantBuffer.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="PrimitiveBuffer.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Sphere.cpp">
-      <Filter>Geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="MaterialController.cpp">
-      <Filter>Controller</Filter>
-    </ClCompile>
-    <ClCompile Include="ControllerManager.cpp">
-      <Filter>Controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Controller.cpp">
-      <Filter>Controller</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Button.cpp">
+    <ClCompile Include="Controller\Button.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="Callback.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="ControllerFactory.cpp">
+    <ClCompile Include="Controller\CameraController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Render</Filter>
+    <ClCompile Include="Controller\Controller.cpp">
+      <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
+    <ClCompile Include="Controller\ControllerFactory.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller\ControllerManager.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller\Filebrowser.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller\GizmoController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller\Input.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller\MaterialController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Geometry\Mesh.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Geometry\Sphere.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Main\Application.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Controller</Filter>
+    <ClCompile Include="Render\Light.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="CameraController.cpp">
-      <Filter>Controller</Filter>
+    <ClCompile Include="Render\Material.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Debugger.cpp">
+    <ClCompile Include="Render\Renderer.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Shader.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\ConstantBuffer.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\PrimitiveBuffer.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Texture.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Callback.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Camera.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\D3D.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Level.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\System.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Transform.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Debugger.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="Filebrowser.cpp">
-      <Filter>Controller</Filter>
+    <ClCompile Include="Utility\FileManager.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Path.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileManager.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="GizmoController.h">
-      <Filter>Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderCommon.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="IImageValidator.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="ITextureDescriptor.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Path.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="IResource.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="ConstantBuffer.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="PrimitiveBuffer.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="IBuffer.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Sphere.h">
-      <Filter>Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="MaterialController.h">
-      <Filter>Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="ControllerManager.h">
-      <Filter>Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Controller.h">
-      <Filter>Controller</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Button.h">
+    <ClInclude Include="Controller\Button.h">
       <Filter>Controller</Filter>
     </ClInclude>
-    <ClInclude Include="Callback.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="ControllerFactory.h">
+    <ClInclude Include="Controller\CameraController.h">
       <Filter>Controller</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Render</Filter>
+    <ClInclude Include="Controller\Controller.h">
+      <Filter>Controller</Filter>
     </ClInclude>
-    <ClInclude Include="Application.h">
+    <ClInclude Include="Controller\ControllerFactory.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller\ControllerManager.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller\Filebrowser.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller\GizmoController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller\Input.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller\MaterialController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry\Mesh.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry\Sphere.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Main\Application.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Controller</Filter>
+    <ClInclude Include="Render\Light.h">
+      <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="CameraController.h">
-      <Filter>Controller</Filter>
+    <ClInclude Include="Render\Material.h">
+      <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Debugger.h">
+    <ClInclude Include="Render\RenderCommon.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Renderer.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Shader.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\ConstantBuffer.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\IBuffer.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\PrimitiveBuffer.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Texture.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Callback.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Camera.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\D3D.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Level.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\System.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Transform.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Debugger.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="Filebrowser.h">
-      <Filter>Controller</Filter>
+    <ClInclude Include="Utility\FileManager.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Path.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

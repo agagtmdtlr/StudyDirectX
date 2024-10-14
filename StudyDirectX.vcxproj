@@ -121,6 +121,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <OpenMPSupport>true</OpenMPSupport>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>./Utility;./System;./Resource;./Render;./Main;./Geometry;./Controller;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,75 +149,72 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Application.cpp" />
-    <ClCompile Include="Callback.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CameraController.cpp" />
-    <ClCompile Include="ConstantBuffer.cpp" />
-    <ClCompile Include="Debugger.cpp" />
-    <ClCompile Include="Filebrowser.cpp" />
-    <ClCompile Include="FileManager.cpp" />
-    <ClCompile Include="ControllerFactory.cpp" />
-    <ClCompile Include="GizmoController.cpp" />
-    <ClCompile Include="IImageLoader.h" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Level.cpp" />
-    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Controller\Button.cpp" />
+    <ClCompile Include="Controller\CameraController.cpp" />
+    <ClCompile Include="Controller\Controller.cpp" />
+    <ClCompile Include="Controller\ControllerFactory.cpp" />
+    <ClCompile Include="Controller\ControllerManager.cpp" />
+    <ClCompile Include="Controller\Filebrowser.cpp" />
+    <ClCompile Include="Controller\GizmoController.cpp" />
+    <ClCompile Include="Controller\Input.cpp" />
+    <ClCompile Include="Controller\MaterialController.cpp" />
+    <ClCompile Include="Geometry\Mesh.cpp" />
+    <ClCompile Include="Geometry\Sphere.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Path.cpp" />
-    <ClCompile Include="PrimitiveBuffer.cpp" />
-    <ClCompile Include="D3D.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Main\Application.cpp" />
+    <ClCompile Include="Render\Light.cpp" />
+    <ClCompile Include="Render\Material.cpp" />
+    <ClCompile Include="Render\Renderer.cpp" />
+    <ClCompile Include="Render\Shader.cpp" />
+    <ClCompile Include="Resource\ConstantBuffer.cpp" />
+    <ClCompile Include="Resource\PrimitiveBuffer.cpp" />
+    <ClCompile Include="Resource\Texture.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="System.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="Controller.cpp" />
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="ControllerManager.cpp" />
-    <ClCompile Include="MaterialController.cpp" />
+    <ClCompile Include="System\Callback.cpp" />
+    <ClCompile Include="System\Camera.cpp" />
+    <ClCompile Include="System\D3D.cpp" />
+    <ClCompile Include="System\Level.cpp" />
+    <ClCompile Include="System\System.cpp" />
+    <ClCompile Include="System\Transform.cpp" />
+    <ClCompile Include="Utility\Debugger.cpp" />
+    <ClCompile Include="Utility\FileManager.cpp" />
+    <ClCompile Include="Utility\Path.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h" />
-    <ClInclude Include="Callback.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="CameraController.h" />
-    <ClInclude Include="ConstantBuffer.h" />
-    <ClInclude Include="Debugger.h" />
-    <ClInclude Include="IBuffer.h" />
-    <ClInclude Include="IImageValidator.h" />
-    <ClInclude Include="Filebrowser.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="IResource.h" />
-    <ClInclude Include="ITextureDescriptor.h" />
-    <ClInclude Include="Level.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Path.h" />
-    <ClInclude Include="PrimitiveBuffer.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="System.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="FileManager.h" />
-    <ClInclude Include="ControllerFactory.h" />
-    <ClInclude Include="GizmoController.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="D3D.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="RenderCommon.h" />
+    <ClInclude Include="Controller\Button.h" />
+    <ClInclude Include="Controller\CameraController.h" />
+    <ClInclude Include="Controller\Controller.h" />
+    <ClInclude Include="Controller\ControllerFactory.h" />
+    <ClInclude Include="Controller\ControllerManager.h" />
+    <ClInclude Include="Controller\Filebrowser.h" />
+    <ClInclude Include="Controller\GizmoController.h" />
+    <ClInclude Include="Controller\Input.h" />
+    <ClInclude Include="Controller\MaterialController.h" />
+    <ClInclude Include="Geometry\Mesh.h" />
+    <ClInclude Include="Geometry\Sphere.h" />
+    <ClInclude Include="Main\Application.h" />
+    <ClInclude Include="Render\Light.h" />
+    <ClInclude Include="Render\Material.h" />
+    <ClInclude Include="Render\RenderCommon.h" />
+    <ClInclude Include="Render\Renderer.h" />
+    <ClInclude Include="Render\Shader.h" />
+    <ClInclude Include="Resource\ConstantBuffer.h" />
+    <ClInclude Include="Resource\IBuffer.h" />
+    <ClInclude Include="Resource\PrimitiveBuffer.h" />
+    <ClInclude Include="Resource\Texture.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="Controller.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="ControllerManager.h" />
-    <ClInclude Include="MaterialController.h" />
+    <ClInclude Include="System\Callback.h" />
+    <ClInclude Include="System\Camera.h" />
+    <ClInclude Include="System\D3D.h" />
+    <ClInclude Include="System\Level.h" />
+    <ClInclude Include="System\System.h" />
+    <ClInclude Include="System\Transform.h" />
+    <ClInclude Include="Utility\Debugger.h" />
+    <ClInclude Include="Utility\FileManager.h" />
+    <ClInclude Include="Utility\Path.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\Phong.hlsl">
