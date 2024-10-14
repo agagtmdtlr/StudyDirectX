@@ -22,6 +22,10 @@ mono_crash.*
 # Cpu RayTracer unused project
 RayTracer/
 
+#ignore shader cache
+*.hlslo
+
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
