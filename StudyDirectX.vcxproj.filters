@@ -28,6 +28,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{ccf111de-cc11-4ba5-bbb6-e3f4c2e52b19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{9f2183e3-0d12-408c-8dbd-7ee900f322c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -116,6 +119,7 @@
     <ClCompile Include="Utility\Path.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Controller\PropertyBrowser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -212,6 +216,7 @@
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Controller\PropertyBrowser.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VS.hlsl">
@@ -223,5 +228,10 @@
     <FxCompile Include="Shader\Phong.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Config\StudDirectX.txt">
+      <Filter>Config</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

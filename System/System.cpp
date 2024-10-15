@@ -90,8 +90,8 @@ void System::InitializeUI()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.DisplaySize.x = D3D::GetWidth();
-	io.DisplaySize.y = D3D::GetHeight();
+	io.DisplaySize.x = (float)D3D::GetWidth();
+	io.DisplaySize.y = (float)D3D::GetHeight();
 	ImGui::StyleColorsLight();
 
 	ImGuiContext* imguiContext = ImGui::GetCurrentContext();

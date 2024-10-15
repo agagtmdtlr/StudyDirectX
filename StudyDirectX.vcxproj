@@ -158,6 +158,7 @@
     <ClCompile Include="Controller\GizmoController.cpp" />
     <ClCompile Include="Controller\Input.cpp" />
     <ClCompile Include="Controller\MaterialController.cpp" />
+    <ClCompile Include="Controller\PropertyBrowser.cpp" />
     <ClCompile Include="Geometry\Mesh.cpp" />
     <ClCompile Include="Geometry\Sphere.cpp" />
     <ClCompile Include="main.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Controller\GizmoController.h" />
     <ClInclude Include="Controller\Input.h" />
     <ClInclude Include="Controller\MaterialController.h" />
+    <ClInclude Include="Controller\PropertyBrowser.h" />
     <ClInclude Include="Geometry\Mesh.h" />
     <ClInclude Include="Geometry\Sphere.h" />
     <ClInclude Include="Main\Application.h" />
@@ -245,6 +247,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Config\StudDirectX.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -19,8 +19,8 @@ void CameraController::Render()
 	{
 		ImVec2 drag = ImGui::GetMouseDragDelta(ImGuiMouseButton_Right);
 
-		camera.rotation.y += drag.x * 0.005;
-		camera.rotation.x += drag.y * 0.005;
+		camera.rotation.y += drag.x * 0.005f;
+		camera.rotation.x += drag.y * 0.005f;
 
 		ImGui::ResetMouseDragDelta(ImGuiMouseButton_Right);
 	}

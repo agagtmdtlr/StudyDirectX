@@ -5,7 +5,7 @@
 #include "ControllerFactory.h"
 
 #include "Filebrowser.h"
-
+#include "PropertyBrowser.h"
 struct ControllerLinkNode
 {
 	unique_ptr<Controller> ui;

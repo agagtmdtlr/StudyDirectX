@@ -1,0 +1,2 @@
+vcpkg=(E:\dev\vcpkg\downloads)
+content=(E:\dev\Resources)

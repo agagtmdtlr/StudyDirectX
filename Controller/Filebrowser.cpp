@@ -35,6 +35,7 @@ void FileBrowser::Render()
 		float cellSize = thumbnailSize + padding;
 		float panelWidth = ImGui::GetContentRegionAvail().x;
 
+
 		int coumnCount = (int)(panelWidth / cellSize);
 		if(coumnCount < 1) coumnCount = 1;
 		ImGui::Columns(coumnCount,0,false);
@@ -42,17 +43,18 @@ void FileBrowser::Render()
 		for (UINT i = 0; i < tokens.size(); i++)
 		{
 			bool clicked = false;
+			bool dlicked = false;
 
 			if (entrys[i].is_directory())
 			{
 				ImGui::ImageButton((ImTextureID)(folderIco->GetSRV()), { thumbnailSize,thumbnailSize });
-
-				clicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
-				if(clicked)
+				dlicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
+				if(dlicked)
 				{
 					movePth = entrys[i].path();
 					moveDir = true;
 				}
+
 			}
 			else
 			{
@@ -61,12 +63,35 @@ void FileBrowser::Render()
 				bool isImg = TextureManager::IsImage(pth);
 				ImTextureID txId = isImg ? imgIco->GetSRV() : fileIco->GetSRV();
 				ImGui::ImageButton(txId, { thumbnailSize,thumbnailSize });
-				clicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
 
-				if (clicked)
+				clicked = ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
+				ImGuiDragDropFlags src_flags = 0;
+				src_flags |= ImGuiDragDropFlags_SourceNoDisableHover;     //
+				src_flags |= ImGuiDragDropFlags_SourceNoHoldToOpenOthers; //
+
+				if (ImGui::BeginDragDropSource(src_flags))
 				{
+					void* data = nullptr;
+					size_t dataSize = 0;
+					//ImGuiCond cond;
+					ImGui::SetDragDropPayload("ITEM", data, dataSize);
+
+					ImGui::ImageButton("drag", txId, { thumbnailSize,thumbnailSize });
+					ImGui::EndDragDropSource();
+				}
+
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ITEM");
+
+					ImGui::EndDragDropTarget();
 				}
 			}
+
+			
+
+
 			ImGui::Text(tokens[i].c_str());
 
 			
@@ -78,7 +103,6 @@ void FileBrowser::Render()
 		ImGui::SliderFloat("Thumbnail Size", &thumbnailSize, 16, 128);
 		// TODO: status bar
 	}
-	
 
 	ImGui::End();
 	
