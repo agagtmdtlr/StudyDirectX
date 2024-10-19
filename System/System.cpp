@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "System.h"
-#include <imgui.h>
-#include <imgui_impl_dx11.h>
-#include <imgui_impl_win32.h>
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
 #include <iostream>
 #include <ImGuizmo.h>
 #include <memory>
@@ -27,8 +27,8 @@ System::~System()
 
 void System::Initialize()
 {
-
-    const int width = 1280, height = 720;
+	systemHandle = this;
+    const int width = 1920, height = 1080;
     InitializeWindow(width, height);
 
 	D3D::Initialize(hwnd, width, height);
@@ -71,8 +71,8 @@ void System::InitializeWindow(int width, int height)
 		wc.lpszClassName,
 		L"SeungLabGraphics Example",
 		WS_OVERLAPPEDWINDOW,
-		100, // À©µµ¿ì ÁÂÃø »ó´ÜÀÇ xÁÂÇ¥
-		100, // À©µµ¿ì ÁÂÃø »ó´ÜÀÇ yÁÂÇ¥
+		0, // À©µµ¿ì ÁÂÃø »ó´ÜÀÇ xÁÂÇ¥
+		0, // À©µµ¿ì ÁÂÃø »ó´ÜÀÇ yÁÂÇ¥
 		wr.right - wr.left, // window horizontal arrow pixel rate
 		wr.bottom - wr.top, // window vertical arrow pixel rate
 		NULL,
@@ -81,7 +81,7 @@ void System::InitializeWindow(int width, int height)
 		NULL
 	);
 
-	ShowWindow(hwnd, SW_SHOWDEFAULT);
+	ShowWindow(hwnd, SW_SHOWMAXIMIZED);
 	UpdateWindow(hwnd);
 }
 
@@ -90,12 +90,20 @@ void System::InitializeUI()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.DisplaySize.x = (float)D3D::GetWidth();
-	io.DisplaySize.y = (float)D3D::GetHeight();
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 	ImGui::StyleColorsLight();
 
 	ImGuiContext* imguiContext = ImGui::GetCurrentContext();
 	ImGuizmo::SetImGuiContext(imguiContext);
+
+	// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+	ImGuiStyle& style = ImGui::GetStyle();
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		style.WindowRounding = 0.0f;
+		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+	}
 
 	// Setup Platform/ Renderer backedns
 	ImGui_ImplDX11_Init(D3D::GetDevice(), D3D::GetDC());
@@ -118,6 +126,13 @@ void System::Run()
 		}
 		else
 		{
+			if (resizeWidth != 0 && resizeHeight != 0)
+			{
+				D3D::ResizeBackBuffer(resizeWidth, resizeHeight);
+				resizeWidth = 0;
+				resizeHeight = 0;
+			}
+
 			// Start the Dear ImGui frame
 			ImGui_ImplDX11_NewFrame();
 			ImGui_ImplWin32_NewFrame();
@@ -126,7 +141,6 @@ void System::Run()
 			ImGuizmo::BeginFrame();
 
 			//ImGui::ShowDemoWindow();
-
 			ImGui::BeginMainMenuBar();
 			if (ImGui::MenuItem("File"))
 			{
@@ -144,18 +158,26 @@ void System::Run()
 			//example->Update();
 			//example->Render();
 
+
 			renderer->Update();
 			renderer->Render();
 
-			ui->Update();
+			ui->UpdateControllerManager();
 			ui->Render();
 
 
-			
+			//TODO:: DockSpaceOverViewport()
+
 
 			ImGui::Render();
 
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+			ImGuiIO& io = ImGui::GetIO();
+			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+			{
+				ImGui::UpdatePlatformWindows();
+				ImGui::RenderPlatformWindowsDefault();
+			}
 
 			// switch the back buffer and the front buffer
 			D3D::Present(1, 0);
@@ -181,8 +203,13 @@ LRESULT System::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 	switch (msg)
 	{
 	case WM_SIZE:
+	{
 		// Reeset and resize swapchain
+		std::cout << "Resize " << LOWORD(lParam) << " " << HIWORD(lParam) << std::endl;
+		resizeWidth = LOWORD(lParam);
+		resizeHeight = HIWORD(lParam);
 		return 0;
+	}		
 	case WM_SYSCOMMAND:
 		if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
 			return 0;
@@ -229,7 +256,10 @@ LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 		default :
 		{
-			return systemHandle->MessageHandler(hwnd, msg, wparam, lparam);
+			if(systemHandle != nullptr )
+				return systemHandle->MessageHandler(hwnd, msg, wparam, lparam);
+			else
+				return ::DefWindowProc(hwnd, msg, wparam, lparam);;
 		}
 
 	}

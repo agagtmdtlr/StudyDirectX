@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ControllerManager.h"
-#include <imgui.h>
+#include "imgui.h"
 
 #include "Level.h"
 #include "Sphere.h"
@@ -42,8 +42,10 @@ void ControllerManager::Initialize()
 	ImGui::StyleColorsDark(&style);
 }
 
-void ControllerManager::Update()
+void ControllerManager::UpdateControllerManager()
 {
+	ImGui::DockSpaceOverViewport();
+
 	ImGui::Begin("Option");
 
 	ImVec2 pos = ImGui::GetMousePos();

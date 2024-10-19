@@ -29,6 +29,13 @@ ID3D11RenderTargetView* D3D::GetRTV()
 	return D3D::GetRenderContext()->renderTargetView.Get();
 }
 
+ID3D11ShaderResourceView* D3D::GetSRV()
+{
+	return D3D::GetRenderContext()->srv.Get();
+}
+
+
+
 HRESULT D3D::Present(UINT syncInterval, UINT flag)
 {
 	return D3D::GetRenderContext()->swapChain->Present(syncInterval, flag);
@@ -66,7 +73,7 @@ void D3D::Initialize(HWND window, int width, int height)
 		modeDesc.RefreshRate.Numerator = 60;
 		modeDesc.RefreshRate.Denominator = 1;
 		swapChainDesc.BufferCount = 2;
-		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // 
+		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT; // 
 		swapChainDesc.OutputWindow = window;
 		swapChainDesc.SampleDesc.Count = 1; // how many multisamples;
 		swapChainDesc.Windowed = TRUE; // windowed/full-screen mode
@@ -76,7 +83,7 @@ void D3D::Initialize(HWND window, int width, int height)
 
 	UINT createDeviceFlags = 0;
 	const D3D_FEATURE_LEVEL featureLevelArray[1] = { D3D_FEATURE_LEVEL_11_0 };
-	if (FAILED(D3D11CreateDeviceAndSwapChain(NULL,
+	HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
 		createDeviceFlags,
@@ -87,29 +94,97 @@ void D3D::Initialize(HWND window, int width, int height)
 		rc->swapChain.GetAddressOf(),
 		rc->device.GetAddressOf(),
 		NULL,
-		rc->deviceContext.GetAddressOf())))
+		rc->deviceContext.GetAddressOf());
+	if ( FAILED(hr) )
 	{
 		std::cout << "D3D11CrateDeviceAndSwapChain() error" << std::endl;
 	}
 
 	//CreateRenderTarget
 	ID3D11Texture2D* pBackBuffer;
-	rc->swapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+
+	ID3D11Device* device = D3D::GetDevice();
+
+	{
+		DXGI_SWAP_CHAIN_DESC desc;
+		rc->swapChain->GetDesc(&desc);
+		rc->swapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+
+	}
+	
 	if (pBackBuffer)
 	{
-		rc->device->CreateRenderTargetView(pBackBuffer, NULL, rc->renderTargetView.GetAddressOf());
+		device->CreateRenderTargetView(pBackBuffer, NULL, rc->renderTargetView.GetAddressOf());
 		pBackBuffer->Release();
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+
+		hr = device->CreateShaderResourceView(pBackBuffer, NULL, rc->srv.GetAddressOf());
+		if (FAILED(hr))
+		{
+			std::cout << "failed create srv for backbuffer" << std::endl;
+		}
+	}
+}
+
+void D3D::ResizeBackBuffer(int width, int height)
+{
+	auto rc = D3D::GetRenderContext();
+
+	rc->CleanupRenderTarget();
+	rc->swapChain->ResizeBuffers(0,width,height, DXGI_FORMAT_R8G8B8A8_UNORM,0);
+	rc->CreateRenderTarget();
+
+	rc->width = width;
+	rc->height = height;
+}
+
+void D3D::InitShaders()
+{
+}
+
+void D3D::CreateRenderTarget()
+{
+	//CreateRenderTarget
+	ID3D11Texture2D* pBackBuffer;
+
+	ID3D11Device* device = D3D::GetDevice();
+
+	{
+		DXGI_SWAP_CHAIN_DESC desc;
+		swapChain->GetDesc(&desc);
+		swapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+
+	}
+	HRESULT hr;
+	if (pBackBuffer)
+	{
+		device->CreateRenderTargetView(pBackBuffer, NULL, renderTargetView.GetAddressOf());
+		pBackBuffer->Release();
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+
+		hr = device->CreateShaderResourceView(pBackBuffer, NULL, srv.GetAddressOf());
+		if (FAILED(hr))
+		{
+			std::cout << "failed create srv for backbuffer" << std::endl;
+		}
 	}
 	else
 	{
 		std::cout << "CreateRenderTargetView() error" << std::endl;
 		exit(-1);
 	}
-
-	
-	
 }
 
-void D3D::InitShaders()
+void D3D::CleanupRenderTarget()
 {
+	renderTargetView.Reset();
+	srv.Reset();
 }

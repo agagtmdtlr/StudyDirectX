@@ -31,6 +31,9 @@
     <Filter Include="Config">
       <UniqueIdentifier>{9f2183e3-0d12-408c-8dbd-7ee900f322c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{b4447c89-55f1-458d-9d0c-02b87116972b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

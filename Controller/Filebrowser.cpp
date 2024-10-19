@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Filebrowser.h"
-#include <imgui.h>
+#include "imgui.h"
 #include "FileManager.h"
-
+#include "imgui_internal.h"
 namespace fs = std::filesystem;
 
 
@@ -17,13 +17,19 @@ FileBrowser::FileBrowser()
 	folderIco = TextureManager::RequestTexture(L"icon/folder.png");
 	fileIco = TextureManager::RequestTexture(L"icon/file.png");
 	imgIco = TextureManager::RequestTexture(L"icon/image.png");
-
+	test = TextureManager::RequestTexture(L"back.jpg");
 }
 
 void FileBrowser::Render()
 {
 	bool moveDir = false;
 	fs::path movePth;
+	static std::filesystem::path dragPath;
+	ImVec2 imSize = ImGui::GetMainViewport()->Size;
+
+	ImGuiDragDropFlags dndFlag = ImGuiDragDropFlags_None;
+	//dndFlag |= ImGuiDragDropFlags_SourceAllowNullID;
+	//dndFlag |= ImGuiDragDropFlags_SourceExtern;
 	if (ImGui::Begin("Content Browser"))
 	{
 
@@ -42,12 +48,16 @@ void FileBrowser::Render()
 
 		for (UINT i = 0; i < tokens.size(); i++)
 		{
+
 			bool clicked = false;
 			bool dlicked = false;
+			std::filesystem::path pth = entrys[i].path();
+			bool isImg = TextureManager::IsImage(pth);
+			ImTextureID txId = entrys[i].is_directory() ? (ImTextureID)(folderIco->GetSRV()) : 
+			(isImg ? imgIco->GetSRV() : fileIco->GetSRV());
 
 			if (entrys[i].is_directory())
 			{
-				ImGui::ImageButton((ImTextureID)(folderIco->GetSRV()), { thumbnailSize,thumbnailSize });
 				dlicked = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
 				if(dlicked)
 				{
@@ -56,38 +66,31 @@ void FileBrowser::Render()
 				}
 
 			}
-			else
+
+			string lab = "content";
+			lab += to_string(i);
+
+			ImGui::PushID(i);
 			{
-				std::filesystem::path pth = entrys[i].path();
-
-				bool isImg = TextureManager::IsImage(pth);
-				ImTextureID txId = isImg ? imgIco->GetSRV() : fileIco->GetSRV();
 				ImGui::ImageButton(txId, { thumbnailSize,thumbnailSize });
-
 				clicked = ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
-				ImGuiDragDropFlags src_flags = 0;
-				src_flags |= ImGuiDragDropFlags_SourceNoDisableHover;     //
-				src_flags |= ImGuiDragDropFlags_SourceNoHoldToOpenOthers; //
 
-				if (ImGui::BeginDragDropSource(src_flags))
+				
+				static bool lastFrameWasAcceted = false;
+				if (ImGui::BeginDragDropSource(dndFlag))
 				{
-					void* data = nullptr;
-					size_t dataSize = 0;
+					dragPath = pth;
 					//ImGuiCond cond;
-					ImGui::SetDragDropPayload("ITEM", data, dataSize);
-
 					ImGui::ImageButton("drag", txId, { thumbnailSize,thumbnailSize });
+
+					void* data = &dragPath;
+					size_t dataSize = sizeof(dragPath);
+					lastFrameWasAcceted = ImGui::SetDragDropPayload("DND_ITEM", data, dataSize, ImGuiCond_None);
 					ImGui::EndDragDropSource();
 				}
 
-
-				if (ImGui::BeginDragDropTarget())
-				{
-					const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ITEM");
-
-					ImGui::EndDragDropTarget();
-				}
 			}
+			ImGui::PopID();
 
 			
 
@@ -98,16 +101,44 @@ void FileBrowser::Render()
 			ImGui::NextColumn();
 		}
 
-		ImGui::Columns(1);
+		ImGui::Columns(1);	
 
 		ImGui::SliderFloat("Thumbnail Size", &thumbnailSize, 16, 128);
 		// TODO: status bar
 	}
+	ImGui::End();
 
+
+	bool bopen = true;
+	ImGuiWindowFlags wflag;
+	wflag |= ImGuiWindowFlags_NoInputs;
+	ImGui::Begin("viewport");
+	{
+		//ImTextureID txid = (ImTextureID)(test->GetSRV());
+		ImTextureID txid = (ImTextureID)(D3D::GetSRV());
+
+
+
+		ImVec2 sz= ImGui::GetContentRegionAvail();
+		ImGui::Image(txid, ImGui::GetContentRegionMax());
+		ImGui::PushID(100);
+		ImRect rect;
+		rect.Min = ImVec2(0, 0);
+		rect.Max = imSize;
+		ImGui::GetCurrentWindow()->GetID(100);
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_ITEM", dndFlag))
+			{
+				std::cout << "drop item" << std::endl;
+			}
+			ImGui::EndDragDropTarget();
+		}
+		ImGui::PopID();
+	}
 	ImGui::End();
 	
-
-
+	
 	if(moveDir == true)
 		Move(movePth);
 

@@ -47,5 +47,7 @@ public:
     shared_ptr<Texture> folderIco;
     shared_ptr<Texture> fileIco;
     shared_ptr<Texture> imgIco;
+    shared_ptr<Texture> test;
+
 
 };

@@ -28,7 +28,7 @@ public:
 	void CreateUI(std::string type, std::string label);
 
 	void Initialize();
-	void Update();
+	void UpdateControllerManager();
 	void Render();
 	void CreateSphere();
 
