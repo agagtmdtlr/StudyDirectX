@@ -6,6 +6,7 @@
 #include <iostream>
 #include <ImGuizmo.h>
 #include <memory>
+#include <oleidl.h>
 
 
 #include "D3D.h"
@@ -13,9 +14,12 @@
 #include "Application.h"
 #include "Renderer.h"
 #include "ControllerManager.h" 
-
+#include "Editor.h"
+#include "Filebrowser.h"
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+System* System::systemHandle = nullptr;
 
 System::System()
 {
@@ -31,25 +35,25 @@ void System::Initialize()
     const int width = 1920, height = 1080;
     InitializeWindow(width, height);
 
-	D3D::Initialize(hwnd, width, height);
+	D3D::Initialize(hwnd, resizeWidth, resizeHeight);
 
 	input = make_unique<Input>();
 	input->Initialize();
 
 	renderer = std::make_unique<Renderer>();
-	renderer->Initialize(width, height);
+	renderer->Initialize(resizeWidth, resizeHeight);
 
 	InitializeUI();
 
-	application = make_unique<Application>(ui.get());
-	application->Initialize();
+	application = make_unique<Editor>(ui.get());
+	application->InitializeApplication();
 }
 
 void System::InitializeWindow(int width, int height)
 {
 	wc = {
 			sizeof(WNDCLASSEX),
-			CS_CLASSDC,
+			CS_VREDRAW | CS_HREDRAW,
 			WndProc,
 			0L,
 			0L,
@@ -66,8 +70,23 @@ void System::InitializeWindow(int width, int height)
 
 	RECT wr = { 0,0,width,height };
 	AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
-
-	hwnd = CreateWindow(
+	/*
+	* CreateWindowExW(
+    _In_ DWORD dwExStyle,
+    _In_opt_ LPCWSTR lpClassName,
+    _In_opt_ LPCWSTR lpWindowName,
+    _In_ DWORD dwStyle,
+    _In_ int X,
+    _In_ int Y,
+    _In_ int nWidth,
+    _In_ int nHeight,
+    _In_opt_ HWND hWndParent,
+    _In_opt_ HMENU hMenu,
+    _In_opt_ HINSTANCE hInstance,
+    _In_opt_ LPVOID lpParam);
+	*/
+	hwnd = CreateWindowExW(
+		WS_EX_ACCEPTFILES,
 		wc.lpszClassName,
 		L"SeungLabGraphics Example",
 		WS_OVERLAPPEDWINDOW,
@@ -83,6 +102,19 @@ void System::InitializeWindow(int width, int height)
 
 	ShowWindow(hwnd, SW_SHOWMAXIMIZED);
 	UpdateWindow(hwnd);
+	
+
+	RECT rect;
+	if (GetClientRect(hwnd, &rect))
+	{
+		resizeWidth= rect.right - rect.left;
+		resizeHeight = rect.bottom - rect.top;
+	}
+
+	//OleInitialize(NULL);
+	//DropManager dm;
+	//RegisterDragDrop(hwnd, &dm);
+
 }
 
 void System::InitializeUI()
@@ -126,12 +158,20 @@ void System::Run()
 		}
 		else
 		{
-			if (resizeWidth != 0 && resizeHeight != 0)
+
+			if (needResizeContentDependency)
 			{
-				D3D::ResizeBackBuffer(resizeWidth, resizeHeight);
-				resizeWidth = 0;
-				resizeHeight = 0;
+				ResizeDisplay();
 			}
+
+			if (needResize)
+			{
+				Resize();
+				needResizeContentDependency = true;
+			}
+
+			D3D::GetDC()->ClearRenderTargetView(D3D::GetBB(), Color(0.2f, 0.2f, 0.2f,1.0f));
+
 
 			// Start the Dear ImGui frame
 			ImGui_ImplDX11_NewFrame();
@@ -139,6 +179,8 @@ void System::Run()
 
 			ImGui::NewFrame();
 			ImGuizmo::BeginFrame();
+
+			
 
 			//ImGui::ShowDemoWindow();
 			ImGui::BeginMainMenuBar();
@@ -160,14 +202,20 @@ void System::Run()
 
 
 			renderer->Update();
-			renderer->Render();
+			application->UpdateApplication();
 
+			renderer->Render();
+			renderer->BeginUI();
 			ui->UpdateControllerManager();
 			ui->Render();
 
 
 			//TODO:: DockSpaceOverViewport()
-
+			if (needResize)
+			{
+				ResizeDisplay();
+				needResize = false;
+			}
 
 			ImGui::Render();
 
@@ -183,7 +231,9 @@ void System::Run()
 			D3D::Present(1, 0);
 			//example->swapChain->Present(1,0);
 		}
+
 	} // while WM_QUIT
+	//RevokeDragDrop(hwnd);
 }
 
 void System::Shutdown()
@@ -196,30 +246,84 @@ void System::Shutdown()
 	//example->Clean();
 	DestroyWindow(hwnd);
 	UnregisterClass(wc.lpszClassName, wc.hInstance);
+
+	OleUninitialize();
+}
+
+void System::Resize()
+{
+	D3D::ResizeBackBuffer(resizeWidth, resizeHeight);
+	resizeWidth = 0;
+	resizeHeight = 0;
+	CHANGEFILTERSTRUCT cfs = { sizeof(CHANGEFILTERSTRUCT) };
+	if (ChangeWindowMessageFilterEx(hwnd, WM_DROPFILES, MSGFLT_ADD, &cfs) == false)
+	{
+		cout << "fall add WM_DROPFILES filter" << endl;
+	}
+	if (ChangeWindowMessageFilterEx(hwnd, WM_COPYDATA, MSGFLT_ADD, &cfs) == false)
+	{
+		cout << "fall add WM_COPYDATA filter" << endl;
+	}
+}
+
+void System::ResizeDisplay()
+{
+	ImVec2 newSize;
+	//renderer->Resize(newSize.x, newSize.y);
+	D3D::ResizeDisplay(D3D::GetDisplayWidth(), D3D::GetDisplayHeight());
 }
 
 LRESULT System::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	
 	switch (msg)
 	{
 	case WM_SIZE:
 	{
 		// Reeset and resize swapchain
 		std::cout << "Resize " << LOWORD(lParam) << " " << HIWORD(lParam) << std::endl;
-		resizeWidth = LOWORD(lParam);
-		resizeHeight = HIWORD(lParam);
+		RECT rect;
+		if (GetClientRect(hWnd, &rect))
+		{
+			resizeWidth = rect.right - rect.left;
+			resizeHeight = rect.bottom - rect.top;
+			needResize = true;
+		}
 		return 0;
 	}		
+	case WM_DROPFILES:
+	{
+		HDROP hDrop = reinterpret_cast<HDROP>(wParam);
+		char filename[MAX_PATH];
+		UINT count = DragQueryFileA(hDrop, -1, NULL, 0);
+		for (UINT i = 0; i < count; ++i)
+		{
+			if (DragQueryFileA(hDrop, i, filename, MAX_PATH))
+			{
+				printf("%s\n", filename);
+			}
+
+		}
+		DragFinish(hDrop);
+		break;
+	}
+	case WM_COMMAND :
+	{
+		std::cout << "WM_COMMAND " << LOWORD(lParam) << " " << HIWORD(lParam) << std::endl;
+		break;
+	}
 	case WM_SYSCOMMAND:
 		if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
 			return 0;
-		break;
+		break;	
 	case WM_MOUSEMOVE:
 		//std::cout << "Mouse " << LOWORD(lParam) << " " << HIWORD(lParam) << std::endl;
 		break;
+	case WM_LBUTTONDOWN:
 	case WM_LBUTTONUP:
 		//std::cout << "WM_LBUTTONUP Left mouse button" << std::endl;
 		break;
+	case WM_RBUTTONDOWN:
 	case WM_RBUTTONUP:
 		//std::cout << "WM_RBUTTONUP Right mouse button" << std::endl;
 		break;
@@ -228,6 +332,19 @@ LRESULT System::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		break;
 	case WM_KEYUP:
 		break;
+	case WM_KILLFOCUS:
+	{
+		//std::cout << "WM_KILLFOCUS" << LOWORD(lParam) << " " << HIWORD(lParam) << std::endl;
+		//SetForegroundWindow(hWnd);
+		break;
+
+	}
+	case WM_IME_SELECT:
+	{
+		std::cout << "WM_KILLFOCUS" << LOWORD(lParam) << " " << HIWORD(lParam) << std::endl;
+		break;
+
+	}
 	case WM_DESTROY:
 		::PostQuitMessage(0);
 		return 0;
@@ -253,11 +370,11 @@ LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 			::PostQuitMessage(0);
 			return 0;
 		}
-
+		
 		default :
 		{
-			if(systemHandle != nullptr )
-				return systemHandle->MessageHandler(hwnd, msg, wparam, lparam);
+			if(System::systemHandle != nullptr )
+				return System::systemHandle->MessageHandler(hwnd, msg, wparam, lparam);
 			else
 				return ::DefWindowProc(hwnd, msg, wparam, lparam);;
 		}

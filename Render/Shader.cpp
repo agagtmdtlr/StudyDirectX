@@ -31,11 +31,10 @@ void Shader::Initialize(std::wstring shaderName, RenderPassState state)
 
 	D3D_SHADER_MACRO macro[] = { "DEBUG" , "0" };
 
-
-
 	/* Compile HLSL */
 	if (state.CheckMask(RenderStage::VS) == true)
 	{
+		//shaderPath = L"Shader/" + shaderName + L"VS.hlsl";
 
 		if (FAILED(D3DCompileFromFile(shaderPath.c_str(), 0, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VSmain", "vs_5_0", 0, 0, GetBlobAddressOf(RenderStage::VS), &errorBlob)))
 		{
@@ -51,7 +50,7 @@ void Shader::Initialize(std::wstring shaderName, RenderPassState state)
 
 	if (state.CheckMask(RenderStage::PS) == true)
 	{
-
+		//shaderPath = L"Shader/" + shaderName + L"PS.hlsl";
 		if (FAILED(D3DCompileFromFile(shaderPath.c_str(), 0, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PSmain", "ps_5_0", 0, 0, GetBlobAddressOf(RenderStage::PS), &errorBlob)))
 		{
 			if (errorBlob)
@@ -179,11 +178,19 @@ void Shader::InitializeInputLayout(D3D11_SHADER_DESC shaderDesc, ID3D11ShaderRef
 			else if (desc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		}
 
+		string name = elementDesc.SemanticName;
+		transform(name.begin(), name.end(), name.begin(), toupper);
+		if (name == "POSITION")
+		{
+			elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			//elementDesc.InputSlot = paramDesc.SemanticIndex;
+		}
+
 		inputLayoutDesc.push_back(elementDesc);
 	}
 
 	auto dc = D3D::GetDevice();
-	HRESULT result = dc->CreateInputLayout(inputLayoutDesc.data(), inputLayoutDesc.size(), blob->GetBufferPointer(), blob->GetBufferSize(), inputlayout.GetAddressOf());
+	HRESULT result = dc->CreateInputLayout(inputLayoutDesc.data(), (UINT)inputLayoutDesc.size(), blob->GetBufferPointer(), blob->GetBufferSize(), inputlayout.GetAddressOf());
 	if (FAILED(result))
 	{
 		std::cout << "failed create input layout" << std::endl;
@@ -226,16 +233,19 @@ void Shader::DrawIndexed(UINT indexCount, UINT startIndexLocation, INT baseVerte
 
 }
 
-void Shader::BeginDraw(ID3D11RenderTargetView* rtv)
+void Shader::DrawIndexedInstanced(UINT indexCount, UINT instanceCount, UINT StartIndexLocation, INT BseVertexLocation, INT StartInstanceLocation)
+{
+	ID3D11DeviceContext* dc = D3D::GetDC();
+	dc->DrawIndexedInstanced(indexCount, instanceCount, StartIndexLocation, BseVertexLocation, StartInstanceLocation);
+}
+
+void Shader::BeginDraw(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv)
 {
 	ID3D11Device* device = D3D::GetDevice();
 	ID3D11DeviceContext* dc = D3D::GetDC();
 
 	dc->RSSetViewports(1, &viewport);
-	dc->OMSetRenderTargets(1, &rtv, nullptr);
-	dc->ClearRenderTargetView(rtv, &state.clearColor.x);
-
-
+	dc->OMSetRenderTargets(1, &rtv, dsv);
 	dc->RSSetState(rss.Get());
 
 	// set the shader objects
@@ -267,10 +277,10 @@ void Shader::BeginDraw(ID3D11RenderTargetView* rtv)
 
 void Shader::EndDraw()
 {
-	ID3D11DeviceContext* dc = D3D::GetDC();
-	dc->VSSetShader(nullptr, 0, 0);
-	dc->PSSetShader(nullptr, 0, 0);
-	dc->IASetInputLayout(nullptr);
+	//ID3D11DeviceContext* dc = D3D::GetDC();
+	//dc->VSSetShader(nullptr, 0, 0);
+	//dc->PSSetShader(nullptr, 0, 0);
+	//dc->IASetInputLayout(nullptr);
 }
 
 ID3DBlob* Shader::GetBlob(RenderStage stage)

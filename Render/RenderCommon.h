@@ -9,7 +9,9 @@
 
 struct Vertex
 {
-	Vector4 position;
+	Vertex() {}
+	Vertex(Vector3 p, Vector3 n, Vector2 uv) : position(p), normal(n), uv(uv) {}
+	Vector3 position;
 	Vector3 normal;
 	Vector2 uv;
 };

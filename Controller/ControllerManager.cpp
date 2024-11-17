@@ -7,6 +7,7 @@
 #include "Button.h"
 #include "Mesh.h"
 #include "Renderer.h"
+#include "Level.h"
 
 ControllerManager* ControllerManager::g_uiManager = nullptr;
 
@@ -32,7 +33,7 @@ void ControllerManager::Initialize()
 
 	// TODO:: UI 레이아웃을 css 구조를 통해 사전에 정의하다록 변경, 여기에 있는 하드코딩 제거
 	CreateUI("material", "material");
-	CreateUI("gizmo", "gizmo");
+	//CreateUI("gizmo", "gizmo");
 	CreateUI("camera", "camera");
 	ImGuiStyle& style = ImGui::GetStyle();
 
@@ -49,27 +50,13 @@ void ControllerManager::UpdateControllerManager()
 	ImGui::Begin("Option");
 
 	ImVec2 pos = ImGui::GetMousePos();
-	ImGui::InputFloat2("Mouse Pos", &pos.x);
+	if(ImGui::IsMousePosValid())
+		ImGui::InputFloat2("Mouse Pos", &pos.x);
 
 	Ray ray = renderer->camera.ScreenPointToRay(Vector2(pos.x, pos.y));
 	ImGui::InputFloat3("ray pos", &ray.position.x);
 	ImGui::InputFloat3("ray dir", &ray.direction.x);
 
-
-	if ( ImGui::IsMouseClicked(ImGuiMouseButton_Left) == true )
-	{
-		Mesh* mesh = renderer->GetSphere();
-		bool intersect = mesh->RayCast(ray);
-		if (intersect == true)
-		{
-			GetController("gizmo")->model = mesh ;
-		}
-	}
-	
-	if (ImGui::IsKeyPressed(ImGuiKey_Escape) == true)
-	{
-		GetController("gizmo")->model.reset();
-	}
 
 	for (auto c : uis)
 	{
@@ -79,9 +66,20 @@ void ControllerManager::UpdateControllerManager()
 
 
 	fileBrowser.Render();
+	sceneDisplayer.Render();
 
 
+	ImGui::Begin("Debug");
+	{
+		ImGui::Text("Size %d %d", D3D::GetWidth(), D3D::GetHeight());
+		ImGui::Text("Display Size %d %d", D3D::GetDisplayWidth(), D3D::GetDisplayHeight());
+		ImGui::Text("Aspect %f", D3D::GetDisplayAspectRatio());
+		//ImGui::Begin("viewport", 0, wflag);		
+	}
+	ImGui::End();
 
+
+	//ImGui::ShowDemoWindow();
 }
 
 void ControllerManager::Render()

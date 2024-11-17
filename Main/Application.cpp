@@ -1,21 +1,18 @@
 #include "stdafx.h"
 #include "Application.h"
-#include "Mesh.h"
 #include "ControllerManager.h"
 
 Application::Application(ControllerManager* uiManager)
     :uiManager(uiManager)
 {
-    sphere.Initialize("sphere", Transform());
-
 }
 
-void Application::Initialize()
+void Application::InitializeApplication()
 {
     // set UI and
 }
 
-Mesh* Application::GetMesh()
+void Application::UpdateApplication()
 {
-    return &sphere;
 }
+

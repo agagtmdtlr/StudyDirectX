@@ -11,6 +11,7 @@
 #include <DirectXTex.h>
 #include "Path.h"
 
+
 using namespace DirectX;
 
 unsigned char* FileManager::LoadImage(const char* filename, int* width, int* height, int* channels)
@@ -33,6 +34,12 @@ unsigned char* FileManager::LoadImage(const char* filename, int* width, int* hei
 void FileManager::WriteImage(const char* filename, int width, int height, int channels, const void* data)
 {
     stbi_write_png(filename, width, height, channels, data, width * channels);
+}
+
+bool FileManager::IsMesh(std::wstring file)
+{
+    wstring ext = Path::GetExtension(file);
+    return ext == L"fbx" || ext == L"obj";
 }
 
 shared_ptr<Texture> TextureManager::RequestTexture(std::wstring filename)
@@ -134,4 +141,8 @@ bool TextureManager::CreateTextureFromFile(const std::wstring& filename)
 shared_ptr<Texture> TextureManager::GetTexture(const std::wstring& filename)
 {
     return textureMap[filename];
+}
+
+void MeshFileManager::RequestMesh(std::wstring filename)
+{
 }

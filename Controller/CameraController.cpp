@@ -3,15 +3,15 @@
 #include "Camera.h"
 #include "Renderer.h"
 #include "imgui.h"
-
+#include "ServiceLoactor.h"
 void CameraController::Render()
 {
 	/*if (model.has_value() == false)
 	{
 		return;
 	}*/
-
-	auto& camera = Renderer::g_renderer->camera;
+	auto renderer = ServiceLoactor::GetService<Renderer>();
+	auto& camera = renderer->camera;
 
 
 	//Camera* camera = any_cast<Camera*>(model);
@@ -25,7 +25,7 @@ void CameraController::Render()
 		ImGui::ResetMouseDragDelta(ImGuiMouseButton_Right);
 	}
 
-	float speed = 0.015f;
+	float speed = 0.015f * accelaration;
 
 	Vector3 dir,up;
 	camera.GetDirectionAndUp(dir,up);
@@ -61,4 +61,15 @@ void CameraController::Render()
 	}
 
 	camera.position += move;
+
+
+	ImGui::Begin("Option");
+	{
+		ImGui::Text("Camera Position %f %f %f", camera.position.x , camera.position.y, camera.position.z);
+		ImGui::Text("Camera Rotation %f %f %f", camera.rotation.x, camera.rotation.y, camera.rotation.z);
+
+		ImGui::InputFloat("Camera Accelaraion", &accelaration);
+	}
+	ImGui::End();
+
 }

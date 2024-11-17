@@ -14,15 +14,18 @@
 class Renderer
 {
 public:
-	static Renderer* g_renderer;
 	Renderer();
+
 	void Initialize(int width, int height);
 	void Update();
 	void UpdateCamera(const Camera& camera);
 	
+	void reserveDrawMesh(shared_ptr<Mesh> mesh);
 	void Render();
+	void BeginUI();
 
-	Mesh* GetSphere() { return sphere.get(); }
+	void Resize(int width, int height);
+
 
 	std::unique_ptr<Shader> renderPass;
 
@@ -32,7 +35,8 @@ public:
 	ComPtr<ID3D11SamplerState> colorSampler;
 
 	shared_ptr<PrimitiveBuffer> primitive;
-	std::unique_ptr<Sphere> sphere;
+
+	std::vector<shared_ptr<Mesh>> meshesForDraw;
 
 	Camera camera;
 };

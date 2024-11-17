@@ -1,10 +1,13 @@
 #pragma once
-
+#include <DirectXTex.h>
 
 class Texture
 {
 public:
 	Texture(TexMetadata metaData, ID3D11ShaderResourceView* srv);
+	Texture(TexMetadata& metaData, DirectX::ScratchImage& simg);
+	Texture(TexMetadata& metaData);
+
 
 	ID3D11ShaderResourceView* GetSRV() {return srv.Get(); }
 	ID3D11RenderTargetView* GetRTV() { return rtv.Get(); }

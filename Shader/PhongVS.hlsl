@@ -1,11 +1,9 @@
-cbuffer MatrixBuffer : register(b0)
+cbuffer MatrixBuffer
 {
     matrix worldMatrix;
     matrix viewMatrix;
     matrix projectionMatrix;
 };
-
-
 
 static float3 lightDir = float3(0.5, -0.5, 0.5);
 
@@ -14,13 +12,14 @@ struct Material
     float amb;
     float diff;
     float spec;
-    float alpha;    
+    float alpha;
 };
 
 struct InstanceConst
 {
     uint materialID;
 };
+
 
 #define INSTANCE_MAX_COUNT 1024
 
@@ -48,41 +47,19 @@ struct VSOutput
     float2 uv : TEXCOORD;
 };
 
-Texture2D baseColorTexture : register(t0);
-SamplerState baseColorSampler : register(s0);
-
-struct Light
-{
-    float4 position;
-};
-
-
-VSOutput VSmain(VSInput vsInput)
+VSOutput main(VSInput vsInput)
 {
     VSOutput vsOutput;
     
-    vsInput.position.w = 1;    
-    vsOutput.position = mul(vsInput.position, worldMatrix);
+    vsOutput.position = vsInput.position;
+    
+    vsOutput.position = mul(vsOutput.position, worldMatrix);
     vsOutput.position = mul(vsOutput.position, viewMatrix);
     vsOutput.position = mul(vsOutput.position, projectionMatrix);
     
-    vsOutput.normal = mul(vsInput.normal, (float3x3)worldMatrix);
+    vsOutput.normal = mul(vsInput.normal, (float3x3) worldMatrix);
     vsOutput.normal = normalize(vsOutput.normal);
     
     vsOutput.uv = vsInput.uv;
     return vsOutput;
-}
-
-float4 PSmain(VSOutput vsOutput) : SV_TARGET
-{
-    float3 l = -normalize(lightDir);
-    float3 n = normalize(vsOutput.normal);
-    float LdotN = dot(l, n);
-    float2 uv = vsOutput.uv;
-    
-    float4 color = float4(0.2, 0.1, 0.1, 1);
-    color += float4(0,1, 0, 1) * LdotN;
-    return color;
-    
-    //return baseColorTexture.Sample(baseColorSampler, vsOutput.uv);
 }

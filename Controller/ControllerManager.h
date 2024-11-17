@@ -6,6 +6,7 @@
 
 #include "Filebrowser.h"
 #include "PropertyBrowser.h"
+#include "SceneDisplayer.h"
 struct ControllerLinkNode
 {
 	unique_ptr<Controller> ui;
@@ -42,6 +43,6 @@ public:
 	class Renderer* renderer = nullptr;
 
 	FileBrowser fileBrowser;
-
+	SceneDisplayer sceneDisplayer;
 };
 

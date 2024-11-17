@@ -116,17 +116,18 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GLM_ENABLE_EXPERIMENTAL;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>IMGUI_DEFINE_MATH_OPERATORS;GLM_ENABLE_EXPERIMENTAL;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <OpenMPSupport>true</OpenMPSupport>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>./imgui;./Utility;./System;./Resource;./Render;./Main;./Geometry;./Controller;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(StudyDirect);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(StudyDirect);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -159,10 +160,12 @@
     <ClCompile Include="Controller\Input.cpp" />
     <ClCompile Include="Controller\MaterialController.cpp" />
     <ClCompile Include="Controller\PropertyBrowser.cpp" />
+    <ClCompile Include="Controller\SceneDisplayer.cpp" />
     <ClCompile Include="Geometry\Mesh.cpp" />
     <ClCompile Include="Geometry\Sphere.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Main\Application.cpp" />
+    <ClCompile Include="Main\Editor.cpp" />
     <ClCompile Include="Render\Light.cpp" />
     <ClCompile Include="Render\Material.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
@@ -170,6 +173,7 @@
     <ClCompile Include="Resource\ConstantBuffer.cpp" />
     <ClCompile Include="Resource\PrimitiveBuffer.cpp" />
     <ClCompile Include="Resource\Texture.cpp" />
+    <ClCompile Include="Geometry\StaticMesh.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -177,6 +181,7 @@
     <ClCompile Include="System\Camera.cpp" />
     <ClCompile Include="System\D3D.cpp" />
     <ClCompile Include="System\Level.cpp" />
+    <ClCompile Include="System\ServiceLoactor.cpp" />
     <ClCompile Include="System\System.cpp" />
     <ClCompile Include="System\Transform.cpp" />
     <ClCompile Include="Utility\Debugger.cpp" />
@@ -194,9 +199,11 @@
     <ClInclude Include="Controller\Input.h" />
     <ClInclude Include="Controller\MaterialController.h" />
     <ClInclude Include="Controller\PropertyBrowser.h" />
+    <ClInclude Include="Controller\SceneDisplayer.h" />
     <ClInclude Include="Geometry\Mesh.h" />
     <ClInclude Include="Geometry\Sphere.h" />
     <ClInclude Include="Main\Application.h" />
+    <ClInclude Include="Main\Editor.h" />
     <ClInclude Include="Render\Light.h" />
     <ClInclude Include="Render\Material.h" />
     <ClInclude Include="Render\RenderCommon.h" />
@@ -207,11 +214,13 @@
     <ClInclude Include="Resource\PrimitiveBuffer.h" />
     <ClInclude Include="Resource\Texture.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Geometry\StaticMesh.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="System\Callback.h" />
     <ClInclude Include="System\Camera.h" />
     <ClInclude Include="System\D3D.h" />
     <ClInclude Include="System\Level.h" />
+    <ClInclude Include="System\ServiceLoactor.h" />
     <ClInclude Include="System\System.h" />
     <ClInclude Include="System\Transform.h" />
     <ClInclude Include="Utility\Debugger.h" />
@@ -231,21 +240,21 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Shader\PS.hlsl">
+    <FxCompile Include="Shader\PhongPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_Release|Win32'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="Shader\VS.hlsl">
+    <FxCompile Include="Shader\PhongVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_Release|Win32'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,5 +6,8 @@ public:
 	virtual ~CameraController() override {}
 
 	virtual void Render() override;
+
+private:
+	float accelaration = 1.0f;
 };
 

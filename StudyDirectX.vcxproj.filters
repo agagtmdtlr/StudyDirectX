@@ -123,6 +123,10 @@
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="Controller\PropertyBrowser.cpp" />
+    <ClCompile Include="Controller\SceneDisplayer.cpp" />
+    <ClCompile Include="Geometry\StaticMesh.cpp" />
+    <ClCompile Include="Main\Editor.cpp" />
+    <ClCompile Include="System\ServiceLoactor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -220,17 +224,17 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Controller\PropertyBrowser.h" />
+    <ClInclude Include="Controller\SceneDisplayer.h" />
+    <ClInclude Include="Geometry\StaticMesh.h" />
+    <ClInclude Include="Main\Editor.h" />
+    <ClInclude Include="System\ServiceLoactor.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader\VS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\PS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
     <FxCompile Include="Shader\Phong.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Shader\PhongVS.hlsl" />
+    <FxCompile Include="Shader\PhongPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Config\StudDirectX.txt">

@@ -7,6 +7,7 @@ class FileManager
 public:
 	static unsigned char* LoadImage(const char* filename, int* width, int* height, int* channels);
 	static void WriteImage(const char* filename, int width, int height, int channels, const void* data);
+	static bool IsMesh(std::wstring file);
 };
 
 class TextureManager
@@ -26,4 +27,8 @@ private:
 	TextureMap textureMap;
 };
 
-
+class MeshFileManager
+{
+public:
+	void RequestMesh(std::wstring filename);
+};

@@ -36,7 +36,7 @@ void ConstantBuffer::Initialize(UINT bufferSize)
 bool ConstantBuffer::UpdateData(const Update_ConstantBuffe_Desc& desc)
 {
 	auto dc = D3D::GetDC();
-	void* data = desc.data;
+	void* data = (MatrixBufferType*)desc.data;
 	UINT dataSize = desc.dataSize;
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;

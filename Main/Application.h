@@ -1,6 +1,4 @@
 #pragma once
-#include "Sphere.h"
-#include "Camera.h"
 
 class Mesh;
 class ControllerManager;
@@ -8,11 +6,9 @@ class Application
 {
 public:
 	Application(ControllerManager* uiManager);
-	void Initialize();
-	Mesh* GetMesh();
-	Sphere sphere;
+	virtual void InitializeApplication();
+	virtual void UpdateApplication();
 
-	Camera camera;
 	ControllerManager* uiManager;
 };
 

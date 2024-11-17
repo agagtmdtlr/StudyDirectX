@@ -11,43 +11,132 @@
 #include <string_view>
 #include <vector>
 #include "Texture.h"
-using ImGuiFileBrowserFlags = int;
+#include <oleidl.h>
 
-enum ImGuiFileBrowserFlags_ : std::uint32_t
+
+class FileImporter
 {
-    ImGuiFileBrowserFlags_SelectDirectory = 1 << 0,  // select directory instead of regular file
-    ImGuiFileBrowserFlags_EnterNewFilename = 1 << 1,  // allow user to enter new filename when selecting regular file
-    ImGuiFileBrowserFlags_NoModal = 1 << 2,  // file browsing window is modal by default. specify this to use a popup window
-    ImGuiFileBrowserFlags_NoTitleBar = 1 << 3,  // hide window title bar
-    ImGuiFileBrowserFlags_NoStatusBar = 1 << 4,  // hide status bar at the bottom of browsing window
-    ImGuiFileBrowserFlags_CloseOnEsc = 1 << 5,  // close file browser when pressing 'ESC'
-    ImGuiFileBrowserFlags_CreateNewDir = 1 << 6,  // allow user to create new directory
-    ImGuiFileBrowserFlags_MultipleSelection = 1 << 7,  // allow user to select multiple files. this will hide ImGuiFileBrowserFlags_EnterNewFilename
-    ImGuiFileBrowserFlags_HideRegularFiles = 1 << 8,  // hide regular files when ImGuiFileBrowserFlags_SelectDirectory is enabled
-    ImGuiFileBrowserFlags_ConfirmOnEnter = 1 << 9,  // confirm selection when pressing 'ENTER'
-    ImGuiFileBrowserFlags_SkipItemsCausingError = 1 << 10, // when entering a new directory, any error will interrupt the process, causing the file browser to fall back to the working directory.
-    // with this flag, if an error is caused by a specific item in the directory, that item will be skipped, allowing the process to continue.
-    ImGuiFileBrowserFlags_EditPathString = 1 << 11, // allow user to directly edit the whole path string
+public:
+
+};
+
+struct AssetHeader
+{
+	UINT version;
+	UINT type; // skinned or mesh
 };
 
 class FileBrowser : public Controller
 {
 
 public:
-    FileBrowser();
-    virtual void Render();
+	FileBrowser();
+	virtual void Render();
 
-    void Move(std::filesystem::path pth );
-    std::filesystem::path curpath;
-    std::filesystem::path rootPath;
+	void ImportFile();
 
-    std::vector<std::filesystem::directory_entry> entrys;
-    std::vector<std::string> tokens;
+	void Move(std::filesystem::path pth);
+	std::filesystem::path curpath;
+	std::filesystem::path rootPath;
 
-    shared_ptr<Texture> folderIco;
-    shared_ptr<Texture> fileIco;
-    shared_ptr<Texture> imgIco;
-    shared_ptr<Texture> test;
+	std::vector<std::filesystem::directory_entry> entrys;
+	std::vector<std::string> tokens;
+
+	shared_ptr<Texture> folderIco;
+	shared_ptr<Texture> fileIco;
+	shared_ptr<Texture> imgIco;
+	shared_ptr<Texture> meshIco;
+
+	shared_ptr<Texture> test;
 
 
+};
+
+// create a clas inheriting from IDRopTarget
+class DropManager :public IDropTarget
+{
+public:
+	//--- implement the IUnknown parts
+	// you could do this the proper way iwth InterlockedIncrement etc
+	// but I've left out stuff that's not exactly necessary for brevity
+	ULONG AddRef() { return 1; }
+	ULONG Release() { return 0; }
+
+	// we handle drop tharget let other kno
+	HRESULT QueryInterface(REFIID riid, void** ppvObject)
+	{
+		if (riid == IID_IDropTarget)
+		{
+			*ppvObject = this;
+			return S_OK;
+		}
+		*ppvObject = NULL;
+		return E_NOINTERFACE;
+	}
+
+	//--- implement the IDropTarget parts
+	// occurs when we drag files into our applications view
+	HRESULT DragEnter(IDataObject* pDataObj, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect)
+	{
+		// TODO: check whether we can handle this type of object at all and set *pdwEffect &= DROPEFFECT_NONE if not;
+		// do something useful to flag to our application that files have been dragged from the OS into our application
+		// trigger MouseDown for button 1 within ImGui
+		//ImGui::IsMouseClicked()
+
+		*pdwEffect &= DROPEFFECT_COPY;
+		return S_OK;
+	}
+
+	// occurs when we drag files out from our applications view
+	HRESULT DragLeave() { return S_OK; }
+	// occurs when we drag the mouse over our applications view whilst carrying files (post Enter, pre Leave)
+	HRESULT DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect)
+	{
+		// trigger MouseMove within ImGui, position is within pt.x and pt.y
+		// grfKeyState contains flags for control, alt, shift etc
+		//...
+
+		*pdwEffect &= DROPEFFECT_COPY;
+		return S_OK;
+	}
+
+	// occurs when we release the mouse button to finish the drag-drop operation
+	HRESULT Drop(IDataObject* pDataObj, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect)
+	{
+		// grfKeyState contains flags for control, alt, shift etc
+
+		// render the data into stgm using the data description in fmte
+		FORMATETC fmte = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
+		STGMEDIUM stgm;
+
+		if (SUCCEEDED(pDataObj->GetData(&fmte, &stgm)))
+		{
+			HDROP hdrop = (HDROP)stgm.hGlobal; // or reinterpret_cast<HDROP> if preferred
+			UINT file_count = DragQueryFile(hdrop, 0xFFFFFFFF, NULL, 0);
+
+			// we can drag more than one file at the same time, so we have to loop here
+			for (UINT i = 0; i < file_count; i++)
+			{
+				TCHAR szFile[MAX_PATH];
+				UINT cch = DragQueryFile(hdrop, i, szFile, MAX_PATH);
+				if (cch > 0 && cch < MAX_PATH)
+				{
+					// szFile contains the full path to the file, do something useful with it
+					// i.e. add it to a vector or something
+				}
+			}
+
+			// we have to release the data when we're done with it
+			ReleaseStgMedium(&stgm);
+
+			// notify our application somehow that we've finished dragging the files (provide the data somehow)
+			//...
+		}
+
+		// trigger MouseUp for button 1 within ImGui
+		//...
+
+		*pdwEffect &= DROPEFFECT_COPY;
+		return S_OK;
+	}
 };

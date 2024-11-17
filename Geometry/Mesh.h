@@ -7,12 +7,12 @@ public:
 
 	Mesh();
 	virtual ~Mesh();
+	virtual void LoadMesh(string path) = 0;
 	virtual void Update();
-	virtual void Render();
-	virtual void Initialize(std::string name, Transform transform);
-
+	void RenderMesh();
+	
+	virtual void Initialize(Transform transform);
 	virtual bool RayCast(const Ray& ray) {return false;}
-
 	virtual std::string GetBufferName() { return std::string(typeid(*this).name()); }
 
 
@@ -21,16 +21,19 @@ public:
 	Material::Description GetMaterialDesctription() { return material.desc; }
 
 public:
-	class PrimitiveBuffer* GetBuffer();
-	UINT GetIndexCount();
+	class PrimitiveBuffer* GetBuffer(UINT index);
+	UINT GetBufferCount();
 
 protected:
-	shared_ptr<PrimitiveBuffer> buffer;
+	shared_ptr<class PrimitiveBufferContainer> buffer;
 	Transform transform;
-private:
-	UINT id;
+	BoundingBox aabb;
 	string name;
+
+private:
+	UINT id;	
 	Material material;
+
 
 
 	static UINT idGenerator;

@@ -95,8 +95,9 @@ struct Shader
 	void InitRasterizerState();
 	void InitializeSampler();
 	void DrawIndexed(UINT indexCount, UINT StartIndexLocation, INT BseVertexLocation);
+	void DrawIndexedInstanced(UINT indexCount, UINT instanceCount, UINT StartIndexLocation, INT BseVertexLocation, INT StartInstanceLocation);
 
-	void BeginDraw(ID3D11RenderTargetView* rtv);
+	void BeginDraw(ID3D11RenderTargetView* rtv,ID3D11DepthStencilView* dsv);
 	void EndDraw();
 
 	void BindPrimitiveBuffer(PrimitiveBuffer* buffer);

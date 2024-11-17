@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include "PrimitiveBuffer.h"
+#include "Renderer.h"
 
 UINT Mesh::idGenerator = 0;
 set<UINT> Mesh::instancesUID;
@@ -25,35 +26,29 @@ void Mesh::Update()
 {	
 }
 
-void Mesh::Render()
+void Mesh::RenderMesh()
 {
-	auto dc = D3D::GetDC();
-	UINT stride = buffer->GetVertexStride();
-	UINT offset = 0;
-
-	dc->IASetVertexBuffers(0, 1, buffer->GetVertexBufferAddressOf(), &stride, &offset);
-	dc->IASetIndexBuffer(buffer->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
-
-	dc->IASetPrimitiveTopology(buffer->GetTopology());
 }
 
-void Mesh::Initialize(string name, Transform transform)
+void Mesh::Initialize(Transform transform)
 {
 	this->transform = transform;
-	this->name = name;
 }
+
 
 void Mesh::SetWorldMatrix(Matrix& matrix)
 {
 	transform = Transform(matrix);
 }
 
-PrimitiveBuffer* Mesh::GetBuffer()
+PrimitiveBuffer* Mesh::GetBuffer(UINT index)
 {
-	return buffer.get();
+	vector<unique_ptr<PrimitiveBuffer>>& v = buffer->buffers;
+	return v[index].get();
 }
 
-UINT Mesh::GetIndexCount()
+UINT Mesh::GetBufferCount()
 {
-	return buffer->GetIndexCount();
+	vector<unique_ptr<PrimitiveBuffer>>& v = buffer->buffers;
+	return v.size();
 }

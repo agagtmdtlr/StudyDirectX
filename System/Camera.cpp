@@ -3,6 +3,9 @@
 
 Matrix Camera::GetProjection()
 {
+	//aspectRatio = D3D::GetDisplayAspectRatio();
+	aspectRatio = D3D::GetDisplayAspectRatio();
+
 
 	return SimpleMath::Matrix::CreatePerspectiveFieldOfView(XMConvertToRadians(fov), aspectRatio, nearPlane, farPlane);
 
@@ -33,7 +36,7 @@ Matrix Camera::GetViewProjection()
 
 Ray Camera::ScreenPointToRay(Vector2 mousePos)
 {
-	Vector3 relative = Vector3(mousePos.x, mousePos.y, 1) / Vector3(D3D::GetWidth(), D3D::GetHeight(), 1);
+	Vector3 relative = Vector3(mousePos.x, mousePos.y, 1) / Vector3(D3D::GetDisplayWidth(), D3D::GetDisplayHeight(), 1);
 	relative.x -= 0.5f;
 	relative.y = 1.0f - relative.y;
 	relative.y -= 0.5f;
