@@ -49,26 +49,34 @@ void StaticMesh::LoadMaterial(std::filesystem::path path)
 
 	xml_node<>* root = doc.first_node();
 	// materials
-	node_iterator it(root);
 
+	xml_node<>* mt_node = root->first_node();
 
-	for( ; it != node_iterator<char>(); )
+	for( ; mt_node != nullptr; )
 	{
 		Material material;
-		std::cout << it->name() << endl;
-		auto& m = *it;
-		node_iterator texture(&m);
-		for (; texture != node_iterator<char>(); )
-		{
-			std::cout << texture->name() << " " <<  texture->value() << endl;
-			++texture;
+		std::cout << mt_node->name() << endl;
 
-			string str = texture->value();
+		xml_node<>* tx_node = mt_node->first_node();
+
+		for (; tx_node != nullptr; )
+		{
+			std::cout << tx_node->name() << " " << tx_node->value() << endl;
+
+			string str = tx_node->value();
 			wstring path;
 			path.assign(str.begin(),str.end());
-			material = TextureManager::RequestTexture(path);
+			if( tx_node->name() == "diffuse")
+				material.baseTexture = TextureManager::RequestTexture(path);
+			else if(tx_node->name() == "normal")
+				material.normalTexture = TextureManager::RequestTexture(path);
+
+			materials.push_back(material);
+
+			tx_node = tx_node->next_sibling();
 		}
-		++it;
+
+		mt_node = mt_node->next_sibling();
 	}
 
 

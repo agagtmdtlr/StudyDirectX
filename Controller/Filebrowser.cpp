@@ -31,11 +31,29 @@ FileBrowser::FileBrowser()
 	curpath = fs::absolute(curpath);
 	Move(curpath);
 
-	folderIco = TextureManager::RequestTexture(L"icon/folder.png");
-	fileIco = TextureManager::RequestTexture(L"icon/file.png");
-	imgIco = TextureManager::RequestTexture(L"icon/image.png");
-	meshIco = TextureManager::RequestTexture(L"icon/mesh.png");
-	test = TextureManager::RequestTexture(L"back.jpg");
+	{
+		fs::path ipath;
+		ipath = curpath;
+		ipath += L"/icon/folder.png";
+		folderIco = TextureManager::RequestTexture(ipath);
+
+		ipath = curpath;
+		ipath += L"/icon/file.png";
+		fileIco = TextureManager::RequestTexture(ipath);
+
+		ipath = curpath;
+		ipath += L"/icon/image.png";
+		imgIco = TextureManager::RequestTexture(ipath);
+
+		ipath = curpath;
+		ipath += L"/icon/mesh.png";
+		meshIco = TextureManager::RequestTexture(ipath);
+
+		ipath = curpath;
+		ipath += L"/back.jpg";
+		test = TextureManager::RequestTexture(ipath);
+	}
+	
 
 }
 
@@ -175,13 +193,17 @@ void FileBrowser::Render()
 
 }
 
-void FileBrowser::ImportMaterial(const aiScene* scene, std::filesystem::path fname)
+void FileBrowser::ImportMaterial(const aiScene* scene, std::filesystem::path fpath)
 {
 	rapidxml::xml_document<> doc;
 	xml_node<>* decl = doc.allocate_node(node_declaration);
 	decl->append_attribute(doc.allocate_attribute("version", "1.0"));
 	decl->append_attribute(doc.allocate_attribute("encoding", "utf-8"));
 	doc.append_node(decl);
+
+	std::filesystem::path fname = fpath.filename();
+	fname.replace_extension();
+	std::filesystem::path dirpath = fpath.parent_path();
 
 	// root node
 	xml_node<>* root = doc.allocate_node(node_element, "material");
@@ -209,14 +231,16 @@ void FileBrowser::ImportMaterial(const aiScene* scene, std::filesystem::path fna
 		else if (AI_SUCCESS == material->GetTexture(aiTextureType_NORMALS, 0, &normal)) {}
 		else if (AI_SUCCESS == material->GetTexture(aiTextureType_NORMAL_CAMERA, 0, &normal)) {}
 
-		string diffusefullpath = curpath.string();
+		string diffusefullpath = dirpath.string();
+		diffusefullpath += "\\";
 		diffusefullpath += diffuse.C_Str();
 
 		xml_node<>* diff = doc.allocate_node(node_element, "diffuse", doc.allocate_string(diffusefullpath.c_str()));
 		child->append_node(diff);
 		std::cout << "diffuse " << diffuse.C_Str() << endl;
 
-		string normalfullpath = curpath.string();
+		string normalfullpath = dirpath.string();
+		normalfullpath += "\\";
 		normalfullpath += normal.C_Str();
 
 		xml_node<>* nor = doc.allocate_node(node_element, "normal", doc.allocate_string(normalfullpath.c_str()));
@@ -371,7 +395,7 @@ void FileBrowser::ImportFile()
 
 				if(scene->HasMaterials())
 				{
-					ImportMaterial(scene,fname);
+					ImportMaterial(scene, fpath);
 				}
 
 				if (scene->hasSkeletons())

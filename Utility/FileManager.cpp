@@ -112,6 +112,13 @@ shared_ptr<Texture> TextureManager::RequestTexture(std::wstring filename)
     return manager->GetTexture(filename);
 }
 
+shared_ptr<Texture> TextureManager::RequestTexture(std::string filename)
+{
+    wstring wfilename;
+    wfilename.assign(filename.begin(),filename.end());
+    return TextureManager::RequestTexture(wfilename);
+}
+
 bool TextureManager::ConvertImageToDDS(std::wstring src, std::wstring dest)
 {
     return false;
@@ -147,9 +154,8 @@ bool TextureManager::CreateTextureFromFile(const std::wstring& filename)
     ZeroMemory(&metaData, sizeof(metaData));
     ScratchImage scratchimage;
 
-    std::wstring fullPth = L"../Resources/";
-    fullPth += filename;
-    HRESULT hr;
+    std::wstring fullPth = filename;
+    HRESULT hr = 0;
     if (ext == L"png" || ext == L"jpg")
     {
         //DirectX::GetMetadataFromWICFile(filename.c_str(), WIC_FLAGS::WIC_FLAGS_NONE , metaData );
@@ -158,6 +164,10 @@ bool TextureManager::CreateTextureFromFile(const std::wstring& filename)
     else if (ext == L"dds")
     {
         hr = DirectX::LoadFromDDSFile(fullPth.c_str(), DDS_FLAGS::DDS_FLAGS_NONE, &metaData, scratchimage);
+    }
+    else
+    {
+        hr = E_FAIL;
     }
 
     if (FAILED(hr))

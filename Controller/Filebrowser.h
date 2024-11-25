@@ -35,7 +35,7 @@ public:
 	FileBrowser();
 	virtual void Render();
 
-	void ImportMaterial(const aiScene* scene, std::filesystem::path fname);
+	void ImportMaterial(const aiScene* scene, std::filesystem::path fpath);
 	void ImportMesh(const aiScene* scene, std::filesystem::path fname);
 
 	void ImportFile();

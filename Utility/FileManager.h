@@ -17,6 +17,8 @@ class TextureManager
 {
 public:
 	static shared_ptr<Texture> RequestTexture(std::wstring filename);
+	static shared_ptr<Texture> RequestTexture(std::string filename);
+
 	static bool ConvertImageToDDS(std::wstring src, std::wstring dest);
 	static bool IsImage(std::wstring file);
 
