@@ -1,22 +1,77 @@
 #include "stdafx.h"
 #include "StaticMesh.h"
 #include "PrimitiveBuffer.h"
-
-#include <filesystem> // c++17
+#include "FileManager.h"
+#include <filesystem>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <fstream>
+
+#include <rapidxml/rapidxml.hpp>
+#include <rapidxml/rapidxml_utils.hpp>
+#include <rapidxml/rapidxml_iterators.hpp>
+
 StaticMesh::StaticMesh()
 	:Mesh()
 {
-	
-
 }
 
 void StaticMesh::LoadMesh(string path)
 {
+	std::filesystem::path fpath(path);
+	fpath.replace_extension();
+
+	LoadMaterial(fpath);
 	LoadBinary(path);
+}
+
+void StaticMesh::LoadMaterial(std::filesystem::path path)
+{
+	using namespace rapidxml;
+
+	std::filesystem::path fpath = "./Content/";
+	fpath += path;
+	fpath += ".material";
+
+	if (std::filesystem::exists(fpath) == false)
+	{
+		std::cout << "do not found material : " << fpath.c_str() << endl;
+	}
+
+	std::ifstream xmlfile(fpath.c_str());
+	std::vector<char> buffer(
+	(std::istreambuf_iterator<char>(xmlfile)),
+	std::istreambuf_iterator<char>());
+	buffer.push_back('\0'); // Add null terminator
+	xml_document<> doc;
+	doc.parse<0>(buffer.data());
+
+	xml_node<>* root = doc.first_node();
+	// materials
+	node_iterator it(root);
+
+
+	for( ; it != node_iterator<char>(); )
+	{
+		Material material;
+		std::cout << it->name() << endl;
+		auto& m = *it;
+		node_iterator texture(&m);
+		for (; texture != node_iterator<char>(); )
+		{
+			std::cout << texture->name() << " " <<  texture->value() << endl;
+			++texture;
+
+			string str = texture->value();
+			wstring path;
+			path.assign(str.begin(),str.end());
+			material = TextureManager::RequestTexture(path);
+		}
+		++it;
+	}
+
+
 }
 
 void StaticMesh::LoadBinary(string path)
@@ -33,6 +88,10 @@ void StaticMesh::LoadBinary(string path)
 	char* readbuf = nullptr;
 	UINT mSize;
 	inputFile.read(reinterpret_cast<char*>(&mSize), sizeof(UINT));
+	if (inputFile.is_open() == false)
+	{
+		return;
+	}
 
 	for (UINT i = 0; i < mSize; i++)
 	{

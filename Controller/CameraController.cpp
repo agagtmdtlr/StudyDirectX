@@ -25,7 +25,7 @@ void CameraController::Render()
 		ImGui::ResetMouseDragDelta(ImGuiMouseButton_Right);
 	}
 
-	float speed = 0.015f * accelaration;
+	float speed = 1.5f * accelaration;
 
 	Vector3 dir,up;
 	camera.GetDirectionAndUp(dir,up);
@@ -63,7 +63,7 @@ void CameraController::Render()
 	camera.position += move;
 
 
-	ImGui::Begin("Option");
+	ImGui::Begin("Game Option");
 	{
 		ImGui::Text("Camera Position %f %f %f", camera.position.x , camera.position.y, camera.position.z);
 		ImGui::Text("Camera Rotation %f %f %f", camera.rotation.x, camera.rotation.y, camera.rotation.z);

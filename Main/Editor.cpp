@@ -10,18 +10,32 @@ Editor::Editor(ControllerManager* uiManager)
 	level = make_unique<Level>();
 }
 
+void CreateSponza(Editor* editor)
+{
+	shared_ptr<StaticMesh> mesh = make_shared<StaticMesh>(StaticMesh());
+	mesh->LoadMesh("sponza.asset");
+	Transform transform;
+	transform.position.y = -1.0;
+	transform.rotation.y = 180;
+
+	mesh->Initialize(transform);
+	editor->level->AddMesh(mesh);
+}
+
 void CreateCube(Editor* editor)
 {
-	shared_ptr<Cube> cube = make_shared<Cube>();
-	cube->LoadMesh("");
+	//shared_ptr<Cube> cube = make_shared<Cube>();
+	//cube->LoadMesh("");
 	Transform t;
 	t.position.x = 2.f;
 	t.rotation.y = 45.f;
 	t.rotation.x = 45.f;
 
 
-	cube->Initialize(t);
-	editor->level->AddMesh(cube);
+	shared_ptr<StaticMesh> mesh = make_shared<StaticMesh>(StaticMesh());
+	mesh->LoadMesh("cube.asset");
+	mesh->Initialize(t);
+	editor->level->AddMesh(mesh);
 }
 
 
@@ -51,10 +65,10 @@ void CreateBunny(Editor* editor)
 void Editor::InitializeApplication()
 {
 	level->LoadLevel("");
-
-	CreateBunny(this);
-	CreateCube(this);
-	CreateSphere(this);
+	CreateSponza(this);
+	//CreateBunny(this);
+	//CreateCube(this);
+	//CreateSphere(this);
 
 	
 }

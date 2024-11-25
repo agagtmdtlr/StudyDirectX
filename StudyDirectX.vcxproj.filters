@@ -34,6 +34,9 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{b4447c89-55f1-458d-9d0c-02b87116972b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderPass">
+      <UniqueIdentifier>{a2a7716c-e465-4abe-9197-091fb2ab3a09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -122,11 +125,22 @@
     <ClCompile Include="Utility\Path.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Controller\PropertyBrowser.cpp" />
-    <ClCompile Include="Controller\SceneDisplayer.cpp" />
-    <ClCompile Include="Geometry\StaticMesh.cpp" />
-    <ClCompile Include="Main\Editor.cpp" />
     <ClCompile Include="System\ServiceLoactor.cpp" />
+    <ClCompile Include="RenderPass\PhongShader.cpp">
+      <Filter>RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="Main\Editor.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Geometry\StaticMesh.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller\PropertyBrowser.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller\SceneDisplayer.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -223,18 +237,27 @@
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Controller\PropertyBrowser.h" />
-    <ClInclude Include="Controller\SceneDisplayer.h" />
-    <ClInclude Include="Geometry\StaticMesh.h" />
-    <ClInclude Include="Main\Editor.h" />
     <ClInclude Include="System\ServiceLoactor.h" />
+    <ClInclude Include="RenderPass\PhongShader.h">
+      <Filter>RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="Main\Editor.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry\StaticMesh.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller\PropertyBrowser.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller\SceneDisplayer.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\Phong.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\PhongVS.hlsl" />
-    <FxCompile Include="Shader\PhongPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Config\StudDirectX.txt">

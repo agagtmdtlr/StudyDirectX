@@ -1,6 +1,8 @@
 #pragma once
 
 
+class Texture;
+
 class Material
 {
 public:
@@ -13,6 +15,10 @@ public:
 	};
 
 	Description desc;
+
+	shared_ptr<Texture> baseTexture;
+	shared_ptr<Texture> normalTexture;
+
 };
 
 

@@ -19,7 +19,7 @@
 void SceneDisplayer::Render()
 {
 	bool bopen = true;
-	ImGuiWindowFlags wflag = ImGuiWindowFlags_None;
+	ImGuiWindowFlags wflag = ImGuiWindowFlags_AlwaysAutoResize;
 	//wflag |= ImGuiWindowFlags_NoBackground;
 	ImGuiDragDropFlags dndFlag = ImGuiDragDropFlags_None;
 
@@ -36,7 +36,7 @@ void SceneDisplayer::Render()
 		ImTextureID txid = (ImTextureID)(D3D::GetSRV());
 
 		ImVec2 sz = ImGui::GetWindowContentRegionMax() - ImGui::GetWindowContentRegionMin();
-		//ImVec2 sz = ImGui::GetContentRegionAvail();
+		sz = ImGui::GetContentRegionAvail();
 		D3D::SetDisplaySize(sz.x,sz.y);
 		 
 		ImVec2 pos = ImGui::GetMousePos()-ImGui::GetWindowPos();

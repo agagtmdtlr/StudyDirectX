@@ -5,16 +5,12 @@ cbuffer MatrixBuffer : register(b0)
     matrix projectionMatrix;
 };
 
-
-
 static float3 lightDir = float3(0.5, -0.5, 0.5);
+
 
 struct Material
 {
-    float amb;
-    float diff;
-    float spec;
-    float alpha;    
+    uint diff;
 };
 
 struct InstanceConst
@@ -48,8 +44,12 @@ struct VSOutput
     float2 uv : TEXCOORD;
 };
 
-Texture2D baseColorTexture : register(t0);
-SamplerState baseColorSampler : register(s0);
+Texture2D baseTexture: register(t0);
+SamplerState baseSampler : register(s0);
+
+Texture2D bumpTexture : register(t1);
+SamplerState bumpSampler : register(s1);
+
 
 struct Light
 {
@@ -73,6 +73,13 @@ VSOutput VSmain(VSInput vsInput)
     return vsOutput;
 }
 
+float4 SampleMaterial(in Texture2D tx, in SamplerState samp , in float2 uv)
+{
+    float4 color = float4(0, 0, 0, 1);
+    color = tx.Sample(samp, uv);
+    return color;
+}
+
 float4 PSmain(VSOutput vsOutput) : SV_TARGET
 {
     float3 l = -normalize(lightDir);
@@ -81,7 +88,12 @@ float4 PSmain(VSOutput vsOutput) : SV_TARGET
     float2 uv = vsOutput.uv;
     
     float4 color = float4(0.2, 0.1, 0.1, 1);
-    color += float4(0,1, 0, 1) * LdotN;
+    
+    const uint diff_id = materials[0].diff;
+    
+    float4 diff = SampleMaterial(baseTexture, baseSampler, uv);
+    
+    color += diff * LdotN;
     return color;
     
     //return baseColorTexture.Sample(baseColorSampler, vsOutput.uv);

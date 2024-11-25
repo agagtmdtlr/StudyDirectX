@@ -6,14 +6,16 @@
 #include <commdlg.h>
 #include "System.h"
 #include <assimp/Importer.hpp>
+#include <assimp/Exporter.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <sstream>
 #include <fstream>
-
-
+#include <rapidxml/rapidxml.hpp>
+#include <rapidxml/rapidxml_ext.hpp>
+#include <rapidxml/rapidxml_print.hpp>
 namespace fs = std::filesystem;
-
+using namespace rapidxml;
 
 FileBrowser::FileBrowser()
 {
@@ -160,7 +162,7 @@ void FileBrowser::Render()
 		//ImGui::EndChild();
 
 
-		
+
 	}
 	ImGui::End();
 
@@ -173,6 +175,143 @@ void FileBrowser::Render()
 
 }
 
+void FileBrowser::ImportMaterial(const aiScene* scene, std::filesystem::path fname)
+{
+	rapidxml::xml_document<> doc;
+	xml_node<>* decl = doc.allocate_node(node_declaration);
+	decl->append_attribute(doc.allocate_attribute("version", "1.0"));
+	decl->append_attribute(doc.allocate_attribute("encoding", "utf-8"));
+	doc.append_node(decl);
+
+	// root node
+	xml_node<>* root = doc.allocate_node(node_element, "material");
+	root->append_attribute(doc.allocate_attribute("version", "1.0"));
+	root->append_attribute(doc.allocate_attribute("type", "example"));
+	doc.append_node(root);
+
+	for (UINT m = 0; m < scene->mNumMaterials; m++)
+	{
+		aiMaterial* material = scene->mMaterials[m];
+
+		xml_node<>* child = doc.allocate_node(node_element, doc.allocate_string(material->GetName().C_Str()));
+		root->append_node(child);
+
+		
+		std::cout << material->GetName().C_Str() << endl;
+
+		aiString diffuse;
+		if (AI_SUCCESS == material->GetTexture(aiTextureType_DIFFUSE, 0, &diffuse)) {}
+		else if (AI_SUCCESS == material->GetTexture(aiTextureType_BASE_COLOR, 0, &diffuse)) {}
+		//std::cout << "diffuse " << diffuse.C_Str() << endl;
+
+		aiString normal;
+		if (AI_SUCCESS == material->GetTexture(aiTextureType_HEIGHT, 0, &normal)) {}
+		else if (AI_SUCCESS == material->GetTexture(aiTextureType_NORMALS, 0, &normal)) {}
+		else if (AI_SUCCESS == material->GetTexture(aiTextureType_NORMAL_CAMERA, 0, &normal)) {}
+
+		string diffusefullpath = curpath.string();
+		diffusefullpath += diffuse.C_Str();
+
+		xml_node<>* diff = doc.allocate_node(node_element, "diffuse", doc.allocate_string(diffusefullpath.c_str()));
+		child->append_node(diff);
+		std::cout << "diffuse " << diffuse.C_Str() << endl;
+
+		string normalfullpath = curpath.string();
+		normalfullpath += normal.C_Str();
+
+		xml_node<>* nor = doc.allocate_node(node_element, "normal", doc.allocate_string(normalfullpath.c_str()));
+		child->append_node(nor);
+		std::cout << "normal " << normal.C_Str() << endl;
+
+	} // materials
+
+	std::string xml_as_string;
+	rapidxml::print(std::back_inserter(xml_as_string), doc);
+
+	ofstream materialOut;
+
+	std::filesystem::path mpath(curpath);
+	mpath += "\\";
+	mpath += fname.string();
+	mpath += ".material";
+	materialOut.open(mpath.c_str());
+	materialOut << xml_as_string;
+	materialOut.clear();
+	materialOut.close();
+}
+
+void FileBrowser::ImportMesh(const aiScene* scene, std::filesystem::path fname)
+{
+	AssetHeader header;
+	header.version = 0;
+	header.type = 1; // static;
+
+	std::string outputpath = curpath.string();
+	outputpath += "\\";
+	outputpath += fname.string();
+	outputpath += ".asset";
+
+	std::ofstream outputFile(outputpath.c_str(), std::ios::binary);
+	if (!outputFile.is_open()) {
+		std::cerr << "파일을 열 수 없습니다." << std::endl;
+		return;
+	}
+	UINT mSize = scene->mNumMeshes;
+	outputFile.write(reinterpret_cast<char*>(&mSize), sizeof(UINT));
+
+	vector<UINT> materialIndexPerMesh(scene->mNumMeshes);
+
+	for (unsigned int m = 0; m < scene->mNumMeshes; m++)
+	{
+		aiMesh* aimesh = scene->mMeshes[m];
+		vector<Vertex> vertices(aimesh->mNumVertices);
+
+		aiVector3D* aivertices = aimesh->mVertices;
+		aiVector3D* ainormals = aimesh->mNormals;
+		aiVector3D* aiuvs = nullptr;
+		if (aimesh->HasTextureCoords(0))
+			aiuvs = aimesh->mTextureCoords[0];
+
+		size_t off = 0;
+
+		for (Vertex& v : vertices)
+		{
+			memcpy(&v.position.x, aivertices, sizeof(Vector3));
+			memcpy(&v.normal.x, ainormals, sizeof(Vector3));
+			if (aiuvs != nullptr)
+				memcpy(&v.uv, aiuvs, sizeof(Vector2));
+			off++;
+			if (off <= vertices.size())
+			{
+				aivertices++;
+				ainormals++;
+				aiuvs++;
+			}
+
+		}
+
+		vector<UINT> indices(aimesh->mNumFaces * 3);
+		for (UINT i = 0; i < aimesh->mNumFaces; i++)
+		{
+			memcpy(indices.data() + (i * 3), aimesh->mFaces[i].mIndices, sizeof(UINT) * 3);
+		}
+
+		UINT vSize = vertices.size();
+		UINT vdatasize = sizeof(Vertex) * vSize;
+		UINT iSize = indices.size();
+		UINT idatasize = sizeof(UINT) * iSize;
+
+		//outputFile.write(reinterpret_cast<char*>(&aimesh->mMaterialIndex), sizeof(UINT));
+		outputFile.write(reinterpret_cast<char*>(&vSize), sizeof(UINT));
+		outputFile.write(reinterpret_cast<char*>(vertices.data()), sizeof(Vertex) * vSize);
+		outputFile.write(reinterpret_cast<char*>(&iSize), sizeof(UINT));
+		outputFile.write(reinterpret_cast<char*>(indices.data()), sizeof(UINT) * iSize);
+	}
+	outputFile.close();
+}
+
+
+//TODO :: move to filemanager
 void FileBrowser::ImportFile()
 {
 	OPENFILENAME OFN;
@@ -187,7 +326,6 @@ void FileBrowser::ImportFile()
 	OFN.lpstrFile = lpstrFile;
 	OFN.nMaxFile = 100;
 	OFN.lpstrInitialDir = L".";
-
 
 	if (GetOpenFileName(&OFN) != 0) {
 		//wsprintf(filePathName, L"%s 파일을 열겠습니까?", OFN.lpstrFile);
@@ -217,10 +355,11 @@ void FileBrowser::ImportFile()
 			if (importer.IsExtensionSupported(fextension.string()))
 			{
 				Assimp::Importer importer;
-				
-				int flag = aiProcess_Triangulate;
 
-				const aiScene* scene = importer.ReadFile(path, flag);
+				int flag = aiProcess_Triangulate;
+				flag |= aiProcess_GenUVCoords;
+
+				const aiScene* scene = importer.ReadFile(fpath.string(), flag);
 
 				if (scene == nullptr)
 				{
@@ -228,77 +367,25 @@ void FileBrowser::ImportFile()
 					return;
 				}
 
-			
+				
+
+				if(scene->HasMaterials())
+				{
+					ImportMaterial(scene,fname);
+				}
+
+				if (scene->hasSkeletons())
+				{
+					// is dynamic mesh;
+				}
 
 				if (scene->HasMeshes())
 				{
-					AssetHeader header;
-					header.version = 0;
-					header.type = 1; // static;
-
-					std::string outputpath = curpath.string();
-					outputpath += "\\";
-					outputpath += fname.string();
-					outputpath += ".asset";
-
-					std::ofstream outputFile(outputpath.c_str(), std::ios::binary);
-					if(!outputFile.is_open()) {
-						std::cerr << "파일을 열 수 없습니다." << std::endl;
-						return;
-					}
-					UINT mSize = scene->mNumMeshes;
-					outputFile.write(reinterpret_cast<char*>(&mSize), sizeof(UINT));
-
-					for (unsigned int m = 0; m < scene->mNumMeshes; m++)
-					{
-						aiMesh* aimesh = scene->mMeshes[m];
-						vector<Vertex> vertices(aimesh->mNumVertices);
-
-						aiVector3D* aivertices = aimesh->mVertices;
-						aiVector3D* ainormals = aimesh->mNormals;
-						aiVector3D* aiuvs = nullptr;
-						if (aimesh->HasTextureCoords(0))
-							aiuvs = aimesh->mTextureCoords[0];
-
-						size_t off = 0;
-
-						for (Vertex& v : vertices)
-						{
-							memcpy(&v.position.x, aivertices, sizeof(Vector3));
-							memcpy(&v.normal.x, ainormals, sizeof(Vector3));
-							if (aiuvs != nullptr)
-								memcpy(&v.uv, aiuvs, sizeof(Vector2));
-							off++;
-							if (off <= vertices.size())
-							{
-								aivertices++;
-								ainormals++;
-								aiuvs++;
-							}
-
-						}
-
-						vector<UINT> indices(aimesh->mNumFaces * 3);
-						for (UINT i = 0; i < aimesh->mNumFaces; i++)
-						{
-							memcpy(indices.data() + (i * 3), aimesh->mFaces[i].mIndices, sizeof(UINT) * 3);
-						}
-
-						UINT vSize = vertices.size();
-						UINT vdatasize = sizeof(Vertex) * vSize;
-						UINT iSize = indices.size();
-						UINT idatasize = sizeof(UINT) * iSize;
-
-						outputFile.write(reinterpret_cast<char*>(&vSize), sizeof(UINT));
-						outputFile.write(reinterpret_cast<char*>(vertices.data()), sizeof(Vertex) * vSize);
-						outputFile.write(reinterpret_cast<char*>(&iSize), sizeof(UINT));
-						outputFile.write(reinterpret_cast<char*>(indices.data()), sizeof(UINT) * iSize);
-					}
-
-					
-					outputFile.close();
+					ImportMesh(scene,fname);
 				}
+				
 			}
+
 		}
 	}
 

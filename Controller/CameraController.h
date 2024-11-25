@@ -8,6 +8,6 @@ public:
 	virtual void Render() override;
 
 private:
-	float accelaration = 1.0f;
+	float accelaration = 10.0f;
 };
 

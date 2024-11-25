@@ -26,12 +26,17 @@ struct AssetHeader
 	UINT type; // skinned or mesh
 };
 
+struct aiScene;
+class  std::filesystem::path;
 class FileBrowser : public Controller
 {
 
 public:
 	FileBrowser();
 	virtual void Render();
+
+	void ImportMaterial(const aiScene* scene, std::filesystem::path fname);
+	void ImportMesh(const aiScene* scene, std::filesystem::path fname);
 
 	void ImportFile();
 

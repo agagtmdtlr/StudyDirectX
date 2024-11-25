@@ -158,16 +158,26 @@ void System::Run()
 		}
 		else
 		{
-
+			static int displayresizeframecount = 2;
 			if (needResizeContentDependency)
 			{
-				ResizeDisplay();
+				if (displayresizeframecount == 0)
+				{
+					ResizeDisplay();
+					needResizeContentDependency =false;
+				}
+				else
+				{
+					displayresizeframecount--;
+				}
 			}
 
 			if (needResize)
 			{
 				Resize();
+				needResize = false;
 				needResizeContentDependency = true;
+				displayresizeframecount = 2;
 			}
 
 			D3D::GetDC()->ClearRenderTargetView(D3D::GetBB(), Color(0.2f, 0.2f, 0.2f,1.0f));
@@ -180,7 +190,8 @@ void System::Run()
 			ImGui::NewFrame();
 			ImGuizmo::BeginFrame();
 
-			
+			ImGui::DockSpaceOverViewport();
+
 
 			//ImGui::ShowDemoWindow();
 			ImGui::BeginMainMenuBar();
@@ -209,13 +220,6 @@ void System::Run()
 			ui->UpdateControllerManager();
 			ui->Render();
 
-
-			//TODO:: DockSpaceOverViewport()
-			if (needResize)
-			{
-				ResizeDisplay();
-				needResize = false;
-			}
 
 			ImGui::Render();
 

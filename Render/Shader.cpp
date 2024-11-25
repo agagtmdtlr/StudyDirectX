@@ -29,14 +29,16 @@ void Shader::Initialize(std::wstring shaderName, RenderPassState state)
 	ID3D11Device* device = D3D::GetDevice();
 	auto dc = D3D::GetDC();
 
-	D3D_SHADER_MACRO macro[] = { "DEBUG" , "0" };
+	D3D_SHADER_MACRO macro[] = { "DEBUG" };
+	UINT flag = D3DCOMPILE_DEBUG;
+	flag |= D3DCOMPILE_SKIP_OPTIMIZATION;
 
 	/* Compile HLSL */
 	if (state.CheckMask(RenderStage::VS) == true)
 	{
 		//shaderPath = L"Shader/" + shaderName + L"VS.hlsl";
 
-		if (FAILED(D3DCompileFromFile(shaderPath.c_str(), 0, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VSmain", "vs_5_0", 0, 0, GetBlobAddressOf(RenderStage::VS), &errorBlob)))
+		if (FAILED(D3DCompileFromFile(shaderPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VSmain", "vs_5_0", flag, 0, GetBlobAddressOf(RenderStage::VS), &errorBlob)))
 		{
 			if (errorBlob)
 			{
@@ -51,7 +53,7 @@ void Shader::Initialize(std::wstring shaderName, RenderPassState state)
 	if (state.CheckMask(RenderStage::PS) == true)
 	{
 		//shaderPath = L"Shader/" + shaderName + L"PS.hlsl";
-		if (FAILED(D3DCompileFromFile(shaderPath.c_str(), 0, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PSmain", "ps_5_0", 0, 0, GetBlobAddressOf(RenderStage::PS), &errorBlob)))
+		if (FAILED(D3DCompileFromFile(shaderPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PSmain", "ps_5_0", flag, 0, GetBlobAddressOf(RenderStage::PS), &errorBlob)))
 		{
 			if (errorBlob)
 			{
@@ -133,7 +135,7 @@ void Shader::Initialize(std::wstring shaderName, RenderPassState state)
 	} // for renderStage
 
 	InitRasterizerState();
-
+	InitDepthStencilState();
 
 }
 
@@ -209,6 +211,37 @@ void Shader::InitRasterizerState()
 	device->CreateRasterizerState(&wfd, rss.GetAddressOf());
 }
 
+void Shader::InitDepthStencilState()
+{
+	auto device = D3D::GetDevice();
+	D3D11_DEPTH_STENCIL_DESC dssDesc;
+	ZeroMemory(&dssDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
+	// Set up the description of the stencil state
+	dssDesc.DepthEnable = true;
+	dssDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dssDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	dssDesc.StencilEnable = false;
+	dssDesc.StencilReadMask = 0xFF;
+	dssDesc.StencilWriteMask = 0xFF;
+
+	//Stencil operations if pixel is front-facing
+	dssDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	dssDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	dssDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	dssDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	//Stencil operations if pixel is back-facing
+	dssDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	dssDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	dssDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	dssDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	HRESULT hr = device->CreateDepthStencilState(&dssDesc, dss.GetAddressOf());
+	if (FAILED(hr))
+		cout << "failed create display dss" << endl;
+}
+
 void Shader::InitializeSampler()
 {
 	auto device = D3D::GetDevice();
@@ -247,6 +280,7 @@ void Shader::BeginDraw(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv)
 	dc->RSSetViewports(1, &viewport);
 	dc->OMSetRenderTargets(1, &rtv, dsv);
 	dc->RSSetState(rss.Get());
+	dc->OMSetDepthStencilState(dss.Get(),0);
 
 	// set the shader objects
 	if (state.CheckMask(RenderStage::VS))

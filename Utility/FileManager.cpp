@@ -42,6 +42,64 @@ bool FileManager::IsMesh(std::wstring file)
     return ext == L"fbx" || ext == L"obj";
 }
 
+shared_ptr<Texture>  FileManager::CreateTextureFromFile(const std::wstring& filename)
+{
+    shared_ptr<Texture> texture;
+    wstring ext = Path::GetExtension(filename);
+
+    TexMetadata metaData;
+    ZeroMemory(&metaData, sizeof(metaData));
+    ScratchImage scratchimage;
+
+    std::wstring fullPth = L"../Resources/";
+    fullPth += filename;
+    HRESULT hr;
+    if (ext == L"png" || ext == L"jpg")
+    {
+        //DirectX::GetMetadataFromWICFile(filename.c_str(), WIC_FLAGS::WIC_FLAGS_NONE , metaData );
+        hr = DirectX::LoadFromWICFile(fullPth.c_str(), WIC_FLAGS_NONE, &metaData, scratchimage);
+    }
+    else if (ext == L"dds")
+    {
+        hr = DirectX::LoadFromDDSFile(fullPth.c_str(), DDS_FLAGS::DDS_FLAGS_NONE, &metaData, scratchimage);
+    }
+
+    if (FAILED(hr))
+    {
+        std::wcout << "faile texture load " << filename << std::endl;
+    }
+
+    auto device = D3D::GetDevice();
+    auto dc = D3D::GetDC();
+
+
+
+    D3D11_TEXTURE2D_DESC desc;
+    ZeroMemory(&desc, sizeof(desc));
+    desc.Width = metaData.width;
+    desc.Height = metaData.height;
+    desc.MipLevels = metaData.mipLevels;
+    desc.ArraySize = metaData.arraySize;
+    desc.Format = metaData.format;
+    desc.SampleDesc.Count = 1;
+    desc.SampleDesc.Quality = 1;
+
+    ComPtr<ID3D11ShaderResourceView> srv;
+
+    DirectX::CreateShaderResourceViewEx(
+        device,
+        scratchimage.GetImages(),
+        scratchimage.GetImageCount(),
+        metaData,
+        D3D11_USAGE_DEFAULT,
+        D3D11_BIND_SHADER_RESOURCE,
+        0, 0, CREATETEX_DEFAULT, srv.GetAddressOf());
+
+    texture = make_shared<Texture>(metaData, srv.Get());
+
+    return texture;
+}
+
 shared_ptr<Texture> TextureManager::RequestTexture(std::wstring filename)
 {
     TextureManager* manager = TextureManager::Get();

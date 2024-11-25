@@ -10,7 +10,6 @@ UINT Mesh::idGenerator = 0;
 set<UINT> Mesh::instancesUID;
 
 Mesh::Mesh()
-	:material(Material())
 {
 	id = idGenerator;
 	idGenerator++;

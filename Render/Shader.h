@@ -66,6 +66,7 @@ struct Shader
 	ComPtr<ID3D11ComputeShader> computeShader;
 	ComPtr<ID3D11InputLayout> inputlayout;
 
+	ComPtr<ID3D11DepthStencilState> dss;
 	ComPtr<ID3D11RasterizerState> rss;
 
 	std::array<ComPtr<ID3DBlob>, StageCount> blobs;
@@ -93,6 +94,7 @@ struct Shader
 	void Initialize(std::wstring shaderName, RenderPassState state);
 	void InitializeInputLayout(D3D11_SHADER_DESC shaderDesc, ID3D11ShaderReflection* reflection, ID3DBlob* blob);
 	void InitRasterizerState();
+	void InitDepthStencilState();
 	void InitializeSampler();
 	void DrawIndexed(UINT indexCount, UINT StartIndexLocation, INT BseVertexLocation);
 	void DrawIndexedInstanced(UINT indexCount, UINT instanceCount, UINT StartIndexLocation, INT BseVertexLocation, INT StartInstanceLocation);

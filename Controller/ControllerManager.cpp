@@ -45,9 +45,8 @@ void ControllerManager::Initialize()
 
 void ControllerManager::UpdateControllerManager()
 {
-	ImGui::DockSpaceOverViewport();
 
-	ImGui::Begin("Option");
+	ImGui::Begin("Game Option");
 
 	ImVec2 pos = ImGui::GetMousePos();
 	if(ImGui::IsMousePosValid())

@@ -32,19 +32,33 @@ void Renderer::Render()
 
 	Resize(D3D::GetDisplayWidth(),D3D::GetDisplayHeight());	
 
-	ImGui::Begin("Option");
-	{
-		ImGui::Text("Camera Position %f %f %f", camera.position.x, camera.position.y, camera.position.z);
-	}
-	ImGui::End();
 
 	Color clearColor = Color(0,0,0,1);
 	dc->ClearRenderTargetView(D3D::GetDisplayRTV(), &clearColor.x);
 	dc->ClearDepthStencilView(D3D::GetDisplayDSV(),D3D11_CLEAR_DEPTH,1.0f,0);
 	renderPass->BeginDraw(D3D::GetDisplayRTV(), D3D::GetDisplayDSV());
 
+	ImGui::Begin("Renderer");
+
+	UINT s = 0;
+	static bool isfirst = true;
+	static bool* barray = nullptr;
+
+	if (isfirst)
+	{
+		for (auto mesh : meshesForDraw)
+		{
+			s+=mesh->GetBufferCount();
+		}
+		isfirst = false;
+		barray = new bool[s];
+	}
+
+	UINT btnI = 0;
 	for (auto mesh : meshesForDraw)
 	{
+		
+
 		MatrixBufferType cbuffer;
 		// transpose for align to hlsl matrix major
 
@@ -61,7 +75,14 @@ void Renderer::Render()
 
 		for (UINT i = 0; i < mesh->GetBufferCount(); i++)
 		{
-			
+			string btnName = "Mesh_" + to_string(btnI);
+			btnI++;
+
+			ImGui::Checkbox(btnName.c_str(), &(barray[btnI]));
+			if (barray[btnI] == false)
+			{
+				continue;
+			}
 
 			auto p = mesh->GetBuffer(i);
 			renderPass->BindPrimitiveBuffer(p);
@@ -69,7 +90,7 @@ void Renderer::Render()
 		}
 	}
 
-	
+	ImGui::End();
 
 
 	renderPass->EndDraw();
@@ -150,7 +171,7 @@ void Renderer::Initialize(int width, int height)
 
 
 	camera.nearPlane = 0.01f;
-	camera.farPlane = 1000.0f;
+	camera.farPlane = 1000000.0f;
 
 	MatrixBufferType cbuffer;
 	// transpose for align to hlsl matrix major

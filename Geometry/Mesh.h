@@ -18,7 +18,6 @@ public:
 
 	void SetWorldMatrix(Matrix& matrix);
 	Transform* GetTransformRef() { return &transform; }
-	Material::Description GetMaterialDesctription() { return material.desc; }
 
 public:
 	class PrimitiveBuffer* GetBuffer(UINT index);
@@ -26,14 +25,13 @@ public:
 
 protected:
 	shared_ptr<class PrimitiveBufferContainer> buffer;
+	vector<Material> materials;
 	Transform transform;
 	BoundingBox aabb;
 	string name;
 
 private:
 	UINT id;	
-	Material material;
-
 
 
 	static UINT idGenerator;
